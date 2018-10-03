@@ -75,4 +75,20 @@ About the protocol PIE:
          </pre>
   8. **Drop probability calculation:** The drop probability is periodically updated based on the latency samples collected over a period of time. But when the congestion period ends, we might end up with high drop probabilty values, so PIE algorithm has a mechanism by which the drop probability decays exonentially when congestion doesn't exist. The update interval (T_UPDATE) of the drop-probability is defaulted to 15ms(MAY be reduced in high speed links for smoother response). 
       The control parameters _alpha_ and _beta_(in Hz) are designed using feedback loop analysis. If T_UPDATE is cut in half, alpha must also be cut in half and beta must be increased by 0.25*alpha.   
-   9. **Latency calculation:**
+   9. **Latency calculation:** 
+       * Little's law method: current_qdelay = queue_.byte_length()/dequeue_rate;
+       * The packets can be time-stamped at enqueue which will be used to calculate latency later.
+   10. **Burst tolerance:** PIE does not penalize short term packet bursts. Its calculated as follows:  
+   <pre>
+    if PIE->burst_allowance_ > 0
+      enqueue packet;
+    else
+      drop_packet(drop_probability);
+
+    if (PIE->drop_prob_ == 0 and current_qdelay < QDELAY_REF/2 and
+           PIE->qdelay_old_ < QDELAY_REF/2)
+             PIE->burst_allowance_ = MAX_BURST;
+    PIE->burst_allowance_ = max(0,PIE->burst_allowance_ - T_UPDATE);
+
+   </pre>
+   11. 
