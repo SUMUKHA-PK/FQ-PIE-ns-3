@@ -64,7 +64,7 @@ About the protocol PIE:
   
   When a packet arrives, a random decision is made regarding whether to drop thepacket.  The drop probability is updated periodically based on how far the current latency is away from the target value and whether thequeuing latency is currently trending up or down.  The queuing latency can be obtained using direct measurements or using estimations calculated from the queue length and the dequeue rate.  
   7. **Random dropping:** Dropping of an incoming packet is decided based upon a certain _drop probability_ which is obtained from the _drop-probability-calculation-component_ of PIE. The random drop is bypassed if the older queue delay sample is less than half the target latency value when the drop probability is <0.2 or queue has less than a couple of packets.  
-    <br>In conclusion,on packet arrival,
+    In conclusion,on packet arrival,
         <pre>
         if ( (PIE->qdelay_old_ < QDELAY_REF/2 && PIE->drop_prob_ < 0.2)
             || (queue_.byte_length() <= 2 * MEAN_PKTSIZE) )
@@ -73,6 +73,6 @@ About the protocol PIE:
          randomly drop the packet with a probability of
          PIE->drop_prob_.
          </pre>
-  8. **Drop probability calculation:** The drop probability is periodically updated based on the latency samples collected over a period of time. But when the congestion period ends, we might end up with high drop probabilty values, so PIE algorithm has a mechanism by which the drop probability decays exonentially when congestion doesn't exist. The update interval(T_UPDATE) of the drop-probability is defaulted to 15ms(MAY be reduced in high speed links for smoother response). 
+  8. **Drop probability calculation:** The drop probability is periodically updated based on the latency samples collected over a period of time. But when the congestion period ends, we might end up with high drop probabilty values, so PIE algorithm has a mechanism by which the drop probability decays exonentially when congestion doesn't exist. The update interval (T_UPDATE) of the drop-probability is defaulted to 15ms(MAY be reduced in high speed links for smoother response). 
       The control parameters _alpha_ and _beta_(in Hz) are designed using feedback loop analysis. If T_UPDATE is cut in half, alpha must also be cut in half and beta must be increased by 0.25*alpha.   
    9. **Latency calculation:**
