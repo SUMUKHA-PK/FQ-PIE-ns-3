@@ -77,7 +77,7 @@ About the protocol PIE:
       The control parameters _alpha_ and _beta_(in Hz) are designed using feedback loop analysis. If T_UPDATE is cut in half, alpha must also be cut in half and beta must be increased by 0.25*alpha.   
    9. **Latency calculation:** 
        * Little's law method: current_qdelay = queue_.byte_length()/dequeue_rate;
-       * The packets can be time-stamped at enqueue which will be used to calculate latency later.
+       * The packets can be time-stamped at enqueue which will be used to calculate latency later.  
    10. **Burst tolerance:** PIE does not penalize short term packet bursts. Its calculated as follows:  
    <pre>
     if PIE->burst_allowance_ > 0
