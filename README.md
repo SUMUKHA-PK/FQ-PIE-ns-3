@@ -5,7 +5,7 @@ Resources used:
   1. RFC 8033, Proportional Integral Controller Enhanced (PIE  https://tools.ietf.org/html/rfc8033 
   2. IEEE paper on PIE http://ieeexplore.ieee.org/document/6602305/
   3. RFC 8290, Fq-Codel https://tools.ietf.org/html/rfc8290
-  4. Paper related  to FQ-PIE http://caia.swin.edu.au/reports/160418A/CAIA-TR-160418A.pdf
+  4. Paper related  to FQ-PIE http://caia.swin.edu.au/reports/160418A/CAIA-TR-160418A.pdf    
 Design Goals of PIE (As in RFC 8033):
 
   *  First, queuing latency, instead of queue length, is controlled.
@@ -39,8 +39,8 @@ About the protocol PIE:
   2. Bufferbloat is a phenomenon in which excess buffers in the network cause high latency and latency variation. 
   3. PIE,Proportional Integrated controller Enhanced can effectively control the average queuing delay to a target value.
   4. PIE, aims to keep the benefits of RED(Random Early Detection) and also include easy implementation and scalability to high speeds(Both are the reasons why RED failed).
-  5. PIE drops random packets at the onset of congestion (like RED, for congestion control) but congestion detection is based on queuing latency rather than the queuing length as with RED. PIE uses a derivative of queuing latency to help determine congestion levels and an appropriate response. The control parameters of PIE are chosen by control theory but can also be made self tuning based on circumstances.
-  6. The structure of PIE
+  5. PIE drops random packets at the onset of congestion (like RED, for congestion control) but congestion detection is based on queuing latency rather than the queuing length as with RED. PIE uses a derivative of queuing latency to help determine congestion levels and an appropriate response. The control parameters of PIE are chosen by control theory but can also be made self tuning based on circumstances.  
+  6. The structure of PIE  
   
   <pre>
   
@@ -63,8 +63,8 @@ About the protocol PIE:
   </pre>
   
   When a packet arrives, a random decision is made regarding whether to drop thepacket.  The drop probability is updated periodically based on how far the current latency is away from the target value and whether thequeuing latency is currently trending up or down.  The queuing latency can be obtained using direct measurements or using estimations calculated from the queue length and the dequeue rate.  
-  7. **Random dropping:** Dropping of an incoming packet is decided based upon a certain _drop probability_ which is obtained from the _drop-probability-calculation-component_ of PIE. The random drop is bypassed if the older queue delay sample is less than half the target latency value when the drop probability is <0.2 or queue has less than a couple of packets.
-        In conclusion,on packet arrival,
+  7. **Random dropping:** Dropping of an incoming packet is decided based upon a certain _drop probability_ which is obtained from the _drop-probability-calculation-component_ of PIE. The random drop is bypassed if the older queue delay sample is less than half the target latency value when the drop probability is <0.2 or queue has less than a couple of packets.  
+    <br>In conclusion,on packet arrival,
         <pre>
         if ( (PIE->qdelay_old_ < QDELAY_REF/2 && PIE->drop_prob_ < 0.2)
             || (queue_.byte_length() <= 2 * MEAN_PKTSIZE) )
