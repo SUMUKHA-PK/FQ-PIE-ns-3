@@ -67,9 +67,9 @@
                 |                    \|/         \/
                 |          -----------------    -------------------
                 |          |     Drop      |    |                 |
-                -----<-----|  Probability  |<---| Latency         |
-                          |  Calculation  |    | Calculation     |
-                          -----------------    -------------------
+                -----<-----|  Probability  |<---|   Latency       |
+                           |  Calculation  |    |  Calculation    |
+                           -----------------    -------------------
     </pre>
   
     When a packet arrives, a random decision is made regarding whether to drop thepacket.  The drop probability is updated periodically based on how far the current latency is away from the target value and whether thequeuing latency is currently trending up or down.  The queuing latency can be obtained using direct measurements or using estimations calculated from the queue length and the dequeue rate.  
