@@ -110,9 +110,6 @@
       
       PIE->burst_allowance_ = max(0,PIE->burst_allowance_ - T_UPDATE);
     ```
-  
-11. 
-
 ---
 
 ### About FQ-PIE
