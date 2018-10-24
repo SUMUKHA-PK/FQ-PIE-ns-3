@@ -156,34 +156,17 @@
     
 ---
 
-### About FQ-CoDel
+### About FQ
 
-1. It is based on a modified Deficit Round Robin (DRR) queue scheduler with the CoDel AQM algorithm operating on each queue.
+1. The intention of FQ-CoDel's scheduler is to give each flow its own queue, hence the term 'flow queuing'. Rather than a perfect realization of this, a hashing based scheme is used, where flows are hashed into a number of buckets, each of which has its own queue.
 
-2. **Important Terms**:
+2. The number of buckets is configurable and presently defaults to 1024 in the Linux implementation.
 
-    2.1. **Flow**: A flow is identified by a 5-tuple of source IP address, destination IP address, source port number, destination port number, and protocol number. It can also be identified by a superset or subset of those parameters, by Media Access Control (MAC) address, or by other means. FQ-CoDel hashes flows into a number of configurable number of buckets to assign packets to internal queues.
+3. By default, the flow hashing is performed on the 5-tuple of source and destination IP addresses, source and destination port numbers, and protocol number.
 
-    2.2. **Queue**: A queue of packets represented inernally in FQ-CoDel. In most instances, each flow gets its own queue; however, because of the possibility of hash collisions, this is not always the case. The word "queue" is used to refer to the internal data structure, and "flow" is used to refer to the actual stream of packets being delivered to the FQ-CoDel algorithm.
+4. FQ-CoDel's DRR scheduler is byte-based, employing a DRR mechanism between queues. This works by keeping a track of the current number of "byte-credits" of each queue. This number is initialized to the configurable quantum; each time a queue gets dequeue opportunity, it gets to dequeue packets, thus decreasing the number of credits by the packet size for each packet. This continues until the value of the byte credits counter becomes zero or less, at which point the counter is increased by one quantum, and the dequeue opportunity ends.
 
-    2.3. **Scheduler**: A mechanism to select which queue a packet is dequeued from.
-
-    2.4. **Quantum**: The maximum amount of bytes to be dequeued from a queue at once.
-
-    2.5. **Interval**:  Characteristic time period used by the control loop of CoDel to detect when a persistent queue is developing (see Section 4.2 of [RFC8289]).
-
-3. **Flow Queuing**:
-
-    3.1. The intention of FQ-CoDel's scheduler is to give each flow its own queue, hence the term 'flow queuing'. Rather than a perfect realization of this, a hashing based scheme is used, where flows are hashed into a number of buckets, each of which has its own queue.
-    
-    3.2. The number of buckets is configurable and presently defaults to 1024 in the Linux implementation.
-    
-    3.3. By default, the flow hashing is performed on the 5-tuple of source and destination IP addresses, source and destination port numbers, and protocol number.
-    
-    3.4. FQ-CoDel's DRR scheduler is byte-based, employing a DRR mechanism between queues. This works by keeping a track of the current number of "byte-credits" of each queue. This number is initialized to the configurable quantum; each time a queue gets dequeue opportunity, it gets to dequeue packets, thus decreasing the number of credits by the packet size for each packet. This continues until the value of the byte credits counter becomes zero or less, at which point the counter is increased by one quantum, and the dequeue opportunity ends.
-    
-    3.5. 
-
+5. 
 
 ---
 
