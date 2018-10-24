@@ -166,15 +166,7 @@
 
 4. FQ-CoDel's DRR scheduler is byte-based, employing a DRR mechanism between queues. This works by keeping a track of the current number of "byte-credits" of each queue. This number is initialized to the configurable quantum; each time a queue gets dequeue opportunity, it gets to dequeue packets, thus decreasing the number of credits by the packet size for each packet. This continues until the value of the byte credits counter becomes zero or less, at which point the counter is increased by one quantum, and the dequeue opportunity ends.
 
-5. 
 
 ---
-
-### TO-DO
-
-* read more about flow-queuing and add important points
-
-* see the linux implementation of FQ-CoDel
-
 
 
