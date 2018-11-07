@@ -15,7 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Authors: 
+ * Authors:  Sumukha PK <sumukhapk46@gmail.com>
+ *           Prajval M  <26prajval98@gmail.com>
+ *           Ishaan R D <ishaanrd6@gmail.com>
+ *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
 /*
@@ -29,8 +32,8 @@
 #include "ns3/double.h"
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
-#include "pie-queue-disc.h"
 #include "fq-pie-queue-disc.h"
+#include "pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -139,31 +142,31 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
 
-  QueueSize nQueued = GetCurrentSize ();
+  // QueueSize nQueued = GetCurrentSize ();
 
-  if (nQueued + item > GetMaxSize ())
-    {
-      // Drops due to queue limit: reactive
-      DropBeforeEnqueue (item, FORCED_DROP);
-      return false;
-    }
-  else if (DropEarly (item, nQueued.GetValue ()))
-    {
-      // Early probability drop: proactive
-      DropBeforeEnqueue (item, UNFORCED_DROP);
-      return false;
-    }
+  // if (nQueued + item > GetMaxSize ())
+  //   {
+  //     // Drops due to queue limit: reactive
+  //     DropBeforeEnqueue (item, FORCED_DROP);
+  //     return false;
+  //   }
+  // else if (DropEarly (item, nQueued.GetValue ()))
+  //   {
+  //     // Early probability drop: proactive
+  //     DropBeforeEnqueue (item, UNFORCED_DROP);
+  //     return false;
+  //   }
 
-  // No drop
-  bool retval = GetInternalQueue (0)->Enqueue (item);
+  // // No drop
+  // bool retval = GetInternalQueue (0)->Enqueue (item);
 
-  // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
-  // internal queue because QueueDisc::AddInternalQueue sets the trace callback
+  // // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
+  // // internal queue because QueueDisc::AddInternalQueue sets the trace callback
 
-  NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
-  NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
+  // NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
+  // NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
 
-  return retval;
+  // return retval;
 }
 
 void

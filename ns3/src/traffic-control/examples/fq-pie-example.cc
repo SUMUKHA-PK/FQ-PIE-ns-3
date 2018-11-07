@@ -15,10 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Authors: Shravya Ks <shravya.ks0@gmail.com>
- *          Smriti Murali <m.smriti.95@gmail.com>
- *          Mohit P. Tahiliani <tahiliani@nitk.edu.in>
- *
+ * Authors:  Sumukha PK <sumukhapk46@gmail.com>
+ *           Prajval M  <26prajval98@gmail.com>
+ *           Ishaan R D <ishaanrd6@gmail.com>
+ *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
 /** Network topology
@@ -39,10 +39,11 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
 #include "ns3/traffic-control-module.h"
+#include "fq-pie-queue-disc.h"
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("PieExample");
+NS_LOG_COMPONENT_DEFINE ("FqPieExample");
 
 uint32_t checkTimes;
 double avgQueueDiscSize;
@@ -137,7 +138,7 @@ BuildAppsTest ()
 int
 main (int argc, char *argv[])
 {
-  LogComponentEnable ("PieQueueDisc", LOG_LEVEL_INFO);
+  LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
 
   std::string pieLinkDataRate = "1.5Mbps";
   std::string pieLinkDelay = "20ms";
@@ -192,11 +193,11 @@ main (int argc, char *argv[])
 
   // PIE params
   NS_LOG_INFO ("Set PIE params");
-  Config::SetDefault ("ns3::PieQueueDisc::MaxSize", StringValue ("100p"));
-  Config::SetDefault ("ns3::PieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
-  Config::SetDefault ("ns3::PieQueueDisc::DequeueThreshold", UintegerValue (10000));
-  Config::SetDefault ("ns3::PieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
-  Config::SetDefault ("ns3::PieQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
+  Config::SetDefault ("ns3::FqPieQueueDisc::MaxSize", StringValue ("100p"));
+  Config::SetDefault ("ns3::FqPieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
+  Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (10000));
+  Config::SetDefault ("ns3::FqPieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
+  Config::SetDefault ("ns3::FqPieQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
 
   NS_LOG_INFO ("Install internet stack on all nodes.");
   InternetStackHelper internet;
@@ -207,7 +208,7 @@ main (int argc, char *argv[])
   tchPfifo.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
 
   TrafficControlHelper tchPie;
-  tchPie.SetRootQueueDisc ("ns3::PieQueueDisc");
+  tchPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
 
   NS_LOG_INFO ("Create channels");
   PointToPointHelper p2p;
@@ -278,7 +279,7 @@ main (int argc, char *argv[])
     {
       PointToPointHelper ptp;
       std::stringstream stmp;
-      stmp << pathOut << "/pie";
+      stmp << pathOut << "/fqpie";
       ptp.EnablePcapAll (stmp.str ().c_str ());
     }
 
@@ -291,8 +292,8 @@ main (int argc, char *argv[])
 
   if (writeForPlot)
     {
-      filePlotQueueDisc << pathOut << "/" << "pie-queue-disc.plotme";
-      filePlotQueueDiscAvg << pathOut << "/" << "pie-queue-disc_avg.plotme";
+      filePlotQueueDisc << pathOut << "/" << "fq-pie-queue-disc.plotme";
+      filePlotQueueDiscAvg << pathOut << "/" << "fq-pie-queue-disc_avg.plotme";
 
       remove (filePlotQueueDisc.str ().c_str ());
       remove (filePlotQueueDiscAvg.str ().c_str ());
@@ -305,7 +306,7 @@ main (int argc, char *argv[])
 
   QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
 
-  if (st.GetNDroppedPackets (PieQueueDisc::FORCED_DROP) != 0)
+  if (st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP) != 0)
     {
       std::cout << "There should be no drops due to queue full." << std::endl;
       exit (1);
@@ -314,17 +315,17 @@ main (int argc, char *argv[])
   if (flowMonitor)
     {
       std::stringstream stmp;
-      stmp << pathOut << "/pie.flowmon";
+      stmp << pathOut << "/fqpie.flowmon";
 
       flowmon->SerializeToXmlFile (stmp.str ().c_str (), false, false);
     }
 
   if (printPieStats)
     {
-      std::cout << "*** PIE stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (PieQueueDisc::UNFORCED_DROP)
+      std::cout << "***FQ PIE stats from Node 2 queue ***" << std::endl;
+      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
                 << " drops due to prob mark" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (PieQueueDisc::FORCED_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP)
                 << " drops due to queue limits" << std::endl;
     }
 
