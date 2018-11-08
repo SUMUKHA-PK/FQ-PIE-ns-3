@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2016 NITK Surathkal
+ * Copyright (c) 2018 NITK Surathkal
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Authors:  Sumukha PK <sumukhapk46@gmail.com>
- *           Prajval M  <26prajval98@gmail.com>
  *           Ishaan R D <ishaanrd6@gmail.com>
+ *           Prajval M  <26prajval98@gmail.com>
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
