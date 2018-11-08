@@ -109,6 +109,41 @@ FqPieQueueDisc::~FqPieQueueDisc ()
 }
 
 void
+FqPieFlow::SetDeficit (uint32_t deficit)
+{
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit = deficit;
+}
+
+int32_t
+FqPieFlow::GetDeficit (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_deficit;
+}
+
+void
+FqPieFlow::IncreaseDeficit (int32_t deficit)
+{
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit += deficit;
+}
+
+void
+FqPieFlow::SetStatus (FlowStatus status)
+{
+  NS_LOG_FUNCTION (this);
+  m_status = status;
+}
+
+FqPieFlow::FlowStatus
+FqPieFlow::GetStatus (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_status;
+}
+
+void
 FqPieQueueDisc::DoDispose (void)
 {
   NS_LOG_FUNCTION (this);
