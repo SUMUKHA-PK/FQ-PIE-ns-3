@@ -212,7 +212,7 @@ FqCoDelQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   flow->GetQueueDisc ()->Enqueue (item);
 
   NS_LOG_DEBUG ("Packet enqueued into flow " << h << "; flow index " << m_flowsIndices[h]);
-
+  
   if (GetCurrentSize () > GetMaxSize ())
     {
       FqCoDelDrop ();

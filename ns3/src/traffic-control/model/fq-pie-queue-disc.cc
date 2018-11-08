@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2016 NITK Surathkal
+ * Copyright (c) 2018 NITK Surathkal
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -16,14 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Authors:  Sumukha PK <sumukhapk46@gmail.com>
- *           Prajval M  <26prajval98@gmail.com>
  *           Ishaan R D <ishaanrd6@gmail.com>
+ *           Prajval M  <26prajval98@gmail.com>
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
- */
-
-/*
- * PORT NOTE: This code was ported from ns-2.36rc1 (queue/pie.cc).
- * Most of the comments are also ported from the same.
  */
 
 #include "ns3/log.h"
@@ -101,7 +96,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
 }
 
 FqPieQueueDisc::FqPieQueueDisc ()
-  : QueueDisc (QueueDiscSizePolicy::SINGLE_INTERNAL_QUEUE)
+  : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS)//m_quantum(0) check about this
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
@@ -129,6 +124,8 @@ FqPieQueueDisc::GetQueueDelay (void)
   return m_qDelay;
 }
 
+
+//changes needed/
 int64_t
 FqPieQueueDisc::AssignStreams (int64_t stream)
 {
@@ -137,38 +134,66 @@ FqPieQueueDisc::AssignStreams (int64_t stream)
   return 1;
 }
 
+
+//changes needed/
 bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
 
-  // QueueSize nQueued = GetCurrentSize ();
 
-  // if (nQueued + item > GetMaxSize ())
-  //   {
-  //     // Drops due to queue limit: reactive
-  //     DropBeforeEnqueue (item, FORCED_DROP);
-  //     return false;
-  //   }
-  // else if (DropEarly (item, nQueued.GetValue ()))
-  //   {
-  //     // Early probability drop: proactive
-  //     DropBeforeEnqueue (item, UNFORCED_DROP);
-  //     return false;
-  //   }
+  //hashing to the right queue
+  uint32_t h = 0;
 
-  // // No drop
-  // bool retval = GetInternalQueue (0)->Enqueue (item);
+  if (GetNPacketFilters () == 0)
+    {
+      h = item->Hash (m_perturbation) % m_flows;
+    }
+  else
+    {
+      int32_t ret = Classify (item);
 
-  // // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
-  // // internal queue because QueueDisc::AddInternalQueue sets the trace callback
+      if (ret != PacketFilter::PF_NO_MATCH)
+        {
+          h = ret % m_flows;
+        }
+      else
+        {
+          NS_LOG_ERROR ("No filter has been able to classify this packet, drop it.");
+          DropBeforeEnqueue (item, UNCLASSIFIED_DROP);
+          return false;
+        }
+    }
 
-  // NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
-  // NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
 
-  // return retval;
+  QueueSize nQueued = GetCurrentSize ();
+
+  if (nQueued + item > GetMaxSize ())
+    {
+      // Drops due to queue limit: reactive
+      DropBeforeEnqueue (item, FORCED_DROP);
+      return false;
+    }
+  else if (DropEarly (item, nQueued.GetValue ()))
+    {
+      // Early probability drop: proactive
+      DropBeforeEnqueue (item, UNFORCED_DROP);
+      return false;
+    }
+
+  // No drop
+  bool retval = GetInternalQueue (0)->Enqueue (item);
+
+  // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
+  // internal queue because QueueDisc::AddInternalQueue sets the trace callback
+
+  NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
+  NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
+
+  return retval;
 }
 
+//changes needed/
 void
 FqPieQueueDisc::InitializeParams (void)
 {
@@ -182,6 +207,8 @@ FqPieQueueDisc::InitializeParams (void)
   m_qDelayOld = Time (Seconds (0));
 }
 
+
+//changes needed/
 bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
 {
   NS_LOG_FUNCTION (this << item << qSize);
@@ -208,15 +235,16 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
   bool earlyDrop = true;
   double u =  m_uv->GetValue ();
 
-  if ((m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb < 0.2))
+// Following conditions are where the packet must not be dropped 
+  if ((m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb < 0.2)) //as mentioned in the rfc explicitly
     {
       return false;
     }
-  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)
+  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)  // if there are less than 2 packets or bytes then do not drop(like it just started)
     {
       return false;
     }
-  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::PACKETS && qSize <= 2)
+  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::PACKETS && qSize <= 2) 
     {
       return false;
     }
@@ -233,6 +261,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
   return true;
 }
 
+//changes needed/
 void FqPieQueueDisc::CalculateP ()
 {
   NS_LOG_FUNCTION (this);
@@ -343,18 +372,19 @@ void FqPieQueueDisc::CalculateP ()
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculateP, this);
 }
 
+//changes needed/
 Ptr<QueueDiscItem>
-FqPieQueueDisc::DoDequeue ()
+FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
 {
   NS_LOG_FUNCTION (this);
 
-  if (GetInternalQueue (0)->IsEmpty ())
+  if (GetInternalQueue (0)->IsEmpty ()) //getinternalqueue(i) gets the ith queue
     {
       NS_LOG_LOGIC ("Queue empty");
       return 0;
     }
 
-  Ptr<QueueDiscItem> item = GetInternalQueue (0)->Dequeue ();
+  Ptr<QueueDiscItem> item = GetInternalQueue (0)->Dequeue ();   //If not empty itll dequeue the first one. We must use DDR to find which is dqd
   double now = Simulator::Now ().GetSeconds ();
   uint32_t pktSize = item->GetSize ();
 

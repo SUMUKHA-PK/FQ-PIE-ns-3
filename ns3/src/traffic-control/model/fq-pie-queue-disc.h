@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2016 NITK Surathkal
+ * Copyright (c) 2018 NITK Surathkal
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Authors:  Sumukha PK <sumukhapk46@gmail.com>
- *           Prajval M  <26prajval98@gmail.com>
  *           Ishaan R D <ishaanrd6@gmail.com>
+ *           Prajval M  <26prajval98@gmail.com>
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
@@ -98,6 +98,8 @@ public:
   // Reasons for dropping packets
   static constexpr const char* UNFORCED_DROP = "Unforced drop";  //!< Early probability drops: proactive
   static constexpr const char* FORCED_DROP = "Forced drop";      //!< Drops due to queue limit: reactive
+  static constexpr const char* UNCLASSIFIED_DROP = "Unclassified drop";  //!< No packet filter able to classify packet
+  
 
 protected:
   /**
@@ -141,6 +143,10 @@ private:
   double m_a;                                   //!< Parameter to pie controller
   double m_b;                                   //!< Parameter to pie controller
   uint32_t m_dqThreshold;                       //!< Minimum queue size in bytes before dequeue rate is measured
+  uint32_t m_quantum;                          //!< Deficit assigned to flows at each round
+  uint32_t m_flows;                            //!< Number of flow queues
+  uint32_t m_dropBatchSize;                    //!< Max number of packets dropped from the fat flow
+  uint32_t m_perturbation;                     //!< hash perturbation value
 
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability
