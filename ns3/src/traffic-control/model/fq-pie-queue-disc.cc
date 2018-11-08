@@ -200,8 +200,32 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
         }
     }
 
+  Ptr<FqPieFlow> flow;
+  Ptr<QueueDisc>  qd;
+  if (m_flowsIndices.find (h) == m_flowsIndices.end ())
+    {
+      NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
+      flow = m_flowFactory.Create<FqPieFlow> ();
+      qd = m_queueDiscFactory.Create<QueueDisc> ();
+      qd->Initialize ();
+      flow->SetQueueDisc (qd);
+      AddQueueDiscClass (flow);
 
-  QueueSize nQueued = GetCurrentSize ();
+      m_flowsIndices[h] = GetNQueueDiscClasses () - 1;
+    }
+  else
+    {
+      flow = StaticCast<FqPieFlow> (GetQueueDiscClass (m_flowsIndices[h]));
+    }
+
+  if (flow->GetStatus () == FqPieFlow::INACTIVE)
+    {
+      flow->SetStatus (FqPieFlow::NEW_FLOW);
+      flow->SetDeficit (m_quantum);
+      m_newFlows.push_back (flow);
+    }
+
+  QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
 
   if (nQueued + item > GetMaxSize ())
     {
@@ -407,7 +431,6 @@ void FqPieQueueDisc::CalculateP ()
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculateP, this);
 }
 
-//changes needed/
 Ptr<QueueDiscItem>
 FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
 {

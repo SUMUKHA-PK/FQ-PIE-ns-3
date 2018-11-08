@@ -220,6 +220,10 @@ private:
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
   EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
   Ptr<UniformRandomVariable> m_uv;              //!< Rng stream
+  ObjectFactory m_flowFactory;         //!< Factory to create a new flow
+  ObjectFactory m_queueDiscFactory;    //!< Factory to create a new queue
+
+  std::map<uint32_t, uint32_t> m_flowsIndices;    //!< Map with the index of class for each flow
 };
 
 };   // namespace ns3
