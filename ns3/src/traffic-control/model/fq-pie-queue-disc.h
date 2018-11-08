@@ -44,6 +44,62 @@ namespace ns3 {
 class TraceContainer;
 class UniformRandomVariable;
 
+class FqPieFlow : public QueueDiscClass {
+public:
+  /**
+   * \brief Get the type ID.
+   * \return the object TypeId
+   */
+  static TypeId GetTypeId (void);
+  /**
+   * \brief FqCoDelFlow constructor
+   */
+  FqPieFlow ();
+
+  virtual ~FqPieFlow ();
+
+  /**
+   * \enum FlowStatus
+   * \brief Used to determine the status of this flow queue
+   */
+  enum FlowStatus
+    {
+      INACTIVE,
+      NEW_FLOW,
+      OLD_FLOW
+    };
+
+  /**
+   * \brief Set the deficit for this flow
+   * \param deficit the deficit for this flow
+   */
+  void SetDeficit (uint32_t deficit);
+  /**
+   * \brief Get the deficit for this flow
+   * \return the deficit for this flow
+   */
+  int32_t GetDeficit (void) const;
+  /**
+   * \brief Increase the deficit for this flow
+   * \param deficit the amount by which the deficit is to be increased
+   */
+  void IncreaseDeficit (int32_t deficit);
+  /**
+   * \brief Set the status for this flow
+   * \param status the status for this flow
+   */
+  void SetStatus (FlowStatus status);
+  /**
+   * \brief Get the status of this flow
+   * \return the status of this flow
+   */
+  FlowStatus GetStatus (void) const;
+
+private:
+  int32_t m_deficit;    //!< the deficit for this flow
+  FlowStatus m_status;  //!< the status of this flow
+};
+
 /**
  * \ingroup traffic-control
  *
@@ -147,6 +203,9 @@ private:
   uint32_t m_flows;                            //!< Number of flow queues
   uint32_t m_dropBatchSize;                    //!< Max number of packets dropped from the fat flow
   uint32_t m_perturbation;                     //!< hash perturbation value
+
+  std::list<Ptr<FqPieFlow> > m_newFlows;    //!< The list of new flows
+  std::list<Ptr<FqPieFlow> > m_oldFlows;    //!< The list of old flows
 
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability

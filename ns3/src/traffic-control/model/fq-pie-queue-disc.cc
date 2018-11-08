@@ -240,7 +240,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
     {
       return false;
     }
-  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)  // if there are less than 2 packets or bytes then do not drop(like it just started)
+  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)  // if there are less than 2 packets or bytes then do not drop(like it just)
     {
       return false;
     }
@@ -378,62 +378,78 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
 {
   NS_LOG_FUNCTION (this);
 
-  if (GetInternalQueue (0)->IsEmpty ()) //getinternalqueue(i) gets the ith queue
+  Ptr<FqPieFlow> flow;
+  Ptr<QueueDiscItem> item;
+
+  do
     {
-      NS_LOG_LOGIC ("Queue empty");
-      return 0;
-    }
+      bool found = false;
 
-  Ptr<QueueDiscItem> item = GetInternalQueue (0)->Dequeue ();   //If not empty itll dequeue the first one. We must use DDR to find which is dqd
-  double now = Simulator::Now ().GetSeconds ();
-  uint32_t pktSize = item->GetSize ();
-
-  // if not in a measurement cycle and the queue has built up to dq_threshold,
-  // start the measurement cycle
-
-  if ( (GetInternalQueue (0)->GetNBytes () >= m_dqThreshold) && (!m_inMeasurement) )
-    {
-      m_dqStart = now;
-      m_dqCount = 0;
-      m_inMeasurement = true;
-    }
-
-  if (m_inMeasurement)
-    {
-      m_dqCount += pktSize;
-
-      // done with a measurement cycle
-      if (m_dqCount >= m_dqThreshold)
+      while (!found && !m_newFlows.empty ())
         {
+          flow = m_newFlows.front ();
 
-          double tmp = now - m_dqStart;
-
-          if (tmp > 0)
+          if (flow->GetDeficit () <= 0)
             {
-              if (m_avgDqRate == 0)
-                {
-                  m_avgDqRate = m_dqCount / tmp;
-                }
-              else
-                {
-                  m_avgDqRate = (0.5 * m_avgDqRate) + (0.5 * (m_dqCount / tmp));
-                }
-            }
-
-          // restart a measurement cycle if there is enough data
-          if (GetInternalQueue (0)->GetNBytes () > m_dqThreshold)
-            {
-              m_dqStart = now;
-              m_dqCount = 0;
-              m_inMeasurement = true;
+              flow->IncreaseDeficit (m_quantum);
+              flow->SetStatus (FqPieFlow::OLD_FLOW);
+              m_oldFlows.push_back (flow);
+              m_newFlows.pop_front ();
             }
           else
             {
-              m_dqCount = 0;
-              m_inMeasurement = false;
+              NS_LOG_DEBUG ("Found a new flow with positive deficit");
+              found = true;
             }
         }
-    }
+
+      while (!found && !m_oldFlows.empty ())
+        {
+          flow = m_oldFlows.front ();
+
+          if (flow->GetDeficit () <= 0)
+            {
+              flow->IncreaseDeficit (m_quantum);
+              m_oldFlows.push_back (flow);
+              m_oldFlows.pop_front ();
+            }
+          else
+            {
+              NS_LOG_DEBUG ("Found an old flow with positive deficit");
+              found = true;
+            }
+        }
+
+      if (!found)
+        {
+          NS_LOG_DEBUG ("No flow found to dequeue a packet");
+          return 0;
+        }
+
+      item = flow->GetQueueDisc ()->Dequeue ();
+
+      if (!item)
+        {
+          NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
+          if (!m_newFlows.empty ())
+            {
+              flow->SetStatus (FqPieFlow::OLD_FLOW);
+              m_oldFlows.push_back (flow);
+              m_newFlows.pop_front ();
+            }
+          else
+            {
+              flow->SetStatus (FqPieFlow::INACTIVE);
+              m_oldFlows.pop_front ();
+            }
+        }
+      else
+        {
+          NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
+        }
+    } while (item == 0);
+
+  flow->IncreaseDeficit (item->GetSize () * -1);
 
   return item;
 }
@@ -445,12 +461,6 @@ FqPieQueueDisc::CheckConfig (void)
   if (GetNQueueDiscClasses () > 0)
     {
       NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
-      return false;
-    }
-
-  if (GetNPacketFilters () > 0)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc cannot have packet filters");
       return false;
     }
 
