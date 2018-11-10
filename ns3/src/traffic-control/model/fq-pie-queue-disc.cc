@@ -105,7 +105,8 @@ TypeId FqPieFlow::GetTypeId (void)
 
 
 FqPieQueueDisc::FqPieQueueDisc ()
-  : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS)//m_quantum(0) check about this
+  : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
+    m_quantum(0)
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
@@ -543,7 +544,24 @@ FqPieQueueDisc::CheckConfig (void)
       NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
       return false;
     }
+  if (!m_quantum)
+      {
+        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
+        Ptr<NetDevice> dev;
+        // if the NetDeviceQueueInterface object is aggregated to a
+        // NetDevice, get the MTU of such NetDevice
+        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
+          {
+            m_quantum = dev->GetMtu ();
+            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+          }
 
+        if (!m_quantum)
+          {
+            NS_LOG_ERROR ("The quantum parameter cannot be null");
+            return false;
+          }
+      }
   return true;
 }
 

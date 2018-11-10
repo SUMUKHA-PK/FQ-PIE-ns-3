@@ -10,6 +10,7 @@
 #include "codel-queue-disc.h"
 #include "fifo-queue-disc.h"
 #include "fq-codel-queue-disc.h"
+#include "fq-pie-queue-disc.h"
 #include "mq-queue-disc.h"
 #include "packet-filter.h"
 #include "pfifo-fast-queue-disc.h"

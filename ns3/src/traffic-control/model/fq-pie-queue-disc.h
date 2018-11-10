@@ -49,9 +49,9 @@ public:
   /**
    * \brief FqPieFlow constructor
    */
-  FqPieFlow ();
+  // FqPieFlow ();
 
-  virtual ~FqPieFlow ();
+  // virtual ~FqPieFlow ();
 
   /**
    * \enum FlowStatus
