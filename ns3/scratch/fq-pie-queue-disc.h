@@ -21,10 +21,6 @@
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
-/*
- * PORT NOTE: This code was ported from ns-2.36rc1 (queue/pie.h).
- * Most of the comments are also ported from the same.
- */
 
 #ifndef FQ_PIE_QUEUE_DISC_H
 #define FQ_PIE_QUEUE_DISC_H
@@ -50,9 +46,9 @@ public:
    * \brief Get the type ID.
    * \return the object TypeId
    */
-  static TypeId GetTypeId (void);
+  //static TypeId GetTypeId (void);
   /**
-   * \brief FqCoDelFlow constructor
+   * \brief FqPieFlow constructor
    */
   FqPieFlow ();
 
