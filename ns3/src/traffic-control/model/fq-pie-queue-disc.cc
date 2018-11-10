@@ -28,7 +28,6 @@
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
 #include "fq-pie-queue-disc.h"
-#include "pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -94,6 +93,16 @@ TypeId FqPieQueueDisc::GetTypeId (void)
 
   return tid;
 }
+TypeId FqPieFlow::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::FqPieFlow")
+    .SetParent<QueueDiscClass> ()
+    .SetGroupName ("TrafficControl")
+    .AddConstructor<FqPieFlow> ()
+  ;
+  return tid;
+}
+
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS)//m_quantum(0) check about this

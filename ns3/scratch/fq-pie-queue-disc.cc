@@ -28,7 +28,6 @@
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
 #include "fq-pie-queue-disc.h"
-#include "pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -94,9 +93,20 @@ TypeId FqPieQueueDisc::GetTypeId (void)
 
   return tid;
 }
+// TypeId FqPieFlow::GetTypeId (void)
+// {
+//   static TypeId tid = TypeId ("ns3::FqPieFlow")
+//     .SetParent<QueueDiscClass> ()
+//     .SetGroupName ("TrafficControl")
+//     .AddConstructor<FqPieFlow> ()
+//   ;
+//   return tid;
+// }
+
 
 FqPieQueueDisc::FqPieQueueDisc ()
-  : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS)//m_quantum(0) check about this
+  : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
+    m_quantum(0)
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
@@ -227,7 +237,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
 
-  if (nQueued + item > GetMaxSize ())
+  if (nQueued + item > qd->GetMaxSize ())
     {
       // Drops due to queue limit: reactive
       DropBeforeEnqueue (item, FORCED_DROP);
@@ -241,13 +251,13 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
     }
 
   // No drop
-  bool retval = GetInternalQueue (0)->Enqueue (item);
+  bool retval = qd->GetInternalQueue (0)->Enqueue (item); //The queue selected gets the packet
 
   // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
   // internal queue because QueueDisc::AddInternalQueue sets the trace callback
 
-  NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
-  NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
+  NS_LOG_LOGIC ("\t bytesInQueue  " << qd->GetInternalQueue (0)->GetNBytes ());
+  NS_LOG_LOGIC ("\t packetsInQueue  " << qd->GetInternalQueue (0)->GetNPackets ());
 
   return retval;
 }
@@ -533,6 +543,25 @@ FqPieQueueDisc::CheckConfig (void)
     {
       NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
       return false;
+    }
+
+  if (!m_quantum)
+    {
+      Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
+      Ptr<NetDevice> dev;
+      // if the NetDeviceQueueInterface object is aggregated to a
+      // NetDevice, get the MTU of such NetDevice
+      if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
+        {
+          m_quantum = dev->GetMtu ();
+          NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+        }
+
+      if (!m_quantum)
+        {
+          NS_LOG_ERROR ("The quantum parameter cannot be null");
+          return false;
+        }
     }
 
   return true;

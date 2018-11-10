@@ -21,11 +21,6 @@
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
-/*
- * PORT NOTE: This code was ported from ns-2.36rc1 (queue/pie.h).
- * Most of the comments are also ported from the same.
- */
-
 #ifndef FQ_PIE_QUEUE_DISC_H
 #define FQ_PIE_QUEUE_DISC_H
 
@@ -52,7 +47,7 @@ public:
    */
   static TypeId GetTypeId (void);
   /**
-   * \brief FqCoDelFlow constructor
+   * \brief FqPieFlow constructor
    */
   FqPieFlow ();
 
@@ -103,7 +98,7 @@ private:
 /**
  * \ingroup traffic-control
  *
- * \brief Implements PIE Active Queue Management discipline
+ * \brief Implements FQPIE Active Queue Management discipline
  */
 class FqPieQueueDisc : public QueueDisc
 {
