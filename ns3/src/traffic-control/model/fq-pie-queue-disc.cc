@@ -121,6 +121,7 @@ FqPieQueueDisc::~FqPieQueueDisc ()
 void
 FqPieFlow::SetDeficit (uint32_t deficit)
 {
+  NS_LOG_DEBUG("Set def");
   NS_LOG_FUNCTION (this << deficit);
   m_deficit = deficit;
 }
@@ -128,6 +129,7 @@ FqPieFlow::SetDeficit (uint32_t deficit)
 int32_t
 FqPieFlow::GetDeficit (void) const
 {
+  NS_LOG_DEBUG("get def");
   NS_LOG_FUNCTION (this);
   return m_deficit;
 }
@@ -135,6 +137,7 @@ FqPieFlow::GetDeficit (void) const
 void
 FqPieFlow::IncreaseDeficit (int32_t deficit)
 {
+  NS_LOG_DEBUG("inc def");
   NS_LOG_FUNCTION (this << deficit);
   m_deficit += deficit;
 }
@@ -142,6 +145,7 @@ FqPieFlow::IncreaseDeficit (int32_t deficit)
 void
 FqPieFlow::SetStatus (FlowStatus status)
 {
+  NS_LOG_DEBUG("set status");
   NS_LOG_FUNCTION (this);
   m_status = status;
 }
@@ -149,6 +153,7 @@ FqPieFlow::SetStatus (FlowStatus status)
 FqPieFlow::FlowStatus
 FqPieFlow::GetStatus (void) const
 {
+  NS_LOG_DEBUG("get status");
   NS_LOG_FUNCTION (this);
   return m_status;
 }
@@ -157,6 +162,7 @@ void
 FqPieQueueDisc::DoDispose (void)
 {
   NS_LOG_FUNCTION (this);
+  NS_LOG_DEBUG("do disp");
   m_uv = 0;
   Simulator::Remove (m_rtrsEvent);
   QueueDisc::DoDispose ();
@@ -165,6 +171,7 @@ FqPieQueueDisc::DoDispose (void)
 Time
 FqPieQueueDisc::GetQueueDelay (void)
 {
+  NS_LOG_DEBUG("getqdel");
   NS_LOG_FUNCTION (this);
   return m_qDelay;
 }
@@ -174,6 +181,7 @@ FqPieQueueDisc::GetQueueDelay (void)
 int64_t
 FqPieQueueDisc::AssignStreams (int64_t stream)
 {
+  NS_LOG_DEBUG("Stream assign");
   NS_LOG_FUNCTION (this << stream);
   m_uv->SetStream (stream);
   return 1;
@@ -185,7 +193,7 @@ bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
-
+  NS_LOG_DEBUG("Enqueued");
 
   //hashing to the right queue
   uint32_t h = 0;
@@ -266,6 +274,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 void
 FqPieQueueDisc::InitializeParams (void)
 {
+  NS_LOG_DEBUG("paramters initialised");
   // Initially queue is empty so variables are initialize to zero except m_dqCount
   m_inMeasurement = false;
   m_dqCount = DQCOUNT_INVALID;
@@ -281,6 +290,7 @@ FqPieQueueDisc::InitializeParams (void)
 bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
 {
   NS_LOG_FUNCTION (this << item << qSize);
+  NS_LOG_DEBUG("early drop");
   if (m_burstAllowance.GetSeconds () > 0)
     {
       // If there is still burst_allowance left, skip random early drop.
@@ -333,6 +343,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
 //changes needed/
 void FqPieQueueDisc::CalculateP ()
 {
+  NS_LOG_DEBUG("Calp");
   NS_LOG_FUNCTION (this);
   Time qDelay;
   double p = 0.0;
@@ -444,6 +455,7 @@ void FqPieQueueDisc::CalculateP ()
 Ptr<QueueDiscItem>
 FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
 {
+  NS_LOG_DEBUG("Dqueued");
   NS_LOG_FUNCTION (this);
 
   Ptr<FqPieFlow> flow;
@@ -525,6 +537,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
 bool
 FqPieQueueDisc::CheckConfig (void)
 {
+  NS_LOG_DEBUG("config check");
   NS_LOG_FUNCTION (this);
   if (GetNQueueDiscClasses () > 0)
     {
