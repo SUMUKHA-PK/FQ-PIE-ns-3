@@ -140,8 +140,8 @@ main (int argc, char *argv[])
 {
   LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
 
-  std::string pieLinkDataRate = "1.5Mbps";
-  std::string pieLinkDelay = "20ms";
+  std::string FqpieLinkDataRate = "1.5Mbps";
+  std::string FqpieLinkDelay = "20ms";
 
   std::string pathOut;
   bool writeForPlot = false;
@@ -207,8 +207,8 @@ main (int argc, char *argv[])
   uint16_t handle = tchPfifo.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
   tchPfifo.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
 
-  TrafficControlHelper tchPie;
-  tchPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
+  TrafficControlHelper tchFqPie;
+  tchFqPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
 
   NS_LOG_INFO ("Create channels");
   PointToPointHelper p2p;
@@ -234,11 +234,11 @@ main (int argc, char *argv[])
   tchPfifo.Install (devn1n2);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue (pieLinkDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue (pieLinkDelay));
+  p2p.SetDeviceAttribute ("DataRate", StringValue (FqpieLinkDataRate));
+  p2p.SetChannelAttribute ("Delay", StringValue (FqpieLinkDelay));
   devn2n3 = p2p.Install (n2n3);
-  // only backbone link has PIE queue disc
-  queueDiscs = tchPie.Install (devn2n3);  // Have to change this line.
+  // only backbone link has FQ-PIE queue disc
+  queueDiscs = tchFqPie.Install (devn2n3);  // Have to change this line.
 
   p2p.SetQueue ("ns3::DropTailQueue");
   p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));

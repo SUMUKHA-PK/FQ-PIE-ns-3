@@ -227,7 +227,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
 
-  if (nQueued + item > qd->GetMaxSize ())
+  if (nQueued + item > GetMaxSize ())
     {
       // Drops due to queue limit: reactive
       DropBeforeEnqueue (item, FORCED_DROP);
@@ -241,13 +241,13 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
     }
 
   // No drop
-  bool retval = qd->GetInternalQueue (0)->Enqueue (item); //The queue selected gets the packet
+  bool retval = GetInternalQueue (0)->Enqueue (item);
 
   // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
   // internal queue because QueueDisc::AddInternalQueue sets the trace callback
 
-  NS_LOG_LOGIC ("\t bytesInQueue  " << qd->GetInternalQueue (0)->GetNBytes ());
-  NS_LOG_LOGIC ("\t packetsInQueue  " << qd->GetInternalQueue (0)->GetNPackets ());
+  NS_LOG_LOGIC ("\t bytesInQueue  " << GetInternalQueue (0)->GetNBytes ());
+  NS_LOG_LOGIC ("\t packetsInQueue  " << GetInternalQueue (0)->GetNPackets ());
 
   return retval;
 }
