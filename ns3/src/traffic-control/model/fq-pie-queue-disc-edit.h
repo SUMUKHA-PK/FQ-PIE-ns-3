@@ -90,6 +90,11 @@ public:
    */
   FlowStatus GetStatus (void) const;
 
+  /**
+   * \brief Initialize the queue parameters.
+   */
+  virtual void InitializeParams (void);
+
 private:
   int32_t m_deficit;    //!< the deficit for this flow
   FlowStatus m_status;  //!< the status of this flow
@@ -105,6 +110,12 @@ private:
     IN_BURST_PROTECTING,
   };
 
+  /**
+   * \brief Get queue delay.
+   *
+   * \returns The current queue delay.
+   */
+  Time GetQueueDelay (void);
 
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability
@@ -117,8 +128,7 @@ private:
   double m_avgDqRate;                           //!< Time averaged dequeue rate
   double m_dqStart;                             //!< Start timestamp of current measurement cycle
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
-  EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
-  Ptr<UniformRandomVariable> m_uv;};
+};
 
 /**
  * \ingroup traffic-control
@@ -163,6 +173,22 @@ private:
   virtual bool CheckConfig (void);
   virtual void InitializeParams (void);
 
+protected:
+  /**
+   * \brief Dispose of the object
+   */
+  virtual void DoDispose (void);
+
+   /**
+   * Assign a fixed random variable stream number to the random variables
+   * used by this model.  Return the number of streams (possibly zero) that
+   * have been assigned.
+   *
+   * \param stream first stream index to use
+   * \return the number of stream indices assigned by this model
+   */
+  int64_t AssignStreams (int64_t stream);
+
   /**
    * \brief Check if a packet needs to be dropped due to probability drop
    * \param item queue item
@@ -186,6 +212,8 @@ private:
   double m_a;                                   //!< Parameter to pie controller
   double m_b;                                   //!< Parameter to pie controller
   uint32_t m_dqThreshold;                       //!< Minimum queue size in bytes before dequeue rate is measured
+  EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
+  Ptr<UniformRandomVariable> m_uv;
 
   uint32_t m_quantum;        //!< Deficit assigned to flows at each round
   uint32_t m_flows;          //!< Number of flow queues
