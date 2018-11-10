@@ -26,6 +26,7 @@
 #include "ns3/uinteger.h"
 #include "ns3/double.h"
 #include "ns3/simulator.h"
+#include "ns3/string.h"
 #include "ns3/abort.h"
 #include "fq-pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
@@ -89,6 +90,21 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    TimeValue (Seconds (0.1)),
                    MakeTimeAccessor (&FqPieQueueDisc::m_maxBurst),
                    MakeTimeChecker ())
+    .AddAttribute ("Flows",
+                   "The number of queues into which the incoming packets are classified",
+                   UintegerValue (1024),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
+                   MakeUintegerChecker<uint32_t> ())
+    .AddAttribute ("Interval",
+                   "The CoDel algorithm interval for each FQCoDel queue",
+                   StringValue ("100ms"),
+                   MakeStringAccessor (&FqPieQueueDisc::m_interval),
+                   MakeStringChecker ())
+    .AddAttribute ("Target",
+                   "The CoDel algorithm target queue delay for each FQCoDel queue",
+                   StringValue ("5ms"),
+                   MakeStringAccessor (&FqPieQueueDisc::m_target),
+                   MakeStringChecker ())
   ;
 
   return tid;
@@ -223,12 +239,13 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {
       NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
+      NS_LOG_DEBUG("En1q1");
       flow = m_flowFactory.Create<FqPieFlow> ();
+      NS_LOG_DEBUG("En21q1");
       qd = m_queueDiscFactory.Create<QueueDisc> ();
       qd->Initialize ();
       flow->SetQueueDisc (qd);
       AddQueueDiscClass (flow);
-
       m_flowsIndices[h] = GetNQueueDiscClasses () - 1;
     }
   else
@@ -241,6 +258,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       flow->SetStatus (FqPieFlow::NEW_FLOW);
       flow->SetDeficit (m_quantum);
       m_newFlows.push_back (flow);
+      
     }
 
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
@@ -249,6 +267,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
     {
       // Drops due to queue limit: reactive
       DropBeforeEnqueue (item, FORCED_DROP);
+      NS_LOG_DEBUG("Enq");
       return false;
     }
   else if (DropEarly (item, nQueued.GetValue ()))
@@ -257,7 +276,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       DropBeforeEnqueue (item, UNFORCED_DROP);
       return false;
     }
-
+NS_LOG_DEBUG("Enq1");
   // No drop
   bool retval = qd->GetInternalQueue (0)->Enqueue (item); //The queue selected gets the packet
 
@@ -276,6 +295,13 @@ FqPieQueueDisc::InitializeParams (void)
 {
   NS_LOG_DEBUG("paramters initialised");
   // Initially queue is empty so variables are initialize to zero except m_dqCount
+  
+  m_flowFactory.SetTypeId ("ns3::FqPieFlow");
+  m_queueDiscFactory.SetTypeId ("ns3::PieQueueDisc");
+  m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
+  m_queueDiscFactory.Set ("Interval", StringValue (m_interval));
+  m_queueDiscFactory.Set ("Target", StringValue (m_target));
+
   m_inMeasurement = false;
   m_dqCount = DQCOUNT_INVALID;
   m_dropProb = 0;
