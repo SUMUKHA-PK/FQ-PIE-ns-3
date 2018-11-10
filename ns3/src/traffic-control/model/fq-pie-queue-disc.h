@@ -202,6 +202,8 @@ private:
   std::list<Ptr<FqPieFlow> > m_newFlows;    //!< The list of new flows
   std::list<Ptr<FqPieFlow> > m_oldFlows;    //!< The list of old flows
 
+std::string m_interval;    //!< CoDel interval attribute
+  std::string m_target;      //!< CoDel target attribute
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability
   Time m_qDelayOld;                             //!< Old value of queue delay
