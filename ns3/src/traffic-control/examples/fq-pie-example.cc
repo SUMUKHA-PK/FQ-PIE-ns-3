@@ -39,7 +39,6 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
 #include "ns3/traffic-control-module.h"
-#include "fq-pie-queue-disc.h"
 
 using namespace ns3;
 
@@ -148,7 +147,7 @@ main (int argc, char *argv[])
   bool writePcap = false;
   bool flowMonitor = false;
 
-  bool printPieStats = true;
+  bool printFqPieStats = true;
 
   global_start_time = 0.0;
   sink_start_time = global_start_time;
@@ -192,7 +191,7 @@ main (int argc, char *argv[])
   uint32_t meanPktSize = 1000;
 
   // PIE params
-  NS_LOG_INFO ("Set PIE params");
+  NS_LOG_INFO ("Set PIE params in Fqpiequeuedisc");
   Config::SetDefault ("ns3::FqPieQueueDisc::MaxSize", StringValue ("100p"));
   Config::SetDefault ("ns3::FqPieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
   Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (10000));
@@ -320,7 +319,7 @@ main (int argc, char *argv[])
       flowmon->SerializeToXmlFile (stmp.str ().c_str (), false, false);
     }
 
-  if (printPieStats)
+  if (printFqPieStats)
     {
       std::cout << "***FQ PIE stats from Node 2 queue ***" << std::endl;
       std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
