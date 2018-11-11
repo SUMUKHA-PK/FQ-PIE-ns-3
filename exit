@@ -1,0 +1,810 @@
+[33mcommit a0937613bb553b4c22257a395e5c5d33749863f6[m
+Merge: df1dba8 950ed77
+Author: Prajval <26prajval98@gmail.com>
+Date:   Sun Nov 11 13:43:28 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit df1dba8ba9fa6fdd2a830bb5ab72bf360b8c74f4[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 07:51:24 2018 +0530
+
+    test
+
+[33mcommit 1543fb4fd31c271601af8b221d6bdf1fa7a85fc5[m
+Author: Prajval M <30946770+26prajval98@users.noreply.github.com>
+Date:   Sun Nov 11 13:10:45 2018 +0530
+
+    Update README.md
+
+[33mcommit 57fadde988d40c2eabd81903d7888fd5bad1712c[m
+Merge: f5ed90c 604faab
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 13:08:45 2018 +0530
+
+    COntrib not coming
+
+[33mcommit f5ed90c090025ba0b3ba88e2f963cd3fe4d6515b[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 12:57:44 2018 +0530
+
+    Completed
+
+[33mcommit 604faaba39aeefce6507f020945014f75770801a[m
+Merge: 4a05c93 784bcee
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 12:13:50 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 4a05c93bcfd8392e06a1342b15212a1ee6e0f828[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 12:13:32 2018 +0530
+
+    Almost everything seems to be done,but hashing seems to happen to same value
+
+[33mcommit a9967b048a2e38d1c8869805581c810cc9fb6550[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 10:36:51 2018 +0530
+
+    constructor in header
+
+[33mcommit 16dd2487127b0da3e3c55feab80e2c830c63b45f[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 10:32:16 2018 +0530
+
+    register
+
+[33mcommit 784bcee169102f1dbe9b848e22d1d7593bbc8c47[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Sun Nov 11 10:30:04 2018 +0530
+
+    Udp on n0n2
+
+[33mcommit 30654c15bdca337730f836b79dccf96c4356ea6b[m
+Merge: f26e7dc 2e16ff5
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 10:12:34 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit f26e7dc993d59b67891ac53d2f8bc53dc726ff3c[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 10:12:15 2018 +0530
+
+    Debugging
+
+[33mcommit 2e16ff5f9fa3985369faa3b055a00e8ac528872c[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 10:07:30 2018 +0530
+
+    quantum added
+
+[33mcommit 1b52699b811fcb66467739fb8b4462be372993e8[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 09:59:04 2018 +0530
+
+    edit format
+
+[33mcommit ff4d82d27df3d60fcb001a40c99e31695ea368a9[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 09:21:02 2018 +0530
+
+    Resolving error
+
+[33mcommit 89975308b333d45bbe7543ac9197889fbd4eb812[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 09:20:19 2018 +0530
+
+    resolving errors
+
+[33mcommit 557bf853ac8b7fa83ee5af5d83af1e5cf7ca04d0[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 08:44:38 2018 +0530
+
+    Calculate P for flows
+
+[33mcommit 18bab0d3dda429f2583ae5ebaf3fedf54c092d96[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 08:28:30 2018 +0530
+
+    flows added to Enqueue, calculateP and Drop Early
+
+[33mcommit 950ed77c938faa235390458ade0561b35130825f[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sun Nov 11 07:51:24 2018 +0530
+
+    test
+
+[33mcommit 93d8d1da7357fde85e5a503c5fe4abb100a2ea1a[m
+Author: Prajval M <30946770+26prajval98@users.noreply.github.com>
+Date:   Sun Nov 11 13:10:45 2018 +0530
+
+    Update README.md
+
+[33mcommit 7baa98130826b121fc64921cb96dfc2b2f61ed97[m
+Merge: f311396 65e9574
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 13:08:45 2018 +0530
+
+    COntrib not coming
+
+[33mcommit f31139673970473094433a64aed9e28e7b425ba1[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 12:57:44 2018 +0530
+
+    Completed
+
+[33mcommit 65e9574c0723b131370aca8b68c15cfc6ab928a8[m
+Merge: 985a75d bf507b8
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 12:13:50 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 985a75dcf790a51c0502e1ab16565514c0a2ab1c[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 12:13:32 2018 +0530
+
+    Almost everything seems to be done,but hashing seems to happen to same value
+
+[33mcommit 2b621521f27a5a0a2ca227a9a3d1f99cded7fb1b[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 10:36:51 2018 +0530
+
+    constructor in header
+
+[33mcommit dd0811126939ee643d9cedc3e82d1197c3224e61[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 10:32:16 2018 +0530
+
+    register
+
+[33mcommit bf507b8e4a5f2e7a3b6ee31e7b6554029a998b78[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Sun Nov 11 10:30:04 2018 +0530
+
+    Udp on n0n2
+
+[33mcommit edbe2c194a1dc13c07834493a077d6220e29f8a2[m
+Merge: 8187f41 b679b8f
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 10:12:34 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 8187f41bb6254c2703aec0ece35fe68c3fcee436[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Nov 11 10:12:15 2018 +0530
+
+    Debugging
+
+[33mcommit b679b8f84f5ced17068c55a7bf4f57de574a93ce[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 10:07:30 2018 +0530
+
+    quantum added
+
+[33mcommit c2fa90a1fca5d524136ae3a972982ebe783f9f45[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 09:59:04 2018 +0530
+
+    edit format
+
+[33mcommit e7b4cf0e5fbfb6d14851bf0838394a38d56cef92[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 09:21:02 2018 +0530
+
+    Resolving error
+
+[33mcommit 9508341f97029c2072a676796967b11f5a37fd0b[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 09:20:19 2018 +0530
+
+    resolving errors
+
+[33mcommit 044039adeb98157f998c732a63200c0bda53772e[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 08:44:38 2018 +0530
+
+    Calculate P for flows
+
+[33mcommit f820d6f6723d5fed80cbbdf6ea2a16a05196d763[m
+Author: Prajval <26prajval98>
+Date:   Sun Nov 11 08:28:30 2018 +0530
+
+    flows added to Enqueue, calculateP and Drop Early
+
+[33mcommit 7991c44d835c5159e0e31aa5f73ea8cb81049048[m
+Merge: 154f3bb 488625d
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sat Nov 10 23:25:18 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 2326db64678cdb7c2359b1baaaa53e30e1b973ea[m
+Merge: f470fa8 344de06
+Author: Prajval <26prajval98>
+Date:   Sat Nov 10 23:25:18 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 154f3bb329ef46ddb8207e95e8b5ecea3e181848[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sat Nov 10 23:25:14 2018 +0530
+
+    check if all added
+
+[33mcommit f470fa8fc998c77e9ccd6ee6a60b94b36638592c[m
+Author: Prajval <26prajval98>
+Date:   Sat Nov 10 23:25:14 2018 +0530
+
+    check if all added
+
+[33mcommit 488625dfdcd12e5eb3da186c9ae191cb571930ff[m
+Merge: b44fc5b 5445492
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:57:18 2018 +0530
+
+    Still debugging,changes needed
+
+[33mcommit 344de06484541cb60231ae5bf490c382e60f87e9[m
+Merge: a86281e d1691e0
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:57:18 2018 +0530
+
+    Still debugging,changes needed
+
+[33mcommit b44fc5bb01e15fffa3677e60983b1ca46d767e06[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:56:43 2018 +0530
+
+    Still debugging,changes needed
+
+[33mcommit a86281eaa4be84d5cc0435eec943849c7152d170[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:56:43 2018 +0530
+
+    Still debugging,changes needed
+
+[33mcommit 54454922e1b9817a6b75ece01040c21c5edda335[m
+Merge: 3bb6873 147bfc7
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sat Nov 10 22:31:06 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit d1691e043a6480ab305d56b206b9b23604eb34cb[m
+Merge: f02bcd7 6bbfc3e
+Author: Prajval <26prajval98>
+Date:   Sat Nov 10 22:31:06 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 3bb68734d7ee118fcfe6d40fdbf948a32dbc6bbe[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Sat Nov 10 22:30:01 2018 +0530
+
+    SomeChanges
+
+[33mcommit f02bcd7b276160e33cb96c01a5491a4c2eb12ed0[m
+Author: Prajval <26prajval98>
+Date:   Sat Nov 10 22:30:01 2018 +0530
+
+    SomeChanges
+
+[33mcommit 147bfc74a9e809f59bf05abcd04d52134c1a2804[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:27:06 2018 +0530
+
+    Debugging
+
+[33mcommit 6bbfc3e7c84f71f2dd592cabd76ebdc921f271d0[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 22:27:06 2018 +0530
+
+    Debugging
+
+[33mcommit fa2cb5e86cc080c82de7f4b82e1a7eac674885a8[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 20:17:07 2018 +0530
+
+    Code compiles
+
+[33mcommit a9fa09584ff47a2829007820a08532c05b15ca72[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 20:17:07 2018 +0530
+
+    Code compiles
+
+[33mcommit 68266d485034b187ec8f6675de199005736ff193[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 13:50:27 2018 +0530
+
+    Changes in .cc
+
+[33mcommit e4fb25a843f203eaf7dad2de2b2fabe5db6c7713[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 13:50:27 2018 +0530
+
+    Changes in .cc
+
+[33mcommit b4b4a2cef1ad78423159d3d6e43bbae404e40372[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 11:51:10 2018 +0530
+
+    Enqueue done
+
+[33mcommit 9e8ced205c8c46b8e5c2abd7831198ab80111649[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Nov 10 11:51:10 2018 +0530
+
+    Enqueue done
+
+[33mcommit 5df95e033f1ba4a89ad52b0385674207bb1341c7[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 21:37:25 2018 +0530
+
+    Some seems to be done
+
+[33mcommit 39fe65ff9057b913431af5c587b805206ec054e1[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 21:37:25 2018 +0530
+
+    Some seems to be done
+
+[33mcommit 439f5a5ddfe12665efb68b6f9bf307f61b3f858b[m
+Merge: a1829ca 124ff2e
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:49:52 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit c310b75a5f3201465a9f020c269541037cee223d[m
+Merge: 4ca6e37 6a62bc2
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:49:52 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit a1829cac5d45093e0733356bc38660fe56d8c496[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:49:35 2018 +0530
+
+    More changes in fqpie
+
+[33mcommit 4ca6e378d426fc626d42432058671608eeed3f74[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:49:35 2018 +0530
+
+    More changes in fqpie
+
+[33mcommit 124ff2e628841b30349c4ff9093a3e7670784cb6[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Thu Nov 8 15:33:11 2018 +0530
+
+    kamdkas
+
+[33mcommit 6a62bc29d305874efa71ad008389009cfb2ba148[m
+Author: Prajval <26prajval98>
+Date:   Thu Nov 8 15:33:11 2018 +0530
+
+    kamdkas
+
+[33mcommit c6c11579dd6f4ce144a018512b479ded921d448c[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:21:37 2018 +0530
+
+    Added a flow class fqpiefloq
+
+[33mcommit e1eef483ce3eb4ab105b5df6c409b96ae9d0628f[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 15:21:37 2018 +0530
+
+    Added a flow class fqpiefloq
+
+[33mcommit 71753952255d645ba9b09fb7d8baa8395a9c7a18[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 14:46:59 2018 +0530
+
+    More changes in working file
+
+[33mcommit a66e011fe4bdd56e6acdc5fad063eb5b0a1f925a[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 8 14:46:59 2018 +0530
+
+    More changes in working file
+
+[33mcommit 4d1726eae9acf0aabe4137b6123c1f49519dba3f[m
+Author: 26prajval98 <26prajval98@gmail.com>
+Date:   Thu Nov 8 14:43:37 2018 +0530
+
+    hw
+
+[33mcommit 09a1dfb6c2fe500623f7dd19049f3d1d181ac54d[m
+Author: Prajval <26prajval98>
+Date:   Thu Nov 8 14:43:37 2018 +0530
+
+    hw
+
+[33mcommit d9cdfc7dc4631f545ddb3599301929c5f0af016e[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Wed Nov 7 19:06:50 2018 +0530
+
+    Made changes in Fqpie files
+
+[33mcommit 6fa4d959a1cb06f46bccb9ee8a02b056018ae528[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Wed Nov 7 19:06:50 2018 +0530
+
+    Made changes in Fqpie files
+
+[33mcommit dafa15315ed9488e09824dc59644f803140913f8[m
+Merge: 5dc36ca 4d77dd6
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 1 23:09:39 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 6b625752b897c52a8915200c6964183a2c7b8c70[m
+Merge: dfc713a bf434f7
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 1 23:09:39 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit 5dc36ca7a5d8107e933b4e8602d1d87d49910a37[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 1 23:09:17 2018 +0530
+
+    Created new files
+
+[33mcommit dfc713a7fdf2a450134b3f55c0450e458a3fb31a[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Thu Nov 1 23:09:17 2018 +0530
+
+    Created new files
+
+[33mcommit 4d77dd6cfa6060c3654d154f852dd833965b339e[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Mon Oct 29 11:55:41 2018 +0530
+
+    Update README.md
+
+[33mcommit bf434f7cb2fb02d9aa33531509ead3acaf027e0b[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Mon Oct 29 11:55:41 2018 +0530
+
+    Update README.md
+
+[33mcommit a4cb7c2be887b508a08627ea39699bd59c746ecf[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 24 16:18:34 2018 +0530
+
+    Update README.md
+
+[33mcommit 804990658ee5c5ae1be8c6df8af063034d4c7364[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 24 16:18:34 2018 +0530
+
+    Update README.md
+
+[33mcommit 73dfb126b568617f0db57c5aad5c73a0150e87a5[m
+Merge: 006792c d8e8f30
+Author: Ishaan R Dharamdas <ishaanrd6@gmail.com>
+Date:   Wed Oct 24 16:14:47 2018 +0530
+
+    Merge pull request #3 from SUMUKHA-PK/ishaan
+    
+    readme modified - removed fq-codel stuff
+
+[33mcommit f0ed3868a229ac1bfe40230ce26cb8acff5f50d9[m
+Merge: 03e91a8 8d6cbf6
+Author: Ishaan R Dharamdas <ishaanrd6@gmail.com>
+Date:   Wed Oct 24 16:14:47 2018 +0530
+
+    Merge pull request #3 from SUMUKHA-PK/ishaan
+    
+    readme modified - removed fq-codel stuff
+
+[33mcommit d8e8f30abb1287239d00b6183b9b4171a6b42d49[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Wed Oct 24 16:01:32 2018 +0530
+
+    readme modified - removed fq-codel stuff
+
+[33mcommit 8d6cbf6e4b866a6cedb05e0226e21b3b31cec284[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Wed Oct 24 16:01:32 2018 +0530
+
+    readme modified - removed fq-codel stuff
+
+[33mcommit 006792c35e678bd3ff9e30453ee328afb154b715[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 24 14:26:01 2018 +0530
+
+    Update .gitignore
+
+[33mcommit 03e91a84a44ed346266bc4c145f8fdab6caace1c[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 24 14:26:01 2018 +0530
+
+    Update .gitignore
+
+[33mcommit 9a1d47297c4621732bc12ea63b3f0698393ef07d[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:13:15 2018 +0530
+
+    Check
+
+[33mcommit c828a3c74805961dee3d292454935d3d7d7d3ce4[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:13:15 2018 +0530
+
+    Check
+
+[33mcommit 7aeffcd155df228036ec57b857c6d823ea36571c[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:08:35 2018 +0530
+
+    Changes?
+
+[33mcommit c3572df010bed8db6b0d6968bef470664bc8c75e[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:08:35 2018 +0530
+
+    Changes?
+
+[33mcommit 6093c8074088e093fd3eff97c420019072286563[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:04:44 2018 +0530
+
+    Update README.md
+
+[33mcommit d353960d63ba0005f6c08e45ddee64ab2f84f4bc[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 17:04:44 2018 +0530
+
+    Update README.md
+
+[33mcommit 6f224f38d219bf43f674ceb0daa308f6970d2cd1[m
+Merge: ef37170 96bd0db
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 11:55:38 2018 +0530
+
+    Merge pull request #2 from SUMUKHA-PK/ishaan
+    
+    updated README with points about FQ_CoDel
+
+[33mcommit 2a12bea7eb82bbeaf4ab455c654d84696fb60901[m
+Merge: 01566c0 62a5811
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Oct 21 11:55:38 2018 +0530
+
+    Merge pull request #2 from SUMUKHA-PK/ishaan
+    
+    updated README with points about FQ_CoDel
+
+[33mcommit 96bd0db8c117869a5214cff7324430589719fc55[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Sat Oct 20 22:14:46 2018 +0530
+
+    updated README with points about FQ_CoDel
+
+[33mcommit 62a581150386aca5df6f052d0a39d480047b6664[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Sat Oct 20 22:14:46 2018 +0530
+
+    updated README with points about FQ_CoDel
+
+[33mcommit ef371708d66e58324a6118758d4523abe5cbaa85[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 17 17:30:41 2018 +0530
+
+    Update README.md
+
+[33mcommit 01566c0976b8b4b6340b8bfe00db7f62b91942b6[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 17 17:30:41 2018 +0530
+
+    Update README.md
+
+[33mcommit 92868f0f7aed9c5882b3ffa07567407a87dfd088[m
+Merge: 890c081 73b754b
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Fri Oct 12 08:48:52 2018 +0530
+
+    Merge pull request #1 from SUMUKHA-PK/ishaan
+    
+    wrote about fq-pie in README.md
+
+[33mcommit 0e370629d81d07c9f3046a11425d667533b60a53[m
+Merge: 465dd47 b8066ba
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Fri Oct 12 08:48:52 2018 +0530
+
+    Merge pull request #1 from SUMUKHA-PK/ishaan
+    
+    wrote about fq-pie in README.md
+
+[33mcommit 73b754b9b8df8fcc4de8cca2d971cdb078e3e02e[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Thu Oct 11 21:29:06 2018 +0530
+
+    wrote about fq-pie in README.md
+
+[33mcommit b8066ba2a14d5177620f657dec63a79f0c24e0cd[m
+Author: ishaan-rd <ishaanrd6@gmail.com>
+Date:   Thu Oct 11 21:29:06 2018 +0530
+
+    wrote about fq-pie in README.md
+
+[33mcommit 890c08166e391ca6104ada358142ecc425ef1880[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:09:05 2018 +0530
+
+    Update README.md
+
+[33mcommit 465dd473b77e32b2cf8c9e334d4c9c9325703b4a[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:09:05 2018 +0530
+
+    Update README.md
+
+[33mcommit 9a139357f09b384e2cab5dceec83e017a527b764[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:08:44 2018 +0530
+
+    Update README.md
+
+[33mcommit a1784285c172fbb64e61dc270526f1a08412a245[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:08:44 2018 +0530
+
+    Update README.md
+
+[33mcommit ff6dbacd1a4ac09b09ecc38a8f3dc09514a20ff7[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:01:05 2018 +0530
+
+    UPDATE
+
+[33mcommit 72d4f208fec3dc8feb7cc29c511f4c046fd5229e[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 15:01:05 2018 +0530
+
+    UPDATE
+
+[33mcommit 3bd26fdff94c2b15f692d529927527810901acf5[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:56:25 2018 +0530
+
+    Update README.md
+
+[33mcommit 607eb07800ec85ea162bc6ca0a087f0150bbd76d[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:56:25 2018 +0530
+
+    Update README.md
+
+[33mcommit fa8d2b84aea05ba67c51ded54cde3dda1fd73f0e[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:54:04 2018 +0530
+
+    Update README.md
+
+[33mcommit 4c218631954b703913ef2a255c8680df3760e546[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:54:04 2018 +0530
+
+    Update README.md
+
+[33mcommit ee62e2091374a28a95c1920d18994eea31cbbe0d[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:53:21 2018 +0530
+
+    Section 4.3 RFC 8033 updated in readme
+
+[33mcommit 4c2ba4f7fd5fc1a04a351761f5c12bc5abb2ca2b[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Wed Oct 3 14:53:21 2018 +0530
+
+    Section 4.3 RFC 8033 updated in readme
+
+[33mcommit 70d35d6094b2280615808525a594cb656e78fad9[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Tue Oct 2 17:52:35 2018 +0530
+
+    Update README.md
+
+[33mcommit 4a7b76026cde6fdc0e160a91f4ad594586613b9f[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Tue Oct 2 17:52:35 2018 +0530
+
+    Update README.md
+
+[33mcommit a543183c462c76b30870d5d4c6ae7dd7eee93d79[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Sep 30 08:26:27 2018 +0530
+
+    Update README.md
+
+[33mcommit 119430f6816a16c7a3011047c940aa8f5a0d1025[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sun Sep 30 08:26:27 2018 +0530
+
+    Update README.md
+
+[33mcommit 61ae83b69ed81c8f391ed67dfaebc59a0874f74b[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 11:52:26 2018 +0530
+
+    Compiled and tested basic functionality of ns3
+
+[33mcommit aee777b9f111e1c3cee06c6c66c3564387d601d2[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 11:52:26 2018 +0530
+
+    Compiled and tested basic functionality of ns3
+
+[33mcommit c8126a2de250970a46c2c32fd2e6271e0e5e4138[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:55:38 2018 +0530
+
+    Added ns3
+
+[33mcommit 697097e637d65825fe39741dce737b3c505bf1ae[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:55:38 2018 +0530
+
+    Added ns3
+
+[33mcommit 50574cebfb50e419b3d69210bd8fef4b28dc6107[m
+Merge: db9a6ea 326671b
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:54:29 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit c8f7bb8d6e60f76ccbc542014f7fe1a363d7ad63[m
+Merge: 611cad1 153e86e
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:54:29 2018 +0530
+
+    Merge branch 'master' of https://github.com/SUMUKHA-PK/FQ-PIE-ns-3
+
+[33mcommit db9a6ea756a6e3ee44835a2d0a42272f7716a319[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:53:45 2018 +0530
+
+    Added ns3 dev
+
+[33mcommit 611cad111dbd2ca307960dc852163065be45515c[m
+Author: SUMUKHA-PK <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:53:45 2018 +0530
+
+    Added ns3 dev
+
+[33mcommit 326671b6d37a21db477d4c983822297879c9b1a8[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:14:50 2018 +0530
+
+    Update README.md
+
+[33mcommit 153e86e92488e976c6765ceb5dafa16c28f76f1e[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Sat Sep 29 10:14:50 2018 +0530
+
+    Update README.md
+
+[33mcommit 177b4918de6fcedf033386c920dd2a9de45bb8a9[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Thu Sep 20 21:23:46 2018 +0530
+
+    Initial commit
+
+[33mcommit 852337a80a2e1b1c2626a389f72f498132027a20[m
+Author: Sumukha Pk <sumukhapk46@gmail.com>
+Date:   Thu Sep 20 21:23:46 2018 +0530
+
+    Initial commit
