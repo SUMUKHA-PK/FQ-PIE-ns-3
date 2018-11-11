@@ -95,11 +95,6 @@ public:
    */
   virtual void InitializeParams (void);
 
-private:
-  int32_t m_deficit;    //!< the deficit for this flow
-  FlowStatus m_status;  //!< the status of this flow
-
-
   /**
    * \brief Burst types
    */
@@ -118,6 +113,7 @@ private:
   Time GetQueueDelay (void);
 
   // ** Variables maintained by PIE
+  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
   double m_dropProb;                            //!< Variable used in calculation of drop probability
   Time m_qDelayOld;                             //!< Old value of queue delay
   Time m_qDelay;                                //!< Current value of queue delay
@@ -128,6 +124,12 @@ private:
   double m_avgDqRate;                           //!< Time averaged dequeue rate
   double m_dqStart;                             //!< Start timestamp of current measurement cycle
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
+
+
+private:
+  int32_t m_deficit;    //!< the deficit for this flow
+  FlowStatus m_status;  //!< the status of this flow
+
 };
 
 /**
@@ -165,7 +167,8 @@ public:
 
   // Reasons for dropping packets
   static constexpr const char* UNCLASSIFIED_DROP = "Unclassified drop";  //!< No packet filter able to classify packet
-  static constexpr const char* RANDOM_DROP = "Random Drop";        //!< Overlimit dropped packets
+  static constexpr const char* RANDOM_DROP = "Random Drop";        //!< Random dropping of packets in FQ-PIE
+  static constexpr const char* FORCED_DROP = "Forced Drop";        //!< Overlimit dropped packets
 
 private:
   virtual bool DoEnqueue (Ptr<QueueDiscItem> item);
@@ -195,14 +198,19 @@ protected:
    * \param qSize queue size
    * \returns 0 for no drop, 1 for drop
    */
-  bool DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize);
+  bool DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow>, uint32_t qSize);
 
-/**
+  /**
    * Periodically update the drop probability based on the delay samples:
    * not only the current delay sample but also the trend where the delay
    * is going, up or down
    */
-  void CalculateP ();
+  void CalculateP (Ptr<FqPieFlow>);
+  /**
+   * Calculate drop probability for each flow ACTIVE
+   */
+  void CalculatePFlow ();
+
 
   Time m_sUpdate;                               //!< Start time of the update timer
   Time m_tUpdate;                               //!< Time period after which CalculateP () is called
