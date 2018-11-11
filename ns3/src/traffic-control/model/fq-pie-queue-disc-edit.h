@@ -47,10 +47,16 @@ public:
    * \return the object TypeId
    */
   static TypeId GetTypeId (void);
+  
   /**
    * \brief FqPieFlow constructor
    */
 
+  FqPieFlow ();
+
+  /**
+   *  brief FqPieFlow destructor 
+   */
   virtual ~FqPieFlow ();
 
   /**
@@ -234,4 +240,3 @@ protected:
 }   // namespace ns3
 
 #endif
-
