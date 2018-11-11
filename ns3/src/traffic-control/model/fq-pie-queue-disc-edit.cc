@@ -335,7 +335,25 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, ui
   return true;
 }
 
-void FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
+void
+FqPieQueueDisc::CalculatePFlow()
+{
+  NS_LOG_DEBUG("Calculating P invoked");
+  std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
+  std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
+}
+
+void 
+FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
 {
   NS_LOG_DEBUG("Calculating P for each flow");
   NS_LOG_FUNCTION (this);
@@ -444,7 +462,6 @@ void FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
     }
 
   flow->m_qDelayOld = qDelay;
-  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
 Ptr<QueueDiscItem>
