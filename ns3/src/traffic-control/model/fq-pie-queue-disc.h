@@ -25,22 +25,20 @@
 #define FQ_PIE_QUEUE_DISC_H
 
 #include "ns3/queue-disc.h"
+#include "ns3/object-factory.h"
+#include <list>
+#include <map>
+
 #include "ns3/nstime.h"
 #include "ns3/boolean.h"
 #include "ns3/data-rate.h"
 #include "ns3/timer.h"
 #include "ns3/event-id.h"
 #include "ns3/random-variable-stream.h"
-#include "ns3/object-factory.h"
-#include <list>
-#include <map>
 
 #define BURST_RESET_TIMEOUT 1.5
 
 namespace ns3 {
-
-class TraceContainer;
-class UniformRandomVariable;
 
 class FqPieFlow : public QueueDiscClass {
 public:
@@ -49,11 +47,16 @@ public:
    * \return the object TypeId
    */
   static TypeId GetTypeId (void);
+  
   /**
    * \brief FqPieFlow constructor
    */
+
   FqPieFlow ();
 
+  /**
+   *  brief FqPieFlow destructor 
+   */
   virtual ~FqPieFlow ();
 
   /**
@@ -66,7 +69,7 @@ public:
       NEW_FLOW,
       OLD_FLOW
     };
-  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
+
   /**
    * \brief Set the deficit for this flow
    * \param deficit the deficit for this flow
@@ -127,6 +130,7 @@ public:
 private:
   int32_t m_deficit;    //!< the deficit for this flow
   FlowStatus m_status;  //!< the status of this flow
+
 };
 
 /**
@@ -200,19 +204,6 @@ protected:
    * \return the number of stream indices assigned by this model
    */
   int64_t AssignStreams (int64_t stream);
-    /**
-    * \brief Set the quantum value.
-    *
-    * \param quantum The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
-    */
-   void SetQuantum (uint32_t quantum);
-
-   /**
-    * \brief Get the quantum value.
-    *
-    * \returns The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
-    */
-   uint32_t GetQuantum (void) const;
 
   /**
    * \brief Check if a packet needs to be dropped due to probability drop

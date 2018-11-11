@@ -28,7 +28,7 @@
 #include "ns3/double.h"
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
-#include "fq-pie-queue-disc-edit.h"
+#include "fq-pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -51,8 +51,8 @@ TypeId FqPieFlow::GetTypeId (void)
   return tid;
 }
 
-FqPieFlow::FqPieFlow ()
-  : m_deficit (0),
+FqPieFlow::FqPieFlow (): 
+    m_deficit (0),
     m_status (INACTIVE)
 {
   NS_LOG_FUNCTION (this);
@@ -178,7 +178,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
-    m_quantum(100)
+    m_quantum(0)
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
@@ -206,6 +206,7 @@ FqPieQueueDisc::GetQuantum (void) const
 void
 FqPieQueueDisc::InitializeParams (void)
 {
+  NS_LOG_DEBUG("paramters initialised");
   // Initially queue is empty so variables are initialize to zero except m_dqCount
   
   m_flowFactory.SetTypeId ("ns3::FqPieFlow");
@@ -216,6 +217,7 @@ FqPieQueueDisc::InitializeParams (void)
 bool
 FqPieQueueDisc::CheckConfig (void)
 {
+  NS_LOG_DEBUG("config check");
   NS_LOG_FUNCTION (this);
   if (GetNQueueDiscClasses () > 0)
     {
@@ -260,13 +262,13 @@ bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
+  NS_LOG_DEBUG("Enqueued");
 
   //hashing to the right queue
-  uint32_t h =0;
-  
+  uint32_t h = 0;
+
   if (GetNPacketFilters () == 0)
     {
-      NS_LOG_DEBUG(m_flows);
       h = item->Hash (m_perturbation) % m_flows;
     }
   else
@@ -283,7 +285,6 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
           DropBeforeEnqueue (item, UNCLASSIFIED_DROP);
           return false;
         }
-        NS_LOG_DEBUG("asisajnasjl asdasjdsajd h");
     }
 
   Ptr<FqPieFlow> flow;
@@ -318,8 +319,6 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       flow->SetDeficit (m_quantum);
       m_newFlows.push_back (flow);
     }
-  
-  NS_LOG_DEBUG("Test");
   
   Ptr<QueueDisc> qd = flow->GetQueueDisc();
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
@@ -600,6 +599,7 @@ FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
 void
 FqPieQueueDisc::CalculatePFlow()
 {
+  NS_LOG_DEBUG("Calculating P invoked");
   std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
   std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
   for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ++ptrFlow){

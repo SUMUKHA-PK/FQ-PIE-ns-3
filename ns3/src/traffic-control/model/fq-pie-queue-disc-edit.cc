@@ -118,6 +118,11 @@ TypeId FqPieQueueDisc::GetTypeId (void)
     .SetParent<QueueDisc> ()
     .SetGroupName ("TrafficControl")
     .AddConstructor<FqPieQueueDisc> ()
+    .AddAttribute ("Flows",
+                   "The number of queues into which the incoming packets are classified",
+                   UintegerValue (1024),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
+                   MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("MeanPktSize",
                    "Average of packet size",
                    UintegerValue (1000),
