@@ -84,16 +84,22 @@ Here the DRR algorithm is used in order to determine which queue has to dequeue.
 **PIE vs FQ-PIE**
 
 1. Only when TCP packets are present in the Network :
+
+
 |       Drops       | PIE | FQ-PIE |
 |:-----------------:|:---:|:------:|
 |    Random Drops   | 204 |    0   |
 | Queue limit Drops |  0  |    0   |
 
+
 2. When both TCP and UDP packets are present in the Network:
+
+
 |       Drops       |  PIE | FQ-PIE |
 |:-----------------:|:----:|:------:|
 |    Random Drops   | 3512 |   483  |
 | Queue limit Drops |  454 |    0   |
+
 
 ***
 
