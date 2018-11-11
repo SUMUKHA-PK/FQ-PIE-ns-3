@@ -22,14 +22,13 @@
  */
 
 #include "ns3/log.h"
+#include "ns3/string.h"
 #include "ns3/enum.h"
 #include "ns3/uinteger.h"
 #include "ns3/double.h"
 #include "ns3/simulator.h"
-#include "ns3/string.h"
 #include "ns3/abort.h"
-#include "fq-pie-queue-disc.h"
-#include "pie-queue-disc.h"
+#include "fq-pie-queue-disc-edit.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -37,9 +36,11 @@ namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("FqPieQueueDisc");
 
-NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
+NS_OBJECT_ENSURE_REGISTERED(FqPieFlow);
 
-//All flow functions are implemented here
+NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
+
+
 TypeId FqPieFlow::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::FqPieFlow")
@@ -57,10 +58,11 @@ FqPieFlow::FqPieFlow ()
   NS_LOG_FUNCTION (this);
 }
 
-FqPieFlow::~FqPieFlow ()
+FqPieFlow::~FqPieFlow()
 {
   NS_LOG_FUNCTION (this);
 }
+
 
 void
 FqPieFlow::SetDeficit (uint32_t deficit)
@@ -102,15 +104,25 @@ FqPieFlow::GetStatus (void) const
   return m_status;
 }
 
-NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
+Time
+FqPieFlow::GetQueueDelay (void)
+{
+  NS_LOG_DEBUG("getqdel");
+  NS_LOG_FUNCTION (this);
+  return m_qDelay;
+}
 
-//All functions related to Queuedisc are implemented here
 TypeId FqPieQueueDisc::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::FqPieQueueDisc")
     .SetParent<QueueDisc> ()
     .SetGroupName ("TrafficControl")
     .AddConstructor<FqPieQueueDisc> ()
+    .AddAttribute ("Flows",
+                   "The number of queues into which the incoming packets are classified",
+                   UintegerValue (1024),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
+                   MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("MeanPktSize",
                    "Average of packet size",
                    UintegerValue (1000),
@@ -157,35 +169,12 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    TimeValue (Seconds (0.1)),
                    MakeTimeAccessor (&FqPieQueueDisc::m_maxBurst),
                    MakeTimeChecker ())
-    .AddAttribute ("Flows",
-                   "The number of queues into which the incoming packets are classified",
-                   UintegerValue (1024),
-                   MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
-                   MakeUintegerChecker<uint32_t> ())
-    .AddAttribute ("Interval",
-                   "The Pie algorithm interval for each FQPie queue",
-                   StringValue ("100ms"),
-                   MakeStringAccessor (&FqPieQueueDisc::m_interval),
-                   MakeStringChecker ())
-    .AddAttribute ("Target",
-                   "The Pie algorithm target queue delay for each FQPie queue",
-                   StringValue ("5ms"),
-                   MakeStringAccessor (&FqPieQueueDisc::m_target),
-                   MakeStringChecker ())
-    .AddAttribute ("DropBatchSize",
-                   "The maximum number of packets dropped from the fat flow",
-                   UintegerValue (64),
-                   MakeUintegerAccessor (&FqPieQueueDisc::m_dropBatchSize),
-                   MakeUintegerChecker<uint32_t> ())
-    .AddAttribute ("Perturbation",
-                   "The salt used as an additional input to the hash function used to classify packets",
-                   UintegerValue (0),
-                   MakeUintegerAccessor (&FqPieQueueDisc::m_perturbation),
-                   MakeUintegerChecker<uint32_t> ())
   ;
 
   return tid;
 }
+
+
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
@@ -193,7 +182,7 @@ FqPieQueueDisc::FqPieQueueDisc ()
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
-  m_rtrsEvent = Simulator::Schedule (m_sUpdate, &FqPieQueueDisc::CalculateP, this);
+  m_rtrsEvent = Simulator::Schedule (m_sUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
 FqPieQueueDisc::~FqPieQueueDisc ()
@@ -202,47 +191,82 @@ FqPieQueueDisc::~FqPieQueueDisc ()
 }
 
 void
-FqPieQueueDisc::DoDispose (void)
+FqPieQueueDisc::SetQuantum (uint32_t quantum)
+{
+  NS_LOG_FUNCTION (this << quantum);
+  m_quantum = quantum;
+}
+
+uint32_t
+FqPieQueueDisc::GetQuantum (void) const
+{
+  return m_quantum;
+}
+
+void
+FqPieQueueDisc::InitializeParams (void)
+{
+  // Initially queue is empty so variables are initialize to zero except m_dqCount
+  
+  m_flowFactory.SetTypeId ("ns3::FqPieFlow");
+  m_queueDiscFactory.SetTypeId ("ns3::PieQueueDisc");
+  m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
+}
+
+bool
+FqPieQueueDisc::CheckConfig (void)
 {
   NS_LOG_FUNCTION (this);
-  NS_LOG_DEBUG("do disp");
-  m_uv = 0;
-  Simulator::Remove (m_rtrsEvent);
-  QueueDisc::DoDispose ();
+  if (GetNQueueDiscClasses () > 0)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
+      return false;
+    }
+
+  if (GetNInternalQueues () == 0)
+    {
+      // add  a DropTail queue
+      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
+                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
+    }
+
+  if (GetNInternalQueues () != 1)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
+      return false;
+    }
+  if (!m_quantum)
+      {
+        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
+        Ptr<NetDevice> dev;
+        // if the NetDeviceQueueInterface object is aggregated to a
+        // NetDevice, get the MTU of such NetDevice
+        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
+          {
+            m_quantum = dev->GetMtu ();
+            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+          }
+
+        if (!m_quantum)
+          {
+            NS_LOG_ERROR ("The quantum parameter cannot be null");
+            return false;
+          }
+      }
+  return true;
 }
 
-Time
-FqPieQueueDisc::GetQueueDelay (void)
-{
-  NS_LOG_DEBUG("getqdel");
-  NS_LOG_FUNCTION (this);
-  return m_qDelay;
-}
-
-
-//changes needed/
-int64_t
-FqPieQueueDisc::AssignStreams (int64_t stream)
-{
-  NS_LOG_DEBUG("Stream assign");
-  NS_LOG_FUNCTION (this << stream);
-  m_uv->SetStream (stream);
-  return 1;
-}
-
-
-//changes needed/
 bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
-  NS_LOG_DEBUG("Enqueued");
 
   //hashing to the right queue
-  uint32_t h = 0;
-
+  uint32_t h =0;
+  
   if (GetNPacketFilters () == 0)
     {
+      NS_LOG_DEBUG(m_flows);
       h = item->Hash (m_perturbation) % m_flows;
     }
   else
@@ -259,20 +283,28 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
           DropBeforeEnqueue (item, UNCLASSIFIED_DROP);
           return false;
         }
+        NS_LOG_DEBUG("asisajnasjl asdasjdsajd h");
     }
 
   Ptr<FqPieFlow> flow;
-  Ptr<QueueDisc>  qd;
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {
       NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
-      NS_LOG_DEBUG("En1q1");
       flow = m_flowFactory.Create<FqPieFlow> ();
-      NS_LOG_DEBUG("En21q1");
-      qd = m_queueDiscFactory.Create<QueueDisc> ();
+      Ptr<QueueDisc> qd = m_queueDiscFactory.Create<QueueDisc> ();
       qd->Initialize ();
       flow->SetQueueDisc (qd);
       AddQueueDiscClass (flow);
+      
+      NS_LOG_DEBUG("paramters initialised for each flow");
+      // Initially queue is empty so variables are initialize to zero except m_dqCount
+      flow->m_inMeasurement = false;
+      flow->m_dqCount = FqPieFlow::DQCOUNT_INVALID;
+      flow->m_dropProb = 0;
+      flow->m_avgDqRate = 0.0;
+      flow->m_dqStart = 0;
+      flow->m_burstState = FqPieFlow::NO_BURST;
+      flow->m_qDelayOld = Time (Seconds (0));
       m_flowsIndices[h] = GetNQueueDiscClasses () - 1;
     }
   else
@@ -285,27 +317,28 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       flow->SetStatus (FqPieFlow::NEW_FLOW);
       flow->SetDeficit (m_quantum);
       m_newFlows.push_back (flow);
-      
     }
-
+  
+  NS_LOG_DEBUG("Test");
+  
+  Ptr<QueueDisc> qd = flow->GetQueueDisc();
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
 
   if (nQueued + item > qd->GetMaxSize ())
     {
       // Drops due to queue limit: reactive
-      DropBeforeEnqueue (item, FORCED_DROP);
-      NS_LOG_DEBUG("Enq");
-      return false;
-    }
-  else if (DropEarly (item, nQueued.GetValue ()))
-    {
-      // Early probability drop: proactive
       DropBeforeEnqueue (item, UNFORCED_DROP);
       return false;
     }
-NS_LOG_DEBUG("Enq1");
+  else if (DropEarly (item, flow, nQueued.GetValue ()))
+    {
+      // Early probability drop: proactive
+      DropBeforeEnqueue (item, FORCED_DROP);
+      return false;
+    }
+
   // No drop
-  bool retval = qd->GetInternalQueue (0)->Enqueue (item); //The queue selected gets the packet
+  bool retval = qd->Enqueue (item); //The queue selected gets the packet
 
   // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
   // internal queue because QueueDisc::AddInternalQueue sets the trace callback
@@ -314,195 +347,6 @@ NS_LOG_DEBUG("Enq1");
   NS_LOG_LOGIC ("\t packetsInQueue  " << qd->GetInternalQueue (0)->GetNPackets ());
 
   return retval;
-}
-
-//changes needed/
-void
-FqPieQueueDisc::InitializeParams (void)
-{
-  NS_LOG_DEBUG("paramters initialised");
-  // Initially queue is empty so variables are initialize to zero except m_dqCount
-  
-  m_flowFactory.SetTypeId ("ns3::FqPieFlow");
-  m_queueDiscFactory.SetTypeId ("ns3::FqPieQueueDisc");
-  m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
-  m_queueDiscFactory.Set ("Interval", StringValue (m_interval));
-  m_queueDiscFactory.Set ("Target", StringValue (m_target));
-
-  m_inMeasurement = false;
-  m_dqCount = DQCOUNT_INVALID;
-  m_dropProb = 0;
-  m_avgDqRate = 0.0;
-  m_dqStart = 0;
-  m_burstState = NO_BURST;
-  m_qDelayOld = Time (Seconds (0));
-}
-
-
-//changes needed/
-bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
-{
-  NS_LOG_FUNCTION (this << item << qSize);
-  NS_LOG_DEBUG("early drop");
-  if (m_burstAllowance.GetSeconds () > 0)
-    {
-      // If there is still burst_allowance left, skip random early drop.
-      return false;
-    }
-
-  if (m_burstState == NO_BURST)
-    {
-      m_burstState = IN_BURST_PROTECTING;
-      m_burstAllowance = m_maxBurst;
-    }
-
-  double p = m_dropProb;
-
-  uint32_t packetSize = item->GetSize ();
-
-  if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES)
-    {
-      p = p * packetSize / m_meanPktSize;
-    }
-  bool earlyDrop = true;
-  double u =  m_uv->GetValue ();
-
-// Following conditions are where the packet must not be dropped 
-  if ((m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb < 0.2)) //as mentioned in the rfc explicitly
-    {
-      return false;
-    }
-  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)  // if there are less than 2 packets or bytes then do not drop(like it just)
-    {
-      return false;
-    }
-  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::PACKETS && qSize <= 2) 
-    {
-      return false;
-    }
-
-  if (u > p)
-    {
-      earlyDrop = false;
-    }
-  if (!earlyDrop)
-    {
-      return false;
-    }
-
-  return true;
-}
-
-//changes needed/
-void FqPieQueueDisc::CalculateP ()
-{
-  NS_LOG_DEBUG("Calp");
-  NS_LOG_FUNCTION (this);
-  Time qDelay;
-  double p = 0.0;
-  bool missingInitFlag = false;
-  if (m_avgDqRate > 0)
-    {
-      qDelay = Time (Seconds (GetInternalQueue (0)->GetNBytes () / m_avgDqRate));
-    }
-  else
-    {
-      qDelay = Time (Seconds (0));
-      missingInitFlag = true;
-    }
-
-  m_qDelay = qDelay;
-
-  if (m_burstAllowance.GetSeconds () > 0)
-    {
-      m_dropProb = 0;
-    }
-  else
-    {
-      p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
-      if (m_dropProb < 0.001)
-        {
-          p /= 32;
-        }
-      else if (m_dropProb < 0.01)
-        {
-          p /= 8;
-        }
-      else if (m_dropProb < 0.1)
-        {
-          p /= 2;
-        }
-      else if (m_dropProb < 1)
-        {
-          p /= 0.5;
-        }
-      else if (m_dropProb < 10)
-        {
-          p /= 0.125;
-        }
-      else
-        {
-          p /= 0.03125;
-        }
-      if ((m_dropProb >= 0.1) && (p > 0.02))
-        {
-          p = 0.02;
-        }
-    }
-
-  p += m_dropProb;
-
-  // For non-linear drop in prob
-
-  if (qDelay.GetSeconds () == 0 && m_qDelayOld.GetSeconds () == 0)
-    {
-      p *= 0.98;
-    }
-  else if (qDelay.GetSeconds () > 0.2)
-    {
-      p += 0.02;
-    }
-
-  m_dropProb = (p > 0) ? p : 0;
-  if (m_burstAllowance < m_tUpdate)
-    {
-      m_burstAllowance =  Time (Seconds (0));
-    }
-  else
-    {
-      m_burstAllowance -= m_tUpdate;
-    }
-
-  uint32_t burstResetLimit = static_cast<uint32_t>(BURST_RESET_TIMEOUT / m_tUpdate.GetSeconds ());
-  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb == 0) && !missingInitFlag )
-    {
-      m_dqCount = DQCOUNT_INVALID;
-      m_avgDqRate = 0.0;
-    }
-  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb == 0) && (m_burstAllowance.GetSeconds () == 0))
-    {
-      if (m_burstState == IN_BURST_PROTECTING)
-        {
-          m_burstState = IN_BURST;
-          m_burstReset = 0;
-        }
-      else if (m_burstState == IN_BURST)
-        {
-          m_burstReset++;
-          if (m_burstReset > burstResetLimit)
-            {
-              m_burstReset = 0;
-              m_burstState = NO_BURST;
-            }
-        }
-    }
-  else if (m_burstState == IN_BURST)
-    {
-      m_burstReset = 0;
-    }
-
-  m_qDelayOld = qDelay;
-  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculateP, this);
 }
 
 Ptr<QueueDiscItem>
@@ -587,48 +431,206 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
   return item;
 }
 
-bool
-FqPieQueueDisc::CheckConfig (void)
+bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, uint32_t qSize)
 {
-  NS_LOG_DEBUG("config check");
-  NS_LOG_FUNCTION (this);
-  if (GetNQueueDiscClasses () > 0)
+  NS_LOG_FUNCTION (this << item << qSize);
+  NS_LOG_DEBUG("early drop");
+  if (flow->m_burstAllowance.GetSeconds () > 0)
     {
-      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
+      // If there is still burst_allowance left, skip random early drop.
       return false;
     }
 
-  if (GetNInternalQueues () == 0)
+  if (flow->m_burstState == FqPieFlow::NO_BURST)
     {
-      // add  a DropTail queue
-      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
-                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
+      flow->m_burstState = FqPieFlow::IN_BURST_PROTECTING;
+      flow->m_burstAllowance = m_maxBurst;
     }
 
-  if (GetNInternalQueues () != 1)
+  double p = flow->m_dropProb;
+
+  uint32_t packetSize = item->GetSize ();
+
+  if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES)
     {
-      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
+      p = p * packetSize / m_meanPktSize;
+    }
+  bool earlyDrop = true;
+  double u =  m_uv->GetValue ();
+
+  // Following conditions are where the packet must not be dropped 
+  if ((flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb < 0.2)) //as mentioned in the rfc explicitly
+    {
       return false;
     }
-  if (!m_quantum)
-      {
-        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
-        Ptr<NetDevice> dev;
-        // if the NetDeviceQueueInterface object is aggregated to a
-        // NetDevice, get the MTU of such NetDevice
-        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
-          {
-            m_quantum = dev->GetMtu ();
-            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
-          }
+  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::BYTES && qSize <= 2 * m_meanPktSize)  // if there are less than 2 packets or bytes then do not drop(like it just)
+    {
+      return false;
+    }
+  else if (GetMaxSize ().GetUnit () == QueueSizeUnit::PACKETS && qSize <= 2) 
+    {
+      return false;
+    }
 
-        if (!m_quantum)
-          {
-            NS_LOG_ERROR ("The quantum parameter cannot be null");
-            return false;
-          }
-      }
+  if (u > p)
+    {
+      earlyDrop = false;
+    }
+  if (!earlyDrop)
+    {
+      return false;
+    }
+
   return true;
+}
+
+
+void 
+FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
+{
+  NS_LOG_DEBUG("Calculating P for each flow");
+  NS_LOG_FUNCTION (this);
+  Time qDelay;
+  double p = 0.0;
+  Ptr<QueueDisc> qd = flow->GetQueueDisc();
+  bool missingInitFlag = false;
+  if (flow->m_avgDqRate > 0)
+    {
+      qDelay = Time (Seconds (qd->GetInternalQueue (0)->GetNBytes () / flow->m_avgDqRate));
+    }
+  else
+    {
+      qDelay = Time (Seconds (0));
+      missingInitFlag = true;
+    }
+
+  flow->m_qDelay = qDelay;
+
+  if (flow->m_burstAllowance.GetSeconds () > 0)
+    {
+      flow->m_dropProb = 0;
+    }
+  else
+    {
+      p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - flow->m_qDelayOld.GetSeconds ());
+      if (flow->m_dropProb < 0.001)
+        {
+          p /= 32;
+        }
+      else if (flow->m_dropProb < 0.01)
+        {
+          p /= 8;
+        }
+      else if (flow->m_dropProb < 0.1)
+        {
+          p /= 2;
+        }
+      else if (flow->m_dropProb < 1)
+        {
+          p /= 0.5;
+        }
+      else if (flow->m_dropProb < 10)
+        {
+          p /= 0.125;
+        }
+      else
+        {
+          p /= 0.03125;
+        }
+      if ((flow->m_dropProb >= 0.1) && (p > 0.02))
+        {
+          p = 0.02;
+        }
+    }
+
+  p += flow->m_dropProb;
+
+  // For non-linear drop in prob
+
+  if (qDelay.GetSeconds () == 0 && flow->m_qDelayOld.GetSeconds () == 0)
+    {
+      p *= 0.98;
+    }
+  else if (qDelay.GetSeconds () > 0.2)
+    {
+      p += 0.02;
+    }
+
+  flow->m_dropProb = (p > 0) ? p : 0;
+  if (flow->m_burstAllowance < m_tUpdate)
+    {
+      flow->m_burstAllowance =  Time (Seconds (0));
+    }
+  else
+    {
+      flow->m_burstAllowance -= m_tUpdate;
+    }
+
+  uint32_t burstResetLimit = static_cast<uint32_t>(BURST_RESET_TIMEOUT / m_tUpdate.GetSeconds ());
+  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb == 0) && !missingInitFlag )
+    {
+      flow->m_dqCount = FqPieFlow::DQCOUNT_INVALID;
+      flow->m_avgDqRate = 0.0;
+    }
+  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb == 0) && (flow->m_burstAllowance.GetSeconds () == 0))
+    {
+      if (flow->m_burstState == FqPieFlow::IN_BURST_PROTECTING)
+        {
+          flow->m_burstState = FqPieFlow::IN_BURST;
+          flow->m_burstReset = 0;
+        }
+      else if (flow->m_burstState == FqPieFlow::IN_BURST)
+        {
+          flow->m_burstReset++;
+          if (flow->m_burstReset > burstResetLimit)
+            {
+              flow->m_burstReset = 0;
+              flow->m_burstState = FqPieFlow::NO_BURST;
+            }
+        }
+    }
+  else if (flow->m_burstState == FqPieFlow::IN_BURST)
+    {
+      flow->m_burstReset = 0;
+    }
+
+  flow->m_qDelayOld = qDelay;
+}
+
+void
+FqPieQueueDisc::CalculatePFlow()
+{
+  std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
+  std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
+}
+
+void
+FqPieQueueDisc::DoDispose (void)
+{
+  NS_LOG_FUNCTION (this);
+  NS_LOG_DEBUG("do disp");
+  m_uv = 0;
+  Simulator::Remove (m_rtrsEvent);
+  QueueDisc::DoDispose ();
+}
+
+int64_t
+FqPieQueueDisc::AssignStreams (int64_t stream)
+{
+  NS_LOG_DEBUG("Stream assign");
+  NS_LOG_FUNCTION (this << stream);
+  m_uv->SetStream (stream);
+
+  return 1;
 }
 
 } //namespace ns3

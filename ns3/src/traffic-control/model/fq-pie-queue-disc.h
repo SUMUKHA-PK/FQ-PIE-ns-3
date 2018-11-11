@@ -93,34 +93,12 @@ public:
    */
   FlowStatus GetStatus (void) const;
 
-private:
-  int32_t m_deficit;    //!< the deficit for this flow
-  FlowStatus m_status;  //!< the status of this flow
-};
-
-/**
- * \ingroup traffic-control
- *
- * \brief Implements FQPIE Active Queue Management discipline
- */
-class FqPieQueueDisc : public QueueDisc
-{
-public:
   /**
-   * \brief Get the type ID.
-   * \return the object TypeId
+   * \brief Get queue delay.
+   *
+   * \returns The current queue delay.
    */
-  static TypeId GetTypeId (void);
-
-  /**
-   * \brief FqPieQueueDisc Constructor
-   */
-  FqPieQueueDisc ();
-
-  /**
-   * \brief FqPieQueueDisc Destructor
-   */
-  virtual ~FqPieQueueDisc ();
+  Time GetQueueDelay (void);
 
   /**
    * \brief Burst types
@@ -132,82 +110,8 @@ public:
     IN_BURST_PROTECTING,
   };
 
-  /**
-   * \brief Get queue delay.
-   *
-   * \returns The current queue delay.
-   */
-  Time GetQueueDelay (void);
-
-  /**
-   * Assign a fixed random variable stream number to the random variables
-   * used by this model.  Return the number of streams (possibly zero) that
-   * have been assigned.
-   *
-   * \param stream first stream index to use
-   * \return the number of stream indices assigned by this model
-   */
-  int64_t AssignStreams (int64_t stream);
-
-  // Reasons for dropping packets
-  static constexpr const char* UNFORCED_DROP = "Unforced drop";  //!< Early probability drops: proactive
-  static constexpr const char* FORCED_DROP = "Forced drop";      //!< Drops due to queue limit: reactive
-  static constexpr const char* UNCLASSIFIED_DROP = "Unclassified drop";  //!< No packet filter able to classify packet
-  
-
-protected:
-  /**
-   * \brief Dispose of the object
-   */
-  virtual void DoDispose (void);
-
-private:
-  virtual bool DoEnqueue (Ptr<QueueDiscItem> item);
-  virtual Ptr<QueueDiscItem> DoDequeue (void);
-  virtual bool CheckConfig (void);
-
-  /**
-   * \brief Initialize the queue parameters.
-   */
-  virtual void InitializeParams (void);
-
-  /**
-   * \brief Check if a packet needs to be dropped due to probability drop
-   * \param item queue item
-   * \param qSize queue size
-   * \returns 0 for no drop, 1 for drop
-   */
-  bool DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize);
-
-  /**
-   * Periodically update the drop probability based on the delay samples:
-   * not only the current delay sample but also the trend where the delay
-   * is going, up or down
-   */
-  void CalculateP ();
-
-  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
-
-  // ** Variables supplied by user
-  Time m_sUpdate;                               //!< Start time of the update timer
-  Time m_tUpdate;                               //!< Time period after which CalculateP () is called
-  Time m_qDelayRef;                             //!< Desired queue delay
-  uint32_t m_meanPktSize;                       //!< Average packet size in bytes
-  Time m_maxBurst;                              //!< Maximum burst allowed before random early dropping kicks in
-  double m_a;                                   //!< Parameter to pie controller
-  double m_b;                                   //!< Parameter to pie controller
-  uint32_t m_dqThreshold;                       //!< Minimum queue size in bytes before dequeue rate is measured
-  uint32_t m_quantum;                          //!< Deficit assigned to flows at each round
-  uint32_t m_flows;                            //!< Number of flow queues
-  uint32_t m_dropBatchSize;                    //!< Max number of packets dropped from the fat flow
-  uint32_t m_perturbation;                     //!< hash perturbation value
-
-  std::list<Ptr<FqPieFlow> > m_newFlows;    //!< The list of new flows
-  std::list<Ptr<FqPieFlow> > m_oldFlows;    //!< The list of old flows
-
-std::string m_interval;    //!< CoDel interval attribute
-  std::string m_target;      //!< CoDel target attribute
   // ** Variables maintained by PIE
+  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
   double m_dropProb;                            //!< Variable used in calculation of drop probability
   Time m_qDelayOld;                             //!< Old value of queue delay
   Time m_qDelay;                                //!< Current value of queue delay
@@ -218,15 +122,118 @@ std::string m_interval;    //!< CoDel interval attribute
   double m_avgDqRate;                           //!< Time averaged dequeue rate
   double m_dqStart;                             //!< Start timestamp of current measurement cycle
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
-  EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
-  Ptr<UniformRandomVariable> m_uv;              //!< Rng stream
-  ObjectFactory m_flowFactory;         //!< Factory to create a new flow
-  ObjectFactory m_queueDiscFactory;    //!< Factory to create a new queue
 
-  std::map<uint32_t, uint32_t> m_flowsIndices;    //!< Map with the index of class for each flow
+
+private:
+  int32_t m_deficit;    //!< the deficit for this flow
+  FlowStatus m_status;  //!< the status of this flow
+
 };
 
-};   // namespace ns3
+/**
+ * \ingroup traffic-control
+ *
+ * \brief Implements FQPIE Active Queue Management discipline
+ */
+class FqPieQueueDisc : public QueueDisc {
+public:
+  /**
+   * \brief Get the type ID.
+   * \return the object TypeId
+   */
+  static TypeId GetTypeId (void);
+  /**
+   * \brief FqCoDelQueueDisc constructor
+   */
+  FqPieQueueDisc ();
+
+  virtual ~FqPieQueueDisc ();
+
+   /**
+    * \brief Set the quantum value.
+    *
+    * \param quantum The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   void SetQuantum (uint32_t quantum);
+
+   /**
+    * \brief Get the quantum value.
+    *
+    * \returns The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   uint32_t GetQuantum (void) const;
+
+  // Reasons for dropping packets
+  static constexpr const char* UNCLASSIFIED_DROP = "Unclassified drop";  //!< No packet filter able to classify packet
+  static constexpr const char* UNFORCED_DROP = "Random Drop";        //!< Random dropping of packets in FQ-PIE
+  static constexpr const char* FORCED_DROP = "Forced Drop";        //!< Overlimit dropped packets
+
+private:
+  virtual void InitializeParams (void);
+  virtual bool CheckConfig (void);
+  virtual bool DoEnqueue (Ptr<QueueDiscItem> item);
+  virtual Ptr<QueueDiscItem> DoDequeue (void);
+  bool DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow>, uint32_t qSize);
+
+  /**
+   * Periodically update the drop probability based on the delay samples:
+   * not only the current delay sample but also the trend where the delay
+   * is going, up or down
+   */
+  void CalculateP (Ptr<FqPieFlow>);
+  /**
+   * Calculate drop probability for each flow ACTIVE
+   */
+  void CalculatePFlow ();
+
+protected:
+  /**
+   * \brief Dispose of the object
+   */
+  virtual void DoDispose (void);
+
+   /**
+   * Assign a fixed random variable stream number to the random variables
+   * used by this model.  Return the number of streams (possibly zero) that
+   * have been assigned.
+   *
+   * \param stream first stream index to use
+   * \return the number of stream indices assigned by this model
+   */
+  int64_t AssignStreams (int64_t stream);
+
+  /**
+   * \brief Check if a packet needs to be dropped due to probability drop
+   * \param item queue item
+   * \param qSize queue size
+   * \returns 0 for no drop, 1 for drop
+   */
+
+
+  Time m_sUpdate;                               //!< Start time of the update timer
+  Time m_tUpdate;                               //!< Time period after which CalculateP () is called
+  Time m_qDelayRef;                             //!< Desired queue delay
+	uint32_t m_meanPktSize;                       //!< Average packet size in bytes
+  Time m_maxBurst;                              //!< Maximum burst allowed before random early dropping kicks in
+  double m_a;                                   //!< Parameter to pie controller
+  double m_b;                                   //!< Parameter to pie controller
+  uint32_t m_dqThreshold;                       //!< Minimum queue size in bytes before dequeue rate is measured
+  EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
+  Ptr<UniformRandomVariable> m_uv;
+
+  uint32_t m_quantum;        //!< Deficit assigned to flows at each round
+  uint32_t m_flows;          //!< Number of flow queues
+  uint32_t m_perturbation;   //!< hash perturbation value
+
+  std::list<Ptr<FqPieFlow> > m_newFlows;    //!< The list of new flows
+  std::list<Ptr<FqPieFlow> > m_oldFlows;    //!< The list of old flows
+
+  std::map<uint32_t, uint32_t> m_flowsIndices;    //!< Map with the index of class for each flow
+
+  ObjectFactory m_flowFactory;         //!< Factory to create a new flow
+  ObjectFactory m_queueDiscFactory;    //!< Factory to create a new queue
+};
+
+}   // namespace ns3
 
 #endif
-
