@@ -107,7 +107,7 @@ BuildAppsTest ()
    * Create the OnOff applications to send TCP to the server
    * onoffhelper is a client that send data to TCP destination
   */
-  OnOffHelper clientHelper1 ("ns3::TcpSocketFactory", Address ());
+  OnOffHelper clientHelper1 ("ns3::UdpSocketFactory", Address ());
   clientHelper1.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelper1.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelper1.SetAttribute ("PacketSize", UintegerValue (1000));
