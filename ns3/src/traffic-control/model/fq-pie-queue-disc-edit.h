@@ -91,6 +91,13 @@ public:
   FlowStatus GetStatus (void) const;
 
   /**
+   * \brief Get queue delay.
+   *
+   * \returns The current queue delay.
+   */
+  Time GetQueueDelay (void);
+
+  /**
    * \brief Burst types
    */
   enum BurstStateT
@@ -99,13 +106,6 @@ public:
     IN_BURST,
     IN_BURST_PROTECTING,
   };
-
-  /**
-   * \brief Get queue delay.
-   *
-   * \returns The current queue delay.
-   */
-  Time GetQueueDelay (void);
 
   // ** Variables maintained by PIE
   static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
@@ -166,10 +166,22 @@ public:
   static constexpr const char* FORCED_DROP = "Forced Drop";        //!< Overlimit dropped packets
 
 private:
+  virtual void InitializeParams (void);
+  virtual bool CheckConfig (void);
   virtual bool DoEnqueue (Ptr<QueueDiscItem> item);
   virtual Ptr<QueueDiscItem> DoDequeue (void);
-  virtual bool CheckConfig (void);
-  virtual void InitializeParams (void);
+  bool DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow>, uint32_t qSize);
+
+  /**
+   * Periodically update the drop probability based on the delay samples:
+   * not only the current delay sample but also the trend where the delay
+   * is going, up or down
+   */
+  void CalculateP (Ptr<FqPieFlow>);
+  /**
+   * Calculate drop probability for each flow ACTIVE
+   */
+  void CalculatePFlow ();
 
 protected:
   /**
@@ -193,18 +205,6 @@ protected:
    * \param qSize queue size
    * \returns 0 for no drop, 1 for drop
    */
-  bool DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow>, uint32_t qSize);
-
-  /**
-   * Periodically update the drop probability based on the delay samples:
-   * not only the current delay sample but also the trend where the delay
-   * is going, up or down
-   */
-  void CalculateP (Ptr<FqPieFlow>);
-  /**
-   * Calculate drop probability for each flow ACTIVE
-   */
-  void CalculatePFlow ();
 
 
   Time m_sUpdate;                               //!< Start time of the update timer
