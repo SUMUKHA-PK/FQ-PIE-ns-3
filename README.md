@@ -14,7 +14,7 @@
 ***
 
 
-## Implementation Details ([detailed Wiki](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Implementation-progress-updates))
+## Implementation Details ([details](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Implementation-progress-updates))
 
 ## Implementation of FQ-PIE was done in NS3
 
@@ -77,7 +77,10 @@ Here the DRR algorithm is used in order to determine which queue has to dequeue.
 
 ### Weekly Progress ([details](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Weekly-Progress))
 
-### Result and Analysis ([detailed Wiki](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Results-and-Further))
+
+***
+
+### Result and Analysis ([details](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Results-and-Further))
 **PIE vs FQ-PIE**
 
 1. Only when TCP packets are present in the Network :
