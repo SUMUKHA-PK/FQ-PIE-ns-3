@@ -175,7 +175,18 @@ FqPieQueueDisc::~FqPieQueueDisc ()
   NS_LOG_FUNCTION (this);
 }
 
-// Define Quantum Here
+void
+FqPieQueueDisc::SetQuantum (uint32_t quantum)
+{
+  NS_LOG_FUNCTION (this << quantum);
+  m_quantum = quantum;
+}
+
+uint32_t
+FqPieQueueDisc::GetQuantum (void) const
+{
+  return m_quantum;
+}
 
 void
 FqPieQueueDisc::InitializeParams (void)
