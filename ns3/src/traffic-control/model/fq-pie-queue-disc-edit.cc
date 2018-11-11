@@ -111,7 +111,7 @@ FqPieQueueDisc::FqPieQueueDisc ()
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
-  m_rtrsEvent = Simulator::Schedule (m_sUpdate, &FqPieQueueDisc::CalculateP, this);
+  m_rtrsEvent = Simulator::Schedule (m_sUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
 FqPieQueueDisc::~FqPieQueueDisc ()
@@ -186,8 +186,6 @@ FqPieQueueDisc::AssignStreams (int64_t stream)
   return 1;
 }
 
-
-//changes needed/
 bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
@@ -218,12 +216,11 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
     }
 
   Ptr<FqPieFlow> flow;
-  Ptr<QueueDisc>  qd;
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {
       NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
       flow = m_flowFactory.Create<FqPieFlow> ();
-      qd = m_queueDiscFactory.Create<QueueDisc> ();
+      Ptr<QueueDisc> qd = m_queueDiscFactory.Create<QueueDisc> ();
       qd->Initialize ();
       flow->SetQueueDisc (qd);
       AddQueueDiscClass (flow);
@@ -241,7 +238,8 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       flow->SetDeficit (m_quantum);
       m_newFlows.push_back (flow);
     }
-
+  
+  Ptr<QueueDisc> qd = flow->GetQueueDisc();
   QueueSize nQueued = qd->GetCurrentSize (); //getting the size of the current qd
 
   if (nQueued + item > qd->GetMaxSize ())
@@ -250,15 +248,15 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       DropBeforeEnqueue (item, FORCED_DROP);
       return false;
     }
-  else if (DropEarly (item, nQueued.GetValue ()))
+  else if (DropEarly (item, flow, nQueued.GetValue ()))
     {
       // Early probability drop: proactive
-      DropBeforeEnqueue (item, UNFORCED_DROP);
+      DropBeforeEnqueue (item, RANDOM_DROP);
       return false;
     }
 
   // No drop
-  bool retval = qd->GetInternalQueue (0)->Enqueue (item); //The queue selected gets the packet
+  bool retval = qd->Enqueue (item); //The queue selected gets the packet
 
   // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
   // internal queue because QueueDisc::AddInternalQueue sets the trace callback
@@ -269,11 +267,10 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   return retval;
 }
 
-//changes needed/
 void
 FqPieFlow::InitializeParams (void)
 {
-  NS_LOG_DEBUG("paramters initialised");
+  NS_LOG_DEBUG("paramters initialised for each flow");
   // Initially queue is empty so variables are initialize to zero except m_dqCount
   m_inMeasurement = false;
   m_dqCount = DQCOUNT_INVALID;
@@ -285,24 +282,23 @@ FqPieFlow::InitializeParams (void)
 }
 
 
-//changes needed/
-bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
+bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, uint32_t qSize)
 {
   NS_LOG_FUNCTION (this << item << qSize);
   NS_LOG_DEBUG("early drop");
-  if (m_burstAllowance.GetSeconds () > 0)
+  if (flow->m_burstAllowance.GetSeconds () > 0)
     {
       // If there is still burst_allowance left, skip random early drop.
       return false;
     }
 
-  if (m_burstState == NO_BURST)
+  if (flow->m_burstState == FqPieFlow::NO_BURST)
     {
-      m_burstState = IN_BURST_PROTECTING;
-      m_burstAllowance = m_maxBurst;
+      flow->m_burstState = FqPieFlow::IN_BURST_PROTECTING;
+      flow->m_burstAllowance = m_maxBurst;
     }
 
-  double p = m_dropProb;
+  double p = flow->m_dropProb;
 
   uint32_t packetSize = item->GetSize ();
 
@@ -314,7 +310,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
   double u =  m_uv->GetValue ();
 
 // Following conditions are where the packet must not be dropped 
-  if ((m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb < 0.2)) //as mentioned in the rfc explicitly
+  if ((flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb < 0.2)) //as mentioned in the rfc explicitly
     {
       return false;
     }
@@ -339,18 +335,17 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
   return true;
 }
 
-// Do it for all flow
-
-void FqPieQueueDisc::CalculateP ()
+void FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
 {
-  NS_LOG_DEBUG("Calp");
+  NS_LOG_DEBUG("Calculating P for each flow");
   NS_LOG_FUNCTION (this);
   Time qDelay;
   double p = 0.0;
+  Ptr<QueueDisc> qd = flow->GetQueueDisc();
   bool missingInitFlag = false;
-  if (m_avgDqRate > 0)
+  if (flow->m_avgDqRate > 0)
     {
-      qDelay = Time (Seconds (GetInternalQueue (0)->GetNBytes () / m_avgDqRate));
+      qDelay = Time (Seconds (qd->GetInternalQueue (0)->GetNBytes () / flow->m_avgDqRate));
     }
   else
     {
@@ -358,32 +353,32 @@ void FqPieQueueDisc::CalculateP ()
       missingInitFlag = true;
     }
 
-  m_qDelay = qDelay;
+  flow->m_qDelay = qDelay;
 
-  if (m_burstAllowance.GetSeconds () > 0)
+  if (flow->m_burstAllowance.GetSeconds () > 0)
     {
-      m_dropProb = 0;
+      flow->m_dropProb = 0;
     }
   else
     {
-      p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
-      if (m_dropProb < 0.001)
+      p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - flow->m_qDelayOld.GetSeconds ());
+      if (flow->m_dropProb < 0.001)
         {
           p /= 32;
         }
-      else if (m_dropProb < 0.01)
+      else if (flow->m_dropProb < 0.01)
         {
           p /= 8;
         }
-      else if (m_dropProb < 0.1)
+      else if (flow->m_dropProb < 0.1)
         {
           p /= 2;
         }
-      else if (m_dropProb < 1)
+      else if (flow->m_dropProb < 1)
         {
           p /= 0.5;
         }
-      else if (m_dropProb < 10)
+      else if (flow->m_dropProb < 10)
         {
           p /= 0.125;
         }
@@ -391,17 +386,17 @@ void FqPieQueueDisc::CalculateP ()
         {
           p /= 0.03125;
         }
-      if ((m_dropProb >= 0.1) && (p > 0.02))
+      if ((flow->m_dropProb >= 0.1) && (p > 0.02))
         {
           p = 0.02;
         }
     }
 
-  p += m_dropProb;
+  p += flow->m_dropProb;
 
   // For non-linear drop in prob
 
-  if (qDelay.GetSeconds () == 0 && m_qDelayOld.GetSeconds () == 0)
+  if (qDelay.GetSeconds () == 0 && flow->m_qDelayOld.GetSeconds () == 0)
     {
       p *= 0.98;
     }
@@ -410,46 +405,46 @@ void FqPieQueueDisc::CalculateP ()
       p += 0.02;
     }
 
-  m_dropProb = (p > 0) ? p : 0;
-  if (m_burstAllowance < m_tUpdate)
+  flow->m_dropProb = (p > 0) ? p : 0;
+  if (flow->m_burstAllowance < m_tUpdate)
     {
-      m_burstAllowance =  Time (Seconds (0));
+      flow->m_burstAllowance =  Time (Seconds (0));
     }
   else
     {
-      m_burstAllowance -= m_tUpdate;
+      flow->m_burstAllowance -= m_tUpdate;
     }
 
   uint32_t burstResetLimit = static_cast<uint32_t>(BURST_RESET_TIMEOUT / m_tUpdate.GetSeconds ());
-  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb == 0) && !missingInitFlag )
+  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb == 0) && !missingInitFlag )
     {
-      m_dqCount = DQCOUNT_INVALID;
-      m_avgDqRate = 0.0;
+      flow->m_dqCount = FqPieFlow::DQCOUNT_INVALID;
+      flow->m_avgDqRate = 0.0;
     }
-  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb == 0) && (m_burstAllowance.GetSeconds () == 0))
+  if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb == 0) && (flow->m_burstAllowance.GetSeconds () == 0))
     {
-      if (m_burstState == IN_BURST_PROTECTING)
+      if (flow->m_burstState == FqPieFlow::IN_BURST_PROTECTING)
         {
-          m_burstState = IN_BURST;
-          m_burstReset = 0;
+          flow->m_burstState = FqPieFlow::IN_BURST;
+          flow->m_burstReset = 0;
         }
-      else if (m_burstState == IN_BURST)
+      else if (flow->m_burstState == FqPieFlow::IN_BURST)
         {
-          m_burstReset++;
-          if (m_burstReset > burstResetLimit)
+          flow->m_burstReset++;
+          if (flow->m_burstReset > burstResetLimit)
             {
-              m_burstReset = 0;
-              m_burstState = NO_BURST;
+              flow->m_burstReset = 0;
+              flow->m_burstState = FqPieFlow::NO_BURST;
             }
         }
     }
-  else if (m_burstState == IN_BURST)
+  else if (flow->m_burstState == FqPieFlow::IN_BURST)
     {
-      m_burstReset = 0;
+      flow->m_burstReset = 0;
     }
 
-  m_qDelayOld = qDelay;
-  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculateP, this);
+  flow->m_qDelayOld = qDelay;
+  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
 Ptr<QueueDiscItem>
