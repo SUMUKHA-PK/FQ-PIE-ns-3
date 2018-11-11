@@ -22,6 +22,7 @@
  */
 
 #include "ns3/log.h"
+#include "ns3/string.h"
 #include "ns3/enum.h"
 #include "ns3/uinteger.h"
 #include "ns3/double.h"
@@ -36,6 +37,70 @@ namespace ns3 {
 NS_LOG_COMPONENT_DEFINE ("FqPieQueueDisc");
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
+
+
+TypeId FqPieFlow::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::FqPieFlow")
+    .SetParent<QueueDiscClass> ()
+    .SetGroupName ("TrafficControl")
+    .AddConstructor<FqPieFlow> ()
+  ;
+  return tid;
+}
+
+FqPieFlow::~FqPieFlow(){
+  NS_LOG_FUNCTION (this);
+}
+
+
+void
+FqPieFlow::SetDeficit (uint32_t deficit)
+{
+  NS_LOG_DEBUG("Set def");
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit = deficit;
+}
+
+int32_t
+FqPieFlow::GetDeficit (void) const
+{
+  NS_LOG_DEBUG("get def");
+  NS_LOG_FUNCTION (this);
+  return m_deficit;
+}
+
+void
+FqPieFlow::IncreaseDeficit (int32_t deficit)
+{
+  NS_LOG_DEBUG("inc def");
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit += deficit;
+}
+
+void
+FqPieFlow::SetStatus (FlowStatus status)
+{
+  NS_LOG_DEBUG("set status");
+  NS_LOG_FUNCTION (this);
+  m_status = status;
+}
+
+FqPieFlow::FlowStatus
+FqPieFlow::GetStatus (void) const
+{
+  NS_LOG_DEBUG("get status");
+  NS_LOG_FUNCTION (this);
+  return m_status;
+}
+
+Time
+FqPieFlow::GetQueueDelay (void)
+{
+  NS_LOG_DEBUG("getqdel");
+  NS_LOG_FUNCTION (this);
+  return m_qDelay;
+}
 
 TypeId FqPieQueueDisc::GetTypeId (void)
 {
@@ -94,15 +159,6 @@ TypeId FqPieQueueDisc::GetTypeId (void)
   return tid;
 }
 
-TypeId FqPieFlow::GetTypeId (void)
-{
-  static TypeId tid = TypeId ("ns3::FqPieFlow")
-    .SetParent<QueueDiscClass> ()
-    .SetGroupName ("TrafficControl")
-    .AddConstructor<FqPieFlow> ()
-  ;
-  return tid;
-}
 
 
 FqPieQueueDisc::FqPieQueueDisc ()
@@ -120,70 +176,71 @@ FqPieQueueDisc::~FqPieQueueDisc ()
 }
 
 void
-FqPieFlow::SetDeficit (uint32_t deficit)
+FqPieQueueDisc::SetQuantum (uint32_t quantum)
 {
-  NS_LOG_DEBUG("Set def");
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit = deficit;
+  NS_LOG_FUNCTION (this << quantum);
+  m_quantum = quantum;
 }
 
-int32_t
-FqPieFlow::GetDeficit (void) const
+uint32_t
+FqPieQueueDisc::GetQuantum (void) const
 {
-  NS_LOG_DEBUG("get def");
-  NS_LOG_FUNCTION (this);
-  return m_deficit;
+  return m_quantum;
 }
 
 void
-FqPieFlow::IncreaseDeficit (int32_t deficit)
+FqPieQueueDisc::InitializeParams (void)
 {
-  NS_LOG_DEBUG("inc def");
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit += deficit;
+  NS_LOG_DEBUG("paramters initialised");
+  // Initially queue is empty so variables are initialize to zero except m_dqCount
+  
+  m_flowFactory.SetTypeId ("ns3::FqPieFlow");
+  m_queueDiscFactory.SetTypeId ("ns3::PieQueueDisc");
+  m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
 }
 
-void
-FqPieFlow::SetStatus (FlowStatus status)
+bool
+FqPieQueueDisc::CheckConfig (void)
 {
-  NS_LOG_DEBUG("set status");
+  NS_LOG_DEBUG("config check");
   NS_LOG_FUNCTION (this);
-  m_status = status;
-}
+  if (GetNQueueDiscClasses () > 0)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
+      return false;
+    }
 
-FqPieFlow::FlowStatus
-FqPieFlow::GetStatus (void) const
-{
-  NS_LOG_DEBUG("get status");
-  NS_LOG_FUNCTION (this);
-  return m_status;
-}
+  if (GetNInternalQueues () == 0)
+    {
+      // add  a DropTail queue
+      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
+                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
+    }
 
-Time
-FqPieFlow::GetQueueDelay (void)
-{
-  NS_LOG_DEBUG("getqdel");
-  NS_LOG_FUNCTION (this);
-  return m_qDelay;
-}
+  if (GetNInternalQueues () != 1)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
+      return false;
+    }
+  if (!m_quantum)
+      {
+        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
+        Ptr<NetDevice> dev;
+        // if the NetDeviceQueueInterface object is aggregated to a
+        // NetDevice, get the MTU of such NetDevice
+        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
+          {
+            m_quantum = dev->GetMtu ();
+            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+          }
 
-void
-FqPieQueueDisc::DoDispose (void)
-{
-  NS_LOG_FUNCTION (this);
-  NS_LOG_DEBUG("do disp");
-  m_uv = 0;
-  Simulator::Remove (m_rtrsEvent);
-  QueueDisc::DoDispose ();
-}
-
-int64_t
-FqPieQueueDisc::AssignStreams (int64_t stream)
-{
-  NS_LOG_DEBUG("Stream assign");
-  NS_LOG_FUNCTION (this << stream);
-  m_uv->SetStream (stream);
-  return 1;
+        if (!m_quantum)
+          {
+            NS_LOG_ERROR ("The quantum parameter cannot be null");
+            return false;
+          }
+      }
+  return true;
 }
 
 bool
@@ -224,7 +281,16 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       qd->Initialize ();
       flow->SetQueueDisc (qd);
       AddQueueDiscClass (flow);
-
+      
+      NS_LOG_DEBUG("paramters initialised for each flow");
+      // Initially queue is empty so variables are initialize to zero except m_dqCount
+      flow->m_inMeasurement = false;
+      flow->m_dqCount = FqPieFlow::DQCOUNT_INVALID;
+      flow->m_dropProb = 0;
+      flow->m_avgDqRate = 0.0;
+      flow->m_dqStart = 0;
+      flow->m_burstState = FqPieFlow::NO_BURST;
+      flow->m_qDelayOld = Time (Seconds (0));
       m_flowsIndices[h] = GetNQueueDiscClasses () - 1;
     }
   else
@@ -245,13 +311,13 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   if (nQueued + item > qd->GetMaxSize ())
     {
       // Drops due to queue limit: reactive
-      DropBeforeEnqueue (item, FORCED_DROP);
+      DropBeforeEnqueue (item, UNFORCED_DROP);
       return false;
     }
   else if (DropEarly (item, flow, nQueued.GetValue ()))
     {
       // Early probability drop: proactive
-      DropBeforeEnqueue (item, RANDOM_DROP);
+      DropBeforeEnqueue (item, FORCED_DROP);
       return false;
     }
 
@@ -267,20 +333,87 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   return retval;
 }
 
-void
-FqPieFlow::InitializeParams (void)
+Ptr<QueueDiscItem>
+FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
 {
-  NS_LOG_DEBUG("paramters initialised for each flow");
-  // Initially queue is empty so variables are initialize to zero except m_dqCount
-  m_inMeasurement = false;
-  m_dqCount = DQCOUNT_INVALID;
-  m_dropProb = 0;
-  m_avgDqRate = 0.0;
-  m_dqStart = 0;
-  m_burstState = NO_BURST;
-  m_qDelayOld = Time (Seconds (0));
-}
+  NS_LOG_DEBUG("Dqueued");
+  NS_LOG_FUNCTION (this);
 
+  Ptr<FqPieFlow> flow;
+  Ptr<QueueDiscItem> item;
+
+  do
+    {
+      bool found = false;
+
+      while (!found && !m_newFlows.empty ())
+        {
+          flow = m_newFlows.front ();
+
+          if (flow->GetDeficit () <= 0)
+            {
+              flow->IncreaseDeficit (m_quantum);
+              flow->SetStatus (FqPieFlow::OLD_FLOW);
+              m_oldFlows.push_back (flow);
+              m_newFlows.pop_front ();
+            }
+          else
+            {
+              NS_LOG_DEBUG ("Found a new flow with positive deficit");
+              found = true;
+            }
+        }
+
+      while (!found && !m_oldFlows.empty ())
+        {
+          flow = m_oldFlows.front ();
+
+          if (flow->GetDeficit () <= 0)
+            {
+              flow->IncreaseDeficit (m_quantum);
+              m_oldFlows.push_back (flow);
+              m_oldFlows.pop_front ();
+            }
+          else
+            {
+              NS_LOG_DEBUG ("Found an old flow with positive deficit");
+              found = true;
+            }
+        }
+
+      if (!found)
+        {
+          NS_LOG_DEBUG ("No flow found to dequeue a packet");
+          return 0;
+        }
+
+      item = flow->GetQueueDisc ()->Dequeue ();
+
+      if (!item)
+        {
+          NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
+          if (!m_newFlows.empty ())
+            {
+              flow->SetStatus (FqPieFlow::OLD_FLOW);
+              m_oldFlows.push_back (flow);
+              m_newFlows.pop_front ();
+            }
+          else
+            {
+              flow->SetStatus (FqPieFlow::INACTIVE);
+              m_oldFlows.pop_front ();
+            }
+        }
+      else
+        {
+          NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
+        }
+    } while (item == 0);
+
+  flow->IncreaseDeficit (item->GetSize () * -1);
+
+  return item;
+}
 
 bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, uint32_t qSize)
 {
@@ -309,7 +442,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, ui
   bool earlyDrop = true;
   double u =  m_uv->GetValue ();
 
-// Following conditions are where the packet must not be dropped 
+  // Following conditions are where the packet must not be dropped 
   if ((flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb < 0.2)) //as mentioned in the rfc explicitly
     {
       return false;
@@ -335,22 +468,6 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, ui
   return true;
 }
 
-void
-FqPieQueueDisc::CalculatePFlow()
-{
-  NS_LOG_DEBUG("Calculating P invoked");
-  std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
-  std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
-  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ++ptrFlow){
-    Ptr<FqPieFlow> flow = (*ptrFlow);
-    CalculateP(flow);
-  }
-  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ++ptrFlow){
-    Ptr<FqPieFlow> flow = (*ptrFlow);
-    CalculateP(flow);
-  }
-  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
-}
 
 void 
 FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
@@ -464,130 +581,41 @@ FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
   flow->m_qDelayOld = qDelay;
 }
 
-Ptr<QueueDiscItem>
-FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
+void
+FqPieQueueDisc::CalculatePFlow()
 {
-  NS_LOG_DEBUG("Dqueued");
-  NS_LOG_FUNCTION (this);
-
-  Ptr<FqPieFlow> flow;
-  Ptr<QueueDiscItem> item;
-
-  do
-    {
-      bool found = false;
-
-      while (!found && !m_newFlows.empty ())
-        {
-          flow = m_newFlows.front ();
-
-          if (flow->GetDeficit () <= 0)
-            {
-              flow->IncreaseDeficit (m_quantum);
-              flow->SetStatus (FqPieFlow::OLD_FLOW);
-              m_oldFlows.push_back (flow);
-              m_newFlows.pop_front ();
-            }
-          else
-            {
-              NS_LOG_DEBUG ("Found a new flow with positive deficit");
-              found = true;
-            }
-        }
-
-      while (!found && !m_oldFlows.empty ())
-        {
-          flow = m_oldFlows.front ();
-
-          if (flow->GetDeficit () <= 0)
-            {
-              flow->IncreaseDeficit (m_quantum);
-              m_oldFlows.push_back (flow);
-              m_oldFlows.pop_front ();
-            }
-          else
-            {
-              NS_LOG_DEBUG ("Found an old flow with positive deficit");
-              found = true;
-            }
-        }
-
-      if (!found)
-        {
-          NS_LOG_DEBUG ("No flow found to dequeue a packet");
-          return 0;
-        }
-
-      item = flow->GetQueueDisc ()->Dequeue ();
-
-      if (!item)
-        {
-          NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
-          if (!m_newFlows.empty ())
-            {
-              flow->SetStatus (FqPieFlow::OLD_FLOW);
-              m_oldFlows.push_back (flow);
-              m_newFlows.pop_front ();
-            }
-          else
-            {
-              flow->SetStatus (FqPieFlow::INACTIVE);
-              m_oldFlows.pop_front ();
-            }
-        }
-      else
-        {
-          NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
-        }
-    } while (item == 0);
-
-  flow->IncreaseDeficit (item->GetSize () * -1);
-
-  return item;
+  NS_LOG_DEBUG("Calculating P invoked");
+  std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
+  std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ++ptrFlow){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    CalculateP(flow);
+  }
+  m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
-bool
-FqPieQueueDisc::CheckConfig (void)
+void
+FqPieQueueDisc::DoDispose (void)
 {
-  NS_LOG_DEBUG("config check");
   NS_LOG_FUNCTION (this);
-  if (GetNQueueDiscClasses () > 0)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
-      return false;
-    }
+  NS_LOG_DEBUG("do disp");
+  m_uv = 0;
+  Simulator::Remove (m_rtrsEvent);
+  QueueDisc::DoDispose ();
+}
 
-  if (GetNInternalQueues () == 0)
-    {
-      // add  a DropTail queue
-      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
-                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
-    }
+int64_t
+FqPieQueueDisc::AssignStreams (int64_t stream)
+{
+  NS_LOG_DEBUG("Stream assign");
+  NS_LOG_FUNCTION (this << stream);
+  m_uv->SetStream (stream);
 
-  if (GetNInternalQueues () != 1)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
-      return false;
-    }
-  if (!m_quantum)
-      {
-        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
-        Ptr<NetDevice> dev;
-        // if the NetDeviceQueueInterface object is aggregated to a
-        // NetDevice, get the MTU of such NetDevice
-        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
-          {
-            m_quantum = dev->GetMtu ();
-            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
-          }
-
-        if (!m_quantum)
-          {
-            NS_LOG_ERROR ("The quantum parameter cannot be null");
-            return false;
-          }
-      }
-  return true;
+  return 1;
 }
 
 } //namespace ns3
