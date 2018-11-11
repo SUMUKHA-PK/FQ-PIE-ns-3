@@ -114,7 +114,7 @@ BuildAppsTest ()
   clientHelper1.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
   // Connection two
-  OnOffHelper clientHelper2 ("ns3::TcpSocketFactory", Address ());
+  OnOffHelper clientHelper2 ("ns3::UdpSocketFactory", Address ());
   clientHelper2.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelper2.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelper2.SetAttribute ("PacketSize", UintegerValue (1000));

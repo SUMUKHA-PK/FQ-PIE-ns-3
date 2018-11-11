@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Authors:  Sumukha PK <sumukhapk46@gmail.com>
- *           Ishaan R D <ishaanrd6@gmail.com>
  *           Prajval M  <26prajval98@gmail.com>
+ *           Ishaan R D <ishaanrd6@gmail.com>
  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 

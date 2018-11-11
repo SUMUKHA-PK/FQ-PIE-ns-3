@@ -66,7 +66,6 @@ FqPieFlow::~FqPieFlow ()
 void
 FqPieFlow::SetDeficit (uint32_t deficit)
 {
-  NS_LOG_DEBUG("Set def");
   NS_LOG_FUNCTION (this << deficit);
   m_deficit = deficit;
 }
@@ -74,7 +73,6 @@ FqPieFlow::SetDeficit (uint32_t deficit)
 int32_t
 FqPieFlow::GetDeficit (void) const
 {
-  NS_LOG_DEBUG("get def");
   NS_LOG_FUNCTION (this);
   return m_deficit;
 }
@@ -82,7 +80,6 @@ FqPieFlow::GetDeficit (void) const
 void
 FqPieFlow::IncreaseDeficit (int32_t deficit)
 {
-  NS_LOG_DEBUG("inc def");
   NS_LOG_FUNCTION (this << deficit);
   m_deficit += deficit;
 }
@@ -90,7 +87,6 @@ FqPieFlow::IncreaseDeficit (int32_t deficit)
 void
 FqPieFlow::SetStatus (FlowStatus status)
 {
-  //NS_LOG_DEBUG("set status");
   NS_LOG_FUNCTION (this);
   m_status = status;
 }
@@ -98,7 +94,6 @@ FqPieFlow::SetStatus (FlowStatus status)
 FqPieFlow::FlowStatus
 FqPieFlow::GetStatus (void) const
 {
-  //NS_LOG_DEBUG("get status");
   NS_LOG_FUNCTION (this);
   return m_status;
 }
@@ -107,7 +102,6 @@ FqPieFlow::GetStatus (void) const
 Time
 FqPieFlow::GetQueueDelay (void)
 {
-  NS_LOG_DEBUG("getqdel");
   NS_LOG_FUNCTION (this);
   return m_qDelay;
 }
@@ -171,7 +165,6 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
                    MakeUintegerChecker<uint32_t> ())
   ;
-
   return tid;
 }
 
@@ -190,11 +183,9 @@ FqPieQueueDisc::~FqPieQueueDisc ()
   NS_LOG_FUNCTION (this);
 }
 
-//changes needed/
 int64_t
 FqPieQueueDisc::AssignStreams (int64_t stream)
 {
-  NS_LOG_DEBUG("Stream assign");
   NS_LOG_FUNCTION (this << stream);
   m_uv->SetStream (stream);
   return 1;
@@ -216,20 +207,15 @@ FqPieQueueDisc::GetQuantum (void) const
 void
 FqPieQueueDisc::InitializeParams (void)
 {
-
   m_flowFactory.SetTypeId ("ns3::FqPieFlow");
   m_queueDiscFactory.SetTypeId ("ns3::PieQueueDisc");
   m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
-  // m_queueDiscFactory.Set ("Interval", StringValue (m_interval));
-  // m_queueDiscFactory.Set ("Target", StringValue (m_target));
-  // m_burstState = NO_BURST;
 }
 
 
 bool
 FqPieQueueDisc::CheckConfig (void)
 {
-  NS_LOG_DEBUG("config check");
   NS_LOG_FUNCTION (this);
   if (GetNQueueDiscClasses () > 0)
     {
@@ -258,7 +244,7 @@ FqPieQueueDisc::CheckConfig (void)
         if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
           {
             m_quantum = dev->GetMtu ();
-            NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+            NS_LOG_LOGIC ("Setting the quantum to the MTU of the device: " << m_quantum);
           }
 
         if (!m_quantum)
@@ -275,7 +261,6 @@ bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
-  NS_LOG_DEBUG("Enqueued");
 
   //hashing to the right queue
   uint32_t h = 0;
@@ -303,7 +288,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   Ptr<FqPieFlow> flow;
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {
-      NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
+      NS_LOG_LOGIC ("Creating a new flow queue with index " << h);
       flow = m_flowFactory.Create<FqPieFlow> ();
       Ptr<QueueDisc> qd = m_queueDiscFactory.Create<QueueDisc> ();
       qd->Initialize ();
@@ -364,7 +349,6 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, uint32_t qSize)
 {
   NS_LOG_FUNCTION (this << item << qSize);
-  NS_LOG_DEBUG("early drop");
   if (flow->m_burstAllowance.GetSeconds () > 0)
     {
       // If there is still burst_allowance left, skip random early drop.
@@ -418,7 +402,6 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, ui
 void 
 FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
 {
-  NS_LOG_DEBUG("Calculating P for each flow");
   NS_LOG_FUNCTION (this);
   Time qDelay;
   double p = 0.0;
@@ -530,16 +513,13 @@ FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
 void
 FqPieQueueDisc::CalculatePFlow()
 {
-  NS_LOG_DEBUG("Calculating P invoked");
   std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
   std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
   for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ptrFlow++){
-    NS_LOG_DEBUG("Calculating P invoked1");
     Ptr<FqPieFlow> flow = (*ptrFlow);
     CalculateP(flow);
   }
   for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ptrFlow++){
-    NS_LOG_DEBUG("Calculating P invoked2");
     Ptr<FqPieFlow> flow = (*ptrFlow);
     CalculateP(flow);
   }
@@ -550,7 +530,6 @@ FqPieQueueDisc::CalculatePFlow()
 Ptr<QueueDiscItem>
 FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
 {
-  NS_LOG_DEBUG("Dqueued");
   NS_LOG_FUNCTION (this);
   Ptr<FqPieFlow> flow;
   Ptr<QueueDiscItem> item;
@@ -572,7 +551,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
             }
           else
             {
-              NS_LOG_DEBUG ("Found a new flow with positive deficit");
+              NS_LOG_LOGIC ("Found a new flow with positive deficit");
               found = true;
             }
         }
@@ -589,14 +568,14 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
             }
           else
             {
-              NS_LOG_DEBUG ("Found an old flow with positive deficit");
+              NS_LOG_LOGIC ("Found an old flow with positive deficit");
               found = true;
             }
         }
 
       if (!found)
         {
-          NS_LOG_DEBUG ("No flow found to dequeue a packet");
+          NS_LOG_LOGIC ("No flow found to dequeue a packet");
           return 0;
         }
 
@@ -604,7 +583,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
 
       if (!item)
         {
-          NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
+          NS_LOG_LOGIC ("Could not get a packet from the selected flow queue");
           if (!m_newFlows.empty ())
             {
               flow->SetStatus (FqPieFlow::OLD_FLOW);
@@ -619,7 +598,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
         }
       else
         {
-          NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
+          NS_LOG_LOGIC ("Dequeued packet " << item->GetPacket ());
         }
     } while (item == 0);
 
@@ -632,7 +611,6 @@ void
 FqPieQueueDisc::DoDispose (void)
 {
   NS_LOG_FUNCTION (this);
-  NS_LOG_DEBUG("do disp");
   m_uv = 0;
   Simulator::Remove (m_rtrsEvent);
   QueueDisc::DoDispose ();
