@@ -91,11 +91,6 @@ public:
   FlowStatus GetStatus (void) const;
 
   /**
-   * \brief Initialize the queue parameters.
-   */
-  virtual void InitializeParams (void);
-
-  /**
    * \brief Burst types
    */
   enum BurstStateT
@@ -167,7 +162,7 @@ public:
 
   // Reasons for dropping packets
   static constexpr const char* UNCLASSIFIED_DROP = "Unclassified drop";  //!< No packet filter able to classify packet
-  static constexpr const char* RANDOM_DROP = "Random Drop";        //!< Random dropping of packets in FQ-PIE
+  static constexpr const char* UNFORCED_DROP = "Random Drop";        //!< Random dropping of packets in FQ-PIE
   static constexpr const char* FORCED_DROP = "Forced Drop";        //!< Overlimit dropped packets
 
 private:

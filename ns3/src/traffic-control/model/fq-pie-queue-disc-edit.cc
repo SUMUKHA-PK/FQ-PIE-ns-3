@@ -27,7 +27,7 @@
 #include "ns3/double.h"
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
-#include "fq-pie-queue-disc-edit.h"
+#include "fq-pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -167,6 +167,10 @@ FqPieFlow::GetQueueDelay (void)
   return m_qDelay;
 }
 
+FqPieFlow::~FqPieFlow(){
+  NS_LOG_FUNCTION (this);
+}
+
 void
 FqPieQueueDisc::DoDispose (void)
 {
@@ -224,7 +228,16 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       qd->Initialize ();
       flow->SetQueueDisc (qd);
       AddQueueDiscClass (flow);
-
+      
+      NS_LOG_DEBUG("paramters initialised for each flow");
+      // Initially queue is empty so variables are initialize to zero except m_dqCount
+      flow->m_inMeasurement = false;
+      flow->m_dqCount = FqPieFlow::DQCOUNT_INVALID;
+      flow->m_dropProb = 0;
+      flow->m_avgDqRate = 0.0;
+      flow->m_dqStart = 0;
+      flow->m_burstState = FqPieFlow::NO_BURST;
+      flow->m_qDelayOld = Time (Seconds (0));
       m_flowsIndices[h] = GetNQueueDiscClasses () - 1;
     }
   else
@@ -245,13 +258,13 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   if (nQueued + item > qd->GetMaxSize ())
     {
       // Drops due to queue limit: reactive
-      DropBeforeEnqueue (item, FORCED_DROP);
+      DropBeforeEnqueue (item, UNFORCED_DROP);
       return false;
     }
   else if (DropEarly (item, flow, nQueued.GetValue ()))
     {
       // Early probability drop: proactive
-      DropBeforeEnqueue (item, RANDOM_DROP);
+      DropBeforeEnqueue (item, FORCED_DROP);
       return false;
     }
 
@@ -266,21 +279,6 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 
   return retval;
 }
-
-void
-FqPieFlow::InitializeParams (void)
-{
-  NS_LOG_DEBUG("paramters initialised for each flow");
-  // Initially queue is empty so variables are initialize to zero except m_dqCount
-  m_inMeasurement = false;
-  m_dqCount = DQCOUNT_INVALID;
-  m_dropProb = 0;
-  m_avgDqRate = 0.0;
-  m_dqStart = 0;
-  m_burstState = NO_BURST;
-  m_qDelayOld = Time (Seconds (0));
-}
-
 
 bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, uint32_t qSize)
 {
@@ -309,7 +307,7 @@ bool FqPieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow> flow, ui
   bool earlyDrop = true;
   double u =  m_uv->GetValue ();
 
-// Following conditions are where the packet must not be dropped 
+  // Following conditions are where the packet must not be dropped 
   if ((flow->m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (flow->m_dropProb < 0.2)) //as mentioned in the rfc explicitly
     {
       return false;
