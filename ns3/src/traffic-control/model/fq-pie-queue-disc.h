@@ -66,7 +66,7 @@ public:
       NEW_FLOW,
       OLD_FLOW
     };
-
+  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
   /**
    * \brief Set the deficit for this flow
    * \param deficit the deficit for this flow
@@ -93,9 +93,31 @@ public:
    */
   FlowStatus GetStatus (void) const;
 
+  enum BurstStateT
+  {
+    NO_BURST,
+    IN_BURST,
+    IN_BURST_PROTECTING,
+  };
+
+Time GetQueueDelay (void);
+
+  bool m_inMeasurement;                         //!< Indicates whether we are in a measurement cycle
+  double m_avgDqRate;                           //!< Time averaged dequeue rate
+  double m_dqStart;                             //!< Start timestamp of current measurement cycle
+  uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
+  double m_dropProb;                            //!< Variable used in calculation of drop probability
+  uint32_t m_burstReset;                        //!< Used to reset value of burst allowance
+  Time m_qDelayOld;                             //!< Old value of queue delay
+  Time m_qDelay;                                //!< Current value of queue delay
+  BurstStateT m_burstState;                     //!< Used to determine the current state of burst
+  Time m_burstAllowance;                        //!< Current max burst value in seconds that is allowed before random drops kick in
+
+
 private:
   int32_t m_deficit;    //!< the deficit for this flow
   FlowStatus m_status;  //!< the status of this flow
+  
 };
 
 /**
@@ -148,6 +170,19 @@ public:
    * \return the number of stream indices assigned by this model
    */
   int64_t AssignStreams (int64_t stream);
+    /**
+    * \brief Set the quantum value.
+    *
+    * \param quantum The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   void SetQuantum (uint32_t quantum);
+
+   /**
+    * \brief Get the quantum value.
+    *
+    * \returns The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   uint32_t GetQuantum (void) const;
 
   // Reasons for dropping packets
   static constexpr const char* UNFORCED_DROP = "Unforced drop";  //!< Early probability drops: proactive
@@ -177,14 +212,18 @@ private:
    * \param qSize queue size
    * \returns 0 for no drop, 1 for drop
    */
-  bool DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize);
+  bool DropEarly (Ptr<QueueDiscItem> item, Ptr<FqPieFlow>, uint32_t qSize);
 
   /**
    * Periodically update the drop probability based on the delay samples:
    * not only the current delay sample but also the trend where the delay
    * is going, up or down
    */
-  void CalculateP ();
+ void CalculateP (Ptr<FqPieFlow>);
+  /**
+   * Calculate drop probability for each flow ACTIVE
+   */
+  void CalculatePFlow ();
 
   static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
 
@@ -209,15 +248,7 @@ std::string m_interval;    //!< CoDel interval attribute
   std::string m_target;      //!< CoDel target attribute
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability
-  Time m_qDelayOld;                             //!< Old value of queue delay
-  Time m_qDelay;                                //!< Current value of queue delay
-  Time m_burstAllowance;                        //!< Current max burst value in seconds that is allowed before random drops kick in
-  uint32_t m_burstReset;                        //!< Used to reset value of burst allowance
   BurstStateT m_burstState;                     //!< Used to determine the current state of burst
-  bool m_inMeasurement;                         //!< Indicates whether we are in a measurement cycle
-  double m_avgDqRate;                           //!< Time averaged dequeue rate
-  double m_dqStart;                             //!< Start timestamp of current measurement cycle
-  uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
   EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
   Ptr<UniformRandomVariable> m_uv;              //!< Rng stream
   ObjectFactory m_flowFactory;         //!< Factory to create a new flow
