@@ -36,6 +36,8 @@ namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("FqPieQueueDisc");
 
+NS_OBJECT_ENSURE_REGISTERED(FqPieFlow);
+
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
 
@@ -49,7 +51,15 @@ TypeId FqPieFlow::GetTypeId (void)
   return tid;
 }
 
-FqPieFlow::~FqPieFlow(){
+FqPieFlow::FqPieFlow (): 
+    m_deficit (0),
+    m_status (INACTIVE)
+{
+  NS_LOG_FUNCTION (this);
+}
+
+FqPieFlow::~FqPieFlow()
+{
   NS_LOG_FUNCTION (this);
 }
 
