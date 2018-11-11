@@ -31,6 +31,9 @@
 #include "ns3/timer.h"
 #include "ns3/event-id.h"
 #include "ns3/random-variable-stream.h"
+#include "ns3/object-factory.h"
+#include <list>
+#include <map>
 
 #define BURST_RESET_TIMEOUT 1.5
 
@@ -49,9 +52,9 @@ public:
   /**
    * \brief FqPieFlow constructor
    */
-  // FqPieFlow ();
+  FqPieFlow ();
 
-  // virtual ~FqPieFlow ();
+  virtual ~FqPieFlow ();
 
   /**
    * \enum FlowStatus

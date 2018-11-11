@@ -29,6 +29,7 @@
 #include "ns3/string.h"
 #include "ns3/abort.h"
 #include "fq-pie-queue-disc.h"
+#include "pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
@@ -36,8 +37,74 @@ namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("FqPieQueueDisc");
 
+NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
+
+//All flow functions are implemented here
+TypeId FqPieFlow::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::FqPieFlow")
+    .SetParent<QueueDiscClass> ()
+    .SetGroupName ("TrafficControl")
+    .AddConstructor<FqPieFlow> ()
+  ;
+  return tid;
+}
+
+FqPieFlow::FqPieFlow ()
+  : m_deficit (0),
+    m_status (INACTIVE)
+{
+  NS_LOG_FUNCTION (this);
+}
+
+FqPieFlow::~FqPieFlow ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+void
+FqPieFlow::SetDeficit (uint32_t deficit)
+{
+  NS_LOG_DEBUG("Set def");
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit = deficit;
+}
+
+int32_t
+FqPieFlow::GetDeficit (void) const
+{
+  NS_LOG_DEBUG("get def");
+  NS_LOG_FUNCTION (this);
+  return m_deficit;
+}
+
+void
+FqPieFlow::IncreaseDeficit (int32_t deficit)
+{
+  NS_LOG_DEBUG("inc def");
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit += deficit;
+}
+
+void
+FqPieFlow::SetStatus (FlowStatus status)
+{
+  NS_LOG_DEBUG("set status");
+  NS_LOG_FUNCTION (this);
+  m_status = status;
+}
+
+FqPieFlow::FlowStatus
+FqPieFlow::GetStatus (void) const
+{
+  NS_LOG_DEBUG("get status");
+  NS_LOG_FUNCTION (this);
+  return m_status;
+}
+
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
+//All functions related to Queuedisc are implemented here
 TypeId FqPieQueueDisc::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::FqPieQueueDisc")
@@ -96,29 +163,29 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
                    MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("Interval",
-                   "The CoDel algorithm interval for each FQCoDel queue",
+                   "The Pie algorithm interval for each FQPie queue",
                    StringValue ("100ms"),
                    MakeStringAccessor (&FqPieQueueDisc::m_interval),
                    MakeStringChecker ())
     .AddAttribute ("Target",
-                   "The CoDel algorithm target queue delay for each FQCoDel queue",
+                   "The Pie algorithm target queue delay for each FQPie queue",
                    StringValue ("5ms"),
                    MakeStringAccessor (&FqPieQueueDisc::m_target),
                    MakeStringChecker ())
+    .AddAttribute ("DropBatchSize",
+                   "The maximum number of packets dropped from the fat flow",
+                   UintegerValue (64),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_dropBatchSize),
+                   MakeUintegerChecker<uint32_t> ())
+    .AddAttribute ("Perturbation",
+                   "The salt used as an additional input to the hash function used to classify packets",
+                   UintegerValue (0),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_perturbation),
+                   MakeUintegerChecker<uint32_t> ())
   ;
 
   return tid;
 }
-TypeId FqPieFlow::GetTypeId (void)
-{
-  static TypeId tid = TypeId ("ns3::FqPieFlow")
-    .SetParent<QueueDiscClass> ()
-    .SetGroupName ("TrafficControl")
-    .AddConstructor<FqPieFlow> ()
-  ;
-  return tid;
-}
-
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
@@ -132,46 +199,6 @@ FqPieQueueDisc::FqPieQueueDisc ()
 FqPieQueueDisc::~FqPieQueueDisc ()
 {
   NS_LOG_FUNCTION (this);
-}
-
-void
-FqPieFlow::SetDeficit (uint32_t deficit)
-{
-  NS_LOG_DEBUG("Set def");
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit = deficit;
-}
-
-int32_t
-FqPieFlow::GetDeficit (void) const
-{
-  NS_LOG_DEBUG("get def");
-  NS_LOG_FUNCTION (this);
-  return m_deficit;
-}
-
-void
-FqPieFlow::IncreaseDeficit (int32_t deficit)
-{
-  NS_LOG_DEBUG("inc def");
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit += deficit;
-}
-
-void
-FqPieFlow::SetStatus (FlowStatus status)
-{
-  NS_LOG_DEBUG("set status");
-  NS_LOG_FUNCTION (this);
-  m_status = status;
-}
-
-FqPieFlow::FlowStatus
-FqPieFlow::GetStatus (void) const
-{
-  NS_LOG_DEBUG("get status");
-  NS_LOG_FUNCTION (this);
-  return m_status;
 }
 
 void
@@ -297,7 +324,7 @@ FqPieQueueDisc::InitializeParams (void)
   // Initially queue is empty so variables are initialize to zero except m_dqCount
   
   m_flowFactory.SetTypeId ("ns3::FqPieFlow");
-  m_queueDiscFactory.SetTypeId ("ns3::PieQueueDisc");
+  m_queueDiscFactory.SetTypeId ("ns3::FqPieQueueDisc");
   m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
   m_queueDiscFactory.Set ("Interval", StringValue (m_interval));
   m_queueDiscFactory.Set ("Target", StringValue (m_target));
