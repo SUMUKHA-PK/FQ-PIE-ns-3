@@ -66,7 +66,7 @@ public:
       NEW_FLOW,
       OLD_FLOW
     };
-
+  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
   /**
    * \brief Set the deficit for this flow
    * \param deficit the deficit for this flow
@@ -127,7 +127,6 @@ public:
 private:
   int32_t m_deficit;    //!< the deficit for this flow
   FlowStatus m_status;  //!< the status of this flow
-
 };
 
 /**
@@ -201,6 +200,19 @@ protected:
    * \return the number of stream indices assigned by this model
    */
   int64_t AssignStreams (int64_t stream);
+    /**
+    * \brief Set the quantum value.
+    *
+    * \param quantum The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   void SetQuantum (uint32_t quantum);
+
+   /**
+    * \brief Get the quantum value.
+    *
+    * \returns The number of bytes each queue gets to dequeue on each round of the scheduling algorithm
+    */
+   uint32_t GetQuantum (void) const;
 
   /**
    * \brief Check if a packet needs to be dropped due to probability drop

@@ -178,7 +178,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
-    m_quantum(0)
+    m_quantum(100)
 {
   NS_LOG_FUNCTION (this);
   m_uv = CreateObject<UniformRandomVariable> ();
