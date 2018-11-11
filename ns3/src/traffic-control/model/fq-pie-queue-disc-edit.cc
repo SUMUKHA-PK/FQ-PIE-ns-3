@@ -27,7 +27,7 @@
 #include "ns3/double.h"
 #include "ns3/simulator.h"
 #include "ns3/abort.h"
-#include "fq-pie-queue-disc.h"
+#include "fq-pie-queue-disc-edit.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
 
