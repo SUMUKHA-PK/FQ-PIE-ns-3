@@ -140,7 +140,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeTimeChecker ())
     .AddAttribute ("MaxSize",
                    "The maximum number of packets accepted by this queue disc",
-                   QueueSizeValue (QueueSize ("25p")),
+                   QueueSizeValue (QueueSize ("10240p")),
                    MakeQueueSizeAccessor (&QueueDisc::SetMaxSize,
                                           &QueueDisc::GetMaxSize),
                    MakeQueueSizeChecker ())

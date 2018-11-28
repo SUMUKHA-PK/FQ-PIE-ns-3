@@ -188,15 +188,11 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::DelAckCount", UintegerValue (1));
   GlobalValue::Bind ("ChecksumEnabled", BooleanValue (false));
 
-  uint32_t meanPktSize = 1000;
+  // uint32_t meanPktSize = 1000;
 
   // CODEL params
   NS_LOG_INFO ("Set CODEL params in Fqcodelqueuedisc");
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::MaxSize", StringValue ("100p"));
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::DequeueThreshold", UintegerValue (10000));
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
+  // Config::SetDefault ("ns3::FqCoDelQueueDisc::MaxSize", StringValue ("100p"));
 
   NS_LOG_INFO ("Install internet stack on all nodes.");
   InternetStackHelper internet;
