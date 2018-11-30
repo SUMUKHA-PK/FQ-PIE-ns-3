@@ -190,9 +190,9 @@ main (int argc, char *argv[])
   std::string FqpieLinkDelay = "32ms";
 
   std::string pathOut;
-  bool writeForPlot = false;
+  bool writeForPlot = true;
   bool writePcap = true;
-  bool flowMonitor = false;
+  bool flowMonitor = true;
 
   bool printFqPieStats = true;
 
