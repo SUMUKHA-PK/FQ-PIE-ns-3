@@ -23,13 +23,35 @@
 
 /** Network topology
  *
- *    10Mb/s, 2ms                            10Mb/s, 4ms
- * n0--------------|                    |---------------n4
- *                 |    1.5Mbps, 20ms   |
- *                 n2------------------n3
- *    10Mb/s, 3ms  |  QueueLimit = 100  |    10Mb/s, 5ms
- * n1--------------|                    |---------------n5
- *
+ * 
+ *    100mB/s, 5ms |
+ * n0--------------|TCP
+ *                 |
+ *                 |
+ *    100mB/s, 5ms |
+ * n1--------------|TCP
+ *                 |
+ *                 |
+ *    100Mb/s, 5ms |TCP                      100Mb/s, 5ms
+ * n2--------------|                    |---------------n9 TCP sink
+ *                 |    10Mbps, 32ms    |
+ *                 n7------------------n8
+ *    100Mb/s, 5ms |  QueueLimit = 100  |    100Mb/s, 5ms
+ *                 |                    |
+ *                 |                    |
+ * n3--------------|TCP                 |---------------n10 UDP sink
+ *                 |
+ *                 |
+ *    100mB/s, 5ms |TCP
+ * n4--------------|
+ *                 |
+ *                 |
+ *    100mB/s, 5ms |UDP
+ * n5--------------|
+ *                 |
+ *                 |
+ *    100mB/s, 5ms |UDP
+ * n6--------------|
  */
 
 #include "ns3/core-module.h"
@@ -55,17 +77,27 @@ double sink_stop_time;
 double client_start_time;
 double client_stop_time;
 
-NodeContainer n0n2;
-NodeContainer n1n2;
-NodeContainer n2n3;
-NodeContainer n3n4;
-NodeContainer n3n5;
+NodeContainer n0n7;
+NodeContainer n1n7;
+NodeContainer n2n7;
+NodeContainer n3n7;
+NodeContainer n4n7;
+NodeContainer n5n7;
+NodeContainer n6n7;
+NodeContainer n7n8;
+NodeContainer n8n9;
+NodeContainer n8n10;
 
-Ipv4InterfaceContainer i0i2;
-Ipv4InterfaceContainer i1i2;
-Ipv4InterfaceContainer i2i3;
-Ipv4InterfaceContainer i3i4;
-Ipv4InterfaceContainer i3i5;
+Ipv4InterfaceContainer i0i7;
+Ipv4InterfaceContainer i1i7;
+Ipv4InterfaceContainer i2i7;
+Ipv4InterfaceContainer i3i7;
+Ipv4InterfaceContainer i4i7;
+Ipv4InterfaceContainer i5i7;
+Ipv4InterfaceContainer i6i7;
+Ipv4InterfaceContainer i7i8;
+Ipv4InterfaceContainer i8i9;
+Ipv4InterfaceContainer i8i10;
 
 std::stringstream filePlotQueueDisc;
 std::stringstream filePlotQueueDiscAvg;
@@ -93,45 +125,60 @@ CheckQueueDiscSize (Ptr<QueueDisc> queue)
 void
 BuildAppsTest ()
 {
-  // SINK is in the right side
-  uint16_t port = 50000;
-  Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
-  PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
-  ApplicationContainer sinkApp = sinkHelper.Install (n3n4.Get (1));
-  sinkApp.Start (Seconds (sink_start_time));
-  sinkApp.Stop (Seconds (sink_stop_time));
+  //TCP sink
+  uint16_t port_tcp= 50000,port_udp = 50001;
+  Address sinkLocalAddress_tcp (InetSocketAddress (Ipv4Address::GetAny (), port_tcp));
+  PacketSinkHelper sinkHelper_tcp ("ns3::TcpSocketFactory", sinkLocalAddress_tcp);
+  ApplicationContainer sinkApp_tcp = sinkHelper_tcp.Install (n8n9.Get (1));
+  sinkApp_tcp.Start (Seconds (sink_start_time));
+  sinkApp_tcp.Stop (Seconds (sink_stop_time));
 
-  // Connection one
-  // Clients are in left side
-  /*
-   * Create the OnOff applications to send TCP to the server
-   * onoffhelper is a client that send data to TCP destination
-  */
-  OnOffHelper clientHelper1 ("ns3::UdpSocketFactory", Address ());
-  clientHelper1.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper1.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper1.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper1.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  //UDP sink
+  Address sinkLocalAddress_udp (InetSocketAddress (Ipv4Address::GetAny (), port_udp));
+  PacketSinkHelper sinkHelper_udp ("ns3::UdpSocketFactory", sinkLocalAddress_udp);
+  ApplicationContainer sinkApp_udp = sinkHelper_udp.Install (n8n10.Get (1));
+  sinkApp_udp.Start (Seconds (sink_start_time));
+  sinkApp_udp.Stop (Seconds (sink_stop_time));
 
-  // Connection two
-  OnOffHelper clientHelper2 ("ns3::TcpSocketFactory", Address ());
-  clientHelper2.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper2.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper2.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper2.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+ 
+  //OnOffHelpers to send UDP and TCP data to respective destinations
+  OnOffHelper clientHelper_tcp ("ns3::TcpSocketFactory", Address ());
+  clientHelper_tcp.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  clientHelper_tcp.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  clientHelper_tcp.SetAttribute ("PacketSize", UintegerValue (1000));
+  clientHelper_tcp.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
 
-  ApplicationContainer clientApps1;
-  AddressValue remoteAddress (InetSocketAddress (i3i4.GetAddress (1), port));
-  clientHelper1.SetAttribute ("Remote", remoteAddress);
-  clientApps1.Add (clientHelper1.Install (n0n2.Get (0)));
-  clientApps1.Start (Seconds (client_start_time));
-  clientApps1.Stop (Seconds (client_stop_time));
+  OnOffHelper clientHelper_udp ("ns3::UdpSocketFactory", Address ());
+  clientHelper_udp.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  clientHelper_udp.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  clientHelper_udp.SetAttribute ("PacketSize", UintegerValue (1000));
+  clientHelper_udp.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
 
-  ApplicationContainer clientApps2;
-  clientHelper2.SetAttribute ("Remote", remoteAddress);
-  clientApps2.Add (clientHelper2.Install (n1n2.Get (0)));
-  clientApps2.Start (Seconds (client_start_time));
-  clientApps2.Stop (Seconds (client_stop_time));
+  ApplicationContainer clientApps_tcp,clientApps_udp;
+
+  AddressValue remoteAddress (InetSocketAddress (i8i9.GetAddress (1), port_tcp)); //Address to the sink
+  clientHelper_tcp.SetAttribute ("Remote", remoteAddress);
+  //Installing TCP on nodes 0-4
+  clientApps_tcp.Add (clientHelper_tcp.Install (n0n7.Get (0)));
+  clientApps_tcp.Add (clientHelper_tcp.Install (n1n7.Get (0)));
+  clientApps_tcp.Add (clientHelper_tcp.Install (n2n7.Get (0)));
+  clientApps_tcp.Add (clientHelper_tcp.Install (n3n7.Get (0)));
+  clientApps_tcp.Add (clientHelper_tcp.Install (n4n7.Get (0)));
+
+  clientApps_tcp.Start (Seconds (client_start_time));
+  clientApps_tcp.Stop (Seconds (client_stop_time));
+
+
+
+  AddressValue remoteAddress1 (InetSocketAddress (i8i10.GetAddress (1), port_udp));
+  clientHelper_udp.SetAttribute ("Remote", remoteAddress);
+  //Installing UDP on nodes 5-6
+  clientApps_udp.Add (clientHelper_tcp.Install (n5n7.Get (0)));
+  clientApps_udp.Add (clientHelper_tcp.Install (n6n7.Get (0)));
+
+  clientApps_udp.Start (Seconds (client_start_time));
+  clientApps_udp.Stop (Seconds (client_stop_time));
+
 }
 
 int
@@ -139,8 +186,8 @@ main (int argc, char *argv[])
 {
   LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
 
-  std::string FqpieLinkDataRate = "1.5Mbps";
-  std::string FqpieLinkDelay = "20ms";
+  std::string FqpieLinkDataRate = "10Mbps";
+  std::string FqpieLinkDelay = "32ms";
 
   std::string pathOut;
   bool writeForPlot = false;
@@ -169,18 +216,29 @@ main (int argc, char *argv[])
 
   NS_LOG_INFO ("Create nodes");
   NodeContainer c;
-  c.Create (6);
+  c.Create (11);
   Names::Add ( "N0", c.Get (0));
   Names::Add ( "N1", c.Get (1));
   Names::Add ( "N2", c.Get (2));
   Names::Add ( "N3", c.Get (3));
   Names::Add ( "N4", c.Get (4));
   Names::Add ( "N5", c.Get (5));
-  n0n2 = NodeContainer (c.Get (0), c.Get (2));
-  n1n2 = NodeContainer (c.Get (1), c.Get (2));
-  n2n3 = NodeContainer (c.Get (2), c.Get (3));
-  n3n4 = NodeContainer (c.Get (3), c.Get (4));
-  n3n5 = NodeContainer (c.Get (3), c.Get (5));
+  Names::Add ( "N6", c.Get (6));
+  Names::Add ( "N7", c.Get (7));
+  Names::Add ( "N8", c.Get (8));
+  Names::Add ( "N9", c.Get (9));
+  Names::Add ( "N10", c.Get (10));
+
+  n0n7 = NodeContainer (c.Get (0), c.Get (7));
+  n1n7 = NodeContainer (c.Get (1), c.Get (7));
+  n2n7 = NodeContainer (c.Get (2), c.Get (7));
+  n3n7 = NodeContainer (c.Get (3), c.Get (7));
+  n4n7 = NodeContainer (c.Get (4), c.Get (7));
+  n5n7 = NodeContainer (c.Get (5), c.Get (7));
+  n6n7 = NodeContainer (c.Get (6), c.Get (7));
+  n7n8 = NodeContainer (c.Get (7), c.Get (8));
+  n8n9 = NodeContainer (c.Get (8), c.Get (9));
+  n8n10 = NodeContainer (c.Get (8), c.Get (10));
 
   Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpNewReno"));
   // 42 = headers size
@@ -212,62 +270,112 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Create channels");
   PointToPointHelper p2p;
 
-  NetDeviceContainer devn0n2;
-  NetDeviceContainer devn1n2;
-  NetDeviceContainer devn2n3;
-  NetDeviceContainer devn3n4;
-  NetDeviceContainer devn3n5;
+  NetDeviceContainer devn0n7;
+  NetDeviceContainer devn1n7;
+  NetDeviceContainer devn2n7;
+  NetDeviceContainer devn3n7;
+  NetDeviceContainer devn4n7;
+  NetDeviceContainer devn5n7;
+  NetDeviceContainer devn6n7;
+  NetDeviceContainer devn7n8;
+  NetDeviceContainer devn8n9;
+  NetDeviceContainer devn8n10;
 
   QueueDiscContainer queueDiscs;
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
-  devn0n2 = p2p.Install (n0n2);
-  tchPfifo.Install (devn0n2);
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn0n7 = p2p.Install (n0n7);
+  tchPfifo.Install (devn0n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("3ms"));
-  devn1n2 = p2p.Install (n1n2);
-  tchPfifo.Install (devn1n2);
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn1n7 = p2p.Install (n1n7);
+  tchPfifo.Install (devn1n7);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn2n7 = p2p.Install (n2n7);
+  tchPfifo.Install (devn2n7);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn3n7 = p2p.Install (n3n7);
+  tchPfifo.Install (devn3n7);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn4n7 = p2p.Install (n4n7);
+  tchPfifo.Install (devn4n7);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn5n7 = p2p.Install (n5n7);
+  tchPfifo.Install (devn5n7);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn6n7 = p2p.Install (n6n7);
+  tchPfifo.Install (devn6n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
   p2p.SetDeviceAttribute ("DataRate", StringValue (FqpieLinkDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue (FqpieLinkDelay));
-  devn2n3 = p2p.Install (n2n3);
+  devn7n8 = p2p.Install (n7n8);
   // only backbone link has FQ-PIE queue disc
-  queueDiscs = tchFqPie.Install (devn2n3);  // Have to change this line.
+  queueDiscs = tchFqPie.Install (devn7n8); 
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("4ms"));
-  devn3n4 = p2p.Install (n3n4);
-  tchPfifo.Install (devn3n4);
-
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
-  devn3n5 = p2p.Install (n3n5);
-  tchPfifo.Install (devn3n5);
+  devn8n9 = p2p.Install (n8n9);
+  tchPfifo.Install (devn8n9);
+
+  p2p.SetQueue ("ns3::DropTailQueue");
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
+  devn8n10 = p2p.Install (n8n10);
+  tchPfifo.Install (devn8n10);
 
   NS_LOG_INFO ("Assign IP Addresses");
   Ipv4AddressHelper ipv4;
 
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
-  i0i2 = ipv4.Assign (devn0n2);
+  i0i7 = ipv4.Assign (devn0n7);
 
   ipv4.SetBase ("10.1.2.0", "255.255.255.0");
-  i1i2 = ipv4.Assign (devn1n2);
+  i1i7 = ipv4.Assign (devn1n7);
 
   ipv4.SetBase ("10.1.3.0", "255.255.255.0");
-  i2i3 = ipv4.Assign (devn2n3);
+  i2i7 = ipv4.Assign (devn2n7);
 
   ipv4.SetBase ("10.1.4.0", "255.255.255.0");
-  i3i4 = ipv4.Assign (devn3n4);
+  i3i7 = ipv4.Assign (devn3n7);
 
   ipv4.SetBase ("10.1.5.0", "255.255.255.0");
-  i3i5 = ipv4.Assign (devn3n5);
+  i4i7 = ipv4.Assign (devn4n7);
+
+  ipv4.SetBase ("10.1.6.0", "255.255.255.0");
+  i5i7 = ipv4.Assign (devn5n7);
+
+  ipv4.SetBase ("10.1.7.0", "255.255.255.0");
+  i6i7 = ipv4.Assign (devn6n7);
+
+  ipv4.SetBase ("10.1.8.0", "255.255.255.0");
+  i7i8 = ipv4.Assign (devn7n8);
+
+  ipv4.SetBase ("10.1.9.0", "255.255.255.0");
+  i8i9 = ipv4.Assign (devn8n9);
+
+  ipv4.SetBase ("10.1.10.0", "255.255.255.0");
+  i8i10 = ipv4.Assign (devn8n10);
 
   // Set up the routing
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();

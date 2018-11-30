@@ -139,12 +139,12 @@ main (int argc, char *argv[])
 {
   LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
 
-  std::string FqpieLinkDataRate = "1.5Mbps";
-  std::string FqpieLinkDelay = "20ms";
+  std::string FqpieLinkDataRate = "10Mbps";
+  std::string FqpieLinkDelay = "32ms";
 
   std::string pathOut;
   bool writeForPlot = false;
-  bool writePcap = false;
+  bool writePcap = true;
   bool flowMonitor = false;
 
   bool printFqPieStats = true;
@@ -221,14 +221,14 @@ main (int argc, char *argv[])
   QueueDiscContainer queueDiscs;
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn0n2 = p2p.Install (n0n2);
   tchPfifo.Install (devn0n2);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("3ms"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn1n2 = p2p.Install (n1n2);
   tchPfifo.Install (devn1n2);
 
@@ -240,13 +240,13 @@ main (int argc, char *argv[])
   queueDiscs = tchFqPie.Install (devn2n3);  // Have to change this line.
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("4ms"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn3n4 = p2p.Install (n3n4);
   tchPfifo.Install (devn3n4);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn3n5 = p2p.Install (n3n5);
   tchPfifo.Install (devn3n5);
