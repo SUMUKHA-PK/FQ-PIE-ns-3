@@ -35,3 +35,6 @@ def build(bld):
 
     obj = bld.create_ns3_program('fq-codel-example-udp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-codel-example-udp.cc'
+
+    obj = bld.create_ns3_program('fq-codel-example-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-codel-example-tcp.cc'
