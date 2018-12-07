@@ -51,7 +51,7 @@ totalvalPacket = 0
 with open(file_name[0:file_name.rindex('.')] + '.csv') as fq:
     fp = fq.readlines()
     for line in fp:
-        print(line.split('\t')[2], destIp, packetSize, line.split('\t')[3].strip())
+        # print(line.split('\t')[2], destIp, packetSize, line.split('\t')[3].strip())
         if (destIp == None or str(line.split('\t')[2]).strip() == destIp) and float(line.split('\t')[0]) >= startTime and (destPort == None or line.split('\t')[3].strip () == '' or destPort == int (line.split('\t')[3].strip ())):
             new_time = float(line.split('\t')[0])
             val += float(line.split('\t')[1])
