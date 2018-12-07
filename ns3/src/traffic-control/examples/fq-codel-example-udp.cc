@@ -143,8 +143,8 @@ main (int argc, char *argv[])
   std::string FqcodelLinkDelay = "20ms";
 
   std::string pathOut;
-  bool writeForPlot = false;
-  bool writePcap = false;
+  bool writeForPlot = true;
+  bool writePcap = true;
   bool flowMonitor = false;
 
   bool printFqCoDelStats = true;
