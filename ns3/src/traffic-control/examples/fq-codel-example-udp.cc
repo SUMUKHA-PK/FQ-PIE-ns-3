@@ -96,10 +96,15 @@ BuildAppsTest ()
   // SINK is in the right side
   uint16_t port = 50000;
   Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
-  PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
-  ApplicationContainer sinkApp = sinkHelper.Install (n3n4.Get (1));
-  sinkApp.Start (Seconds (sink_start_time));
-  sinkApp.Stop (Seconds (sink_stop_time));
+  PacketSinkHelper sinkHelperTCP ("ns3::TcpSocketFactory", sinkLocalAddress);
+  ApplicationContainer sinkAppTCP = sinkHelperTCP.Install (n3n4.Get (1));
+  sinkAppTCP.Start (Seconds (sink_start_time));
+  sinkAppTCP.Stop (Seconds (sink_stop_time));
+
+  PacketSinkHelper sinkHelperUDP ("ns3::UdpSocketFactory", sinkLocalAddress);
+  ApplicationContainer sinkAppUDP = sinkHelperUDP.Install (n3n5.Get (1));
+  sinkAppUDP.Start (Seconds (sink_start_time));
+  sinkAppUDP.Stop (Seconds (sink_stop_time));
 
   // Connection one
   // Clients are in left side
