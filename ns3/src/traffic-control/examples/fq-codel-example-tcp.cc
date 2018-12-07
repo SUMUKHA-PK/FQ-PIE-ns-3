@@ -143,7 +143,7 @@ main (int argc, char *argv[])
   std::string FqcodelLinkDelay = "20ms";
 
   std::string pathOut;
-  bool writeForPlot = false;
+  bool writeForPlot = true;
   bool writePcap = true;
   bool flowMonitor = false;
 
@@ -187,8 +187,6 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1000 - 42));
   Config::SetDefault ("ns3::TcpSocket::DelAckCount", UintegerValue (1));
   GlobalValue::Bind ("ChecksumEnabled", BooleanValue (false));
-
-  // uint32_t meanPktSize = 1000;
 
   // CODEL params
   NS_LOG_INFO ("Set CODEL params in Fqcodelqueuedisc");

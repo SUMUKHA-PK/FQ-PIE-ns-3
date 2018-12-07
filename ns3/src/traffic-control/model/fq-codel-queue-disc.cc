@@ -188,7 +188,7 @@ FqCoDelQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   Ptr<FqCoDelFlow> flow;
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {
-      NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
+      // NS_LOG_DEBUG ("Creating a new flow queue with index " << h);
       flow = m_flowFactory.Create<FqCoDelFlow> ();
       Ptr<QueueDisc> qd = m_queueDiscFactory.Create<QueueDisc> ();
       qd->Initialize ();
@@ -211,7 +211,7 @@ FqCoDelQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 
   flow->GetQueueDisc ()->Enqueue (item);
 
-  NS_LOG_DEBUG ("Packet enqueued into flow " << h << "; flow index " << m_flowsIndices[h]);
+  // NS_LOG_DEBUG ("Packet enqueued into flow " << h << "; flow index " << m_flowsIndices[h]);
   
   if (GetCurrentSize () > GetMaxSize ())
     {
@@ -246,7 +246,7 @@ FqCoDelQueueDisc::DoDequeue (void)
             }
           else
             {
-              NS_LOG_DEBUG ("Found a new flow with positive deficit");
+              // NS_LOG_DEBUG ("Found a new flow with positive deficit");
               found = true;
             }
         }
@@ -263,14 +263,14 @@ FqCoDelQueueDisc::DoDequeue (void)
             }
           else
             {
-              NS_LOG_DEBUG ("Found an old flow with positive deficit");
+              // NS_LOG_DEBUG ("Found an old flow with positive deficit");
               found = true;
             }
         }
 
       if (!found)
         {
-          NS_LOG_DEBUG ("No flow found to dequeue a packet");
+          // NS_LOG_DEBUG ("No flow found to dequeue a packet");
           return 0;
         }
 
@@ -278,7 +278,7 @@ FqCoDelQueueDisc::DoDequeue (void)
 
       if (!item)
         {
-          NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
+          // NS_LOG_DEBUG ("Could not get a packet from the selected flow queue");
           if (!m_newFlows.empty ())
             {
               flow->SetStatus (FqCoDelFlow::OLD_FLOW);
@@ -293,7 +293,7 @@ FqCoDelQueueDisc::DoDequeue (void)
         }
       else
         {
-          NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
+          // NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
         }
     } while (item == 0);
 
@@ -329,7 +329,7 @@ FqCoDelQueueDisc::CheckConfig (void)
       if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
         {
           m_quantum = dev->GetMtu ();
-          NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
+          // NS_LOG_DEBUG ("Setting the quantum to the MTU of the device: " << m_quantum);
         }
 
       if (!m_quantum)
