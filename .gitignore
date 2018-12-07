@@ -2,3 +2,5 @@
 .vscode
 *.pcap
 *.plotme
+ns3/plotmeTP
+ns3/plotmeTPP
