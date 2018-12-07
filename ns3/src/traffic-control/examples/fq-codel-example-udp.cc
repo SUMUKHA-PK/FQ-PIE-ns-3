@@ -126,14 +126,15 @@ BuildAppsTest ()
   clientHelper2.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
   ApplicationContainer clientApps1;
-  AddressValue remoteAddress (InetSocketAddress (i3i4.GetAddress (1), port));
-  clientHelper1.SetAttribute ("Remote", remoteAddress);
+  AddressValue remoteAddressUDP (InetSocketAddress (i3i5.GetAddress (1), port));
+  clientHelper1.SetAttribute ("Remote", remoteAddressUDP);
   clientApps1.Add (clientHelper1.Install (n0n2.Get (0)));
   clientApps1.Start (Seconds (client_start_time));
   clientApps1.Stop (Seconds (client_stop_time));
 
+  AddressValue remoteAddressTCP (InetSocketAddress (i3i4.GetAddress (1), port));
   ApplicationContainer clientApps2;
-  clientHelper2.SetAttribute ("Remote", remoteAddress);
+  clientHelper2.SetAttribute ("Remote", remoteAddressTCP);
   clientApps2.Add (clientHelper2.Install (n1n2.Get (0)));
   clientApps2.Start (Seconds (client_start_time));
   clientApps2.Stop (Seconds (client_stop_time));
