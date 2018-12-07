@@ -143,7 +143,7 @@ main (int argc, char *argv[])
   std::string FqpieLinkDelay = "20ms";
 
   std::string pathOut;
-  bool writeForPlot = false;
+  bool writeForPlot = true;
   bool writePcap = true;
   bool flowMonitor = false;
 
