@@ -64,7 +64,7 @@
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("FqPieExample");
+NS_LOG_COMPONENT_DEFINE ("FqCoDelExample");
 
 uint32_t checkTimes;
 double avgQueueDiscSize;
@@ -183,17 +183,17 @@ BuildAppsTest ()
 int
 main (int argc, char *argv[])
 {
-  LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
+  LogComponentEnable ("FqCoDelQueueDisc", LOG_LEVEL_INFO);
 
-  std::string FqpieLinkDataRate = "10Mbps";
-  std::string FqpieLinkDelay = "32ms";
+  std::string FqcodelLinkDataRate = "10Mbps";
+  std::string FqcodelLinkDelay = "32ms";
 
   std::string pathOut;
   bool writeForPlot = true;
   bool writePcap = true;
   bool flowMonitor = false;
 
-  bool printFqPieStats = true;
+  bool printFqCoDelStats = true;
 
   global_start_time = 0.0;
   sink_start_time = global_start_time;
@@ -245,15 +245,9 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::DelAckCount", UintegerValue (1));
   GlobalValue::Bind ("ChecksumEnabled", BooleanValue (false));
 
-  uint32_t meanPktSize = 1000;
-
-  // PIE params
-  NS_LOG_INFO ("Set PIE params in Fqpiequeuedisc");
-  Config::SetDefault ("ns3::FqPieQueueDisc::MaxSize", StringValue ("100p"));
-  Config::SetDefault ("ns3::FqPieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
-  Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (10000));
-  Config::SetDefault ("ns3::FqPieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
-  Config::SetDefault ("ns3::FqPieQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
+  // Codel params
+  NS_LOG_INFO ("Set CODEL params in Fqcodelqueuedisc");
+  Config::SetDefault ("ns3::FqCoDelQueueDisc::MaxSize", StringValue ("100p"));
 
   NS_LOG_INFO ("Install internet stack on all nodes.");
   InternetStackHelper internet;
@@ -263,8 +257,8 @@ main (int argc, char *argv[])
   uint16_t handle = tchPfifo.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
   tchPfifo.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
 
-  TrafficControlHelper tchFqPie;
-  tchFqPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
+  TrafficControlHelper tchFqCoDel;
+  tchFqCoDel.SetRootQueueDisc ("ns3::FqCoDelQueueDisc");
 
   NS_LOG_INFO ("Create channels");
   PointToPointHelper p2p;
@@ -325,11 +319,11 @@ main (int argc, char *argv[])
   tchPfifo.Install (devn6n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue (FqpieLinkDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue (FqpieLinkDelay));
+  p2p.SetDeviceAttribute ("DataRate", StringValue (FqcodelLinkDataRate));
+  p2p.SetChannelAttribute ("Delay", StringValue (FqcodelLinkDelay));
   devn7n8 = p2p.Install (n7n8);
-  // only backbone link has FQ-PIE queue disc
-  queueDiscs = tchFqPie.Install (devn7n8); 
+  // only backbone link has FQ-CODEL queue disc
+  queueDiscs = tchFqCoDel.Install (devn7n8); 
 
   p2p.SetQueue ("ns3::DropTailQueue");
   p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
@@ -385,7 +379,7 @@ main (int argc, char *argv[])
     {
       PointToPointHelper ptp;
       std::stringstream stmp;
-      stmp << pathOut << "/fqpie";
+      stmp << pathOut << "/fqcodel";
       ptp.EnablePcapAll (stmp.str ().c_str ());
     }
 
@@ -398,8 +392,8 @@ main (int argc, char *argv[])
 
   if (writeForPlot)
     {
-      filePlotQueueDisc << pathOut << "/" << "fq-pie-queue-disc.plotme";
-      filePlotQueueDiscAvg << pathOut << "/" << "fq-pie-queue-disc_avg.plotme";
+      filePlotQueueDisc << pathOut << "/" << "fq-codel-queue-disc.plotme";
+      filePlotQueueDiscAvg << pathOut << "/" << "fq-codel-queue-disc_avg.plotme";
 
       remove (filePlotQueueDisc.str ().c_str ());
       remove (filePlotQueueDiscAvg.str ().c_str ());
@@ -412,26 +406,25 @@ main (int argc, char *argv[])
 
   QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
 
-  if (st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP) != 0)
+  if (st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP) != 0)
     {
       std::cout << "There should be no drops due to queue full." << std::endl;
-      exit (1);
     }
 
   if (flowMonitor)
     {
       std::stringstream stmp;
-      stmp << pathOut << "/fqpie.flowmon";
+      stmp << pathOut << "/fqcodel.flowmon";
 
       flowmon->SerializeToXmlFile (stmp.str ().c_str (), false, false);
     }
 
-  if (printFqPieStats)
+  if (printFqCoDelStats)
     {
       std::cout << "***FQ PIE stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::UNCLASSIFIED_DROP)
                 << " drops due to prob mark" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP)
                 << " drops due to queue limits" << std::endl;
     }
 
