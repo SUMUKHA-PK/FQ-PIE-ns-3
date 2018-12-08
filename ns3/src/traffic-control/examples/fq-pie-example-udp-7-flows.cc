@@ -126,58 +126,57 @@ void
 BuildAppsTest ()
 {
   //TCP sink
-  uint16_t port_tcp= 50000,port_udp = 50001;
-  Address sinkLocalAddress_tcp (InetSocketAddress (Ipv4Address::GetAny (), port_tcp));
-  PacketSinkHelper sinkHelper_tcp ("ns3::TcpSocketFactory", sinkLocalAddress_tcp);
-  ApplicationContainer sinkApp_tcp = sinkHelper_tcp.Install (n8n9.Get (1));
-  sinkApp_tcp.Start (Seconds (sink_start_time));
-  sinkApp_tcp.Stop (Seconds (sink_stop_time));
+  uint16_t port= 50000;
+  Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
+  PacketSinkHelper sinkHelperTCP ("ns3::TcpSocketFactory", sinkLocalAddress);
+  ApplicationContainer sinkAppTCP = sinkHelperTCP.Install (n8n9.Get (1));
+  sinkAppTCP.Start (Seconds (sink_start_time));
+  sinkAppTCP.Stop (Seconds (sink_stop_time));
 
   //UDP sink
-  Address sinkLocalAddress_udp (InetSocketAddress (Ipv4Address::GetAny (), port_udp));
-  PacketSinkHelper sinkHelper_udp ("ns3::UdpSocketFactory", sinkLocalAddress_udp);
-  ApplicationContainer sinkApp_udp = sinkHelper_udp.Install (n8n10.Get (1));
-  sinkApp_udp.Start (Seconds (sink_start_time));
-  sinkApp_udp.Stop (Seconds (sink_stop_time));
+  PacketSinkHelper sinkHelperUDP ("ns3::UdpSocketFactory", sinkLocalAddress);
+  ApplicationContainer sinkAppUDP = sinkHelperUDP.Install (n8n10.Get (1));
+  sinkAppUDP.Start (Seconds (sink_start_time));
+  sinkAppUDP.Stop (Seconds (sink_stop_time));
 
  
   //OnOffHelpers to send UDP and TCP data to respective destinations
-  OnOffHelper clientHelper_tcp ("ns3::TcpSocketFactory", Address ());
-  clientHelper_tcp.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper_tcp.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper_tcp.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper_tcp.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  OnOffHelper clientHelperTCP ("ns3::TcpSocketFactory", Address ());
+  clientHelperTCP.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  clientHelperTCP.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  clientHelperTCP.SetAttribute ("PacketSize", UintegerValue (1000));
+  clientHelperTCP.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
 
-  OnOffHelper clientHelper_udp ("ns3::UdpSocketFactory", Address ());
-  clientHelper_udp.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper_udp.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper_udp.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper_udp.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  OnOffHelper clientHelperUDP ("ns3::UdpSocketFactory", Address ());
+  clientHelperUDP.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  clientHelperUDP.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  clientHelperUDP.SetAttribute ("PacketSize", UintegerValue (1000));
+  clientHelperUDP.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
 
-  ApplicationContainer clientApps_tcp,clientApps_udp;
+  ApplicationContainer clientAppsTCP,clientAppsUDP;
 
-  AddressValue remoteAddress (InetSocketAddress (i8i9.GetAddress (1), port_tcp)); //Address to the sink
-  clientHelper_tcp.SetAttribute ("Remote", remoteAddress);
+  AddressValue remoteAddress (InetSocketAddress (i8i9.GetAddress (1), port)); //Address to the sink
+  clientHelperTCP.SetAttribute ("Remote", remoteAddress);
   //Installing TCP on nodes 0-4
-  clientApps_tcp.Add (clientHelper_tcp.Install (n0n7.Get (0)));
-  clientApps_tcp.Add (clientHelper_tcp.Install (n1n7.Get (0)));
-  clientApps_tcp.Add (clientHelper_tcp.Install (n2n7.Get (0)));
-  clientApps_tcp.Add (clientHelper_tcp.Install (n3n7.Get (0)));
-  clientApps_tcp.Add (clientHelper_tcp.Install (n4n7.Get (0)));
+  clientAppsTCP.Add (clientHelperTCP.Install (n0n7.Get (0)));
+  clientAppsTCP.Add (clientHelperTCP.Install (n1n7.Get (0)));
+  clientAppsTCP.Add (clientHelperTCP.Install (n2n7.Get (0)));
+  clientAppsTCP.Add (clientHelperTCP.Install (n3n7.Get (0)));
+  clientAppsTCP.Add (clientHelperTCP.Install (n4n7.Get (0)));
 
-  clientApps_tcp.Start (Seconds (client_start_time));
-  clientApps_tcp.Stop (Seconds (client_stop_time));
+  clientAppsTCP.Start (Seconds (client_start_time));
+  clientAppsTCP.Stop (Seconds (client_stop_time));
 
 
 
-  AddressValue remoteAddress1 (InetSocketAddress (i8i10.GetAddress (1), port_udp));
-  clientHelper_udp.SetAttribute ("Remote", remoteAddress);
+  AddressValue remoteAddress1 (InetSocketAddress (i8i10.GetAddress (1), port));
+  clientHelperUDP.SetAttribute ("Remote", remoteAddress);
   //Installing UDP on nodes 5-6
-  clientApps_udp.Add (clientHelper_tcp.Install (n5n7.Get (0)));
-  clientApps_udp.Add (clientHelper_tcp.Install (n6n7.Get (0)));
+  clientAppsUDP.Add (clientHelperTCP.Install (n5n7.Get (0)));
+  clientAppsUDP.Add (clientHelperTCP.Install (n6n7.Get (0)));
 
-  clientApps_udp.Start (Seconds (client_start_time));
-  clientApps_udp.Stop (Seconds (client_stop_time));
+  clientAppsUDP.Start (Seconds (client_start_time));
+  clientAppsUDP.Stop (Seconds (client_stop_time));
 
 }
 
