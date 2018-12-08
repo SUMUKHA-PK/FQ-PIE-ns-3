@@ -40,4 +40,7 @@ def build(bld):
     obj.source = 'fq-codel-example-tcp.cc'
 
     obj = bld.create_ns3_program('fq-pie-example-udp-7-flows', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
-    obj.source = 'fq-pie-example-udp-7-flows.cc'    
+    obj.source = 'fq-pie-example-udp-7-flows.cc'
+
+    obj = bld.create_ns3_program('fq-codel-example-udp-7-flows', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-codel-example-udp-7-flows.cc'    
