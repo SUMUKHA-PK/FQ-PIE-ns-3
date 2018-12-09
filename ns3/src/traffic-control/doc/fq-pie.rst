@@ -33,7 +33,7 @@ FqPieFlow class. The code was ported to |ns3| based on Linux kernel code.
   
   * ``FqPieQueueDisc::DropEarly ()``: If there is still burst allowance left, then random early drop is skipped. If no burst allowance, then the following conditions are checked for which random dropping is bypassed - If the queue's latency sample is smaller than half of it's target latency value when the drop probability is not too high (less than 0.2) or if the queue has 2 or less packets, the packet is not dropped. Otherwise, the incoming packet is randomly dropped.
   
-  * ``FqPieQueueDisc::CalculateP ()``: The PIE algorithm periodically updates the probability based on the latency samples. The drop probability is updated as per the algorithm given in RFC 8033. /* TODO line 461 to 526*/
+  * ``FqPieQueueDisc::CalculateP ()``: The PIE algorithm periodically updates the probability based on the latency samples. The drop probability is updated as per the algorithm given in RFC 8033. This method is linked to Simulator::Schedule() which runs this function every mt_Update unit of time. The function is made to run for every queue/flow that is present. The function takes in a parameter (flow) and applies the function to only that flow. The simulator runs a new function we created, CalculatePFlow which calls the function CalcluateP for each flow.
   
   * ``FqPieQueueDisc::DoDequeue ()``: The first task performed by this routine is selecting a queue from which to dequeue a packet. To this end, the scheduler first looks at the list of new queues; for the queue at the head of that list, if that queue has a negative deficit (i.e., it has already dequeued at least a quantum of bytes), it is given an additional amount of deficit, the queue is put onto the end of the list of old queues, and the routine selects the next queue and starts again. Otherwise, that queue is selected for dequeue. If the list of new queues is empty, the scheduler proceeds down the list of old queues in the same fashion (checking the deficit, and either selecting the queue for dequeuing, or increasing deficit and putting the queue back at the end of the list). If no queue is found for dequeuing, the method returns a message stating that. Otherwise, a packet is chosen from the selected queue to be dequeued and the deficit of the queue is updated.
   
@@ -51,7 +51,6 @@ In |ns3|, packet classification is performed in the same way as in Linux.
 
 References
 ==========
-
 
 .. [Buf16] Bufferbloat.net.  Available online at `<http://www.bufferbloat.net/>`_.
 
@@ -80,11 +79,28 @@ can be used (at any time) to configure a different value.
 Examples
 ========
 
+A typical usage pattern is to create a traffic control helper and to configure type
+and attributes of queue disc and filters from the helper. For example, FqCodel
+can be configured as follows:
+
+.. sourcecode:: cpp
+
+  TrafficControlHelper tchFqPie;
+  tchFqPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
+  
+  QueueDiscContainer queueDiscs = tchFqPie.Install (devn2n3)
+
 
 Validation
 **********
 
 The FqPie model is tested using :cpp:class:`FqPieQueueDiscTestSuite` class defined in `src/test/ns3tc/fq-pie-queue-disc-test-suite.cc`.  The suite includes 5 test cases:
+
+* Test 1: The first test checks that packets that cannot be classified by any available filter are dropped.
+* Test 2: The second test checks that IPv4 packets having distinct destination addresses are enqueued into different flow queues. Also, it checks that packets are dropped from the fat flow in case the queue disc capacity is exceeded.
+* Test 3: The third test checks the dequeue operation and the deficit round robin-based scheduler.
+* Test 4: The fourth test checks that TCP packets with distinct port numbers are enqueued into different flow queues.
+* Test 5: The fifth test checks that UDP packets with distinct port numbers are enqueued into different flow queues.
 
 The test suite can be run using the following commands::
 
