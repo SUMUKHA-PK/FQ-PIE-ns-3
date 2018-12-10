@@ -64,7 +64,7 @@
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("FqCoDelExample");
+NS_LOG_COMPONENT_DEFINE ("CoDelExample");
 
 uint32_t checkTimes;
 double avgQueueDiscSize;
@@ -183,17 +183,17 @@ BuildAppsTest ()
 int
 main (int argc, char *argv[])
 {
-  LogComponentEnable ("FqCoDelQueueDisc", LOG_LEVEL_INFO);
+  LogComponentEnable ("CoDelQueueDisc", LOG_LEVEL_INFO);
 
-  std::string FqcodelLinkDataRate = "10Mbps";
-  std::string FqcodelLinkDelay = "32ms";
+  std::string CodelLinkDataRate = "10Mbps";
+  std::string CodelLinkDelay = "32ms";
 
   std::string pathOut;
   bool writeForPlot = true;
   bool writePcap = true;
   bool flowMonitor = false;
 
-  bool printFqCoDelStats = true;
+  bool printCoDelStats = true;
 
   global_start_time = 0.0;
   sink_start_time = global_start_time;
@@ -246,8 +246,8 @@ main (int argc, char *argv[])
   GlobalValue::Bind ("ChecksumEnabled", BooleanValue (false));
 
   // Codel params
-  NS_LOG_INFO ("Set CODEL params in Fqcodelqueuedisc");
-  Config::SetDefault ("ns3::FqCoDelQueueDisc::MaxSize", StringValue ("100p"));
+  NS_LOG_INFO ("Set CODEL params in CoDelQueueDisc");
+  Config::SetDefault ("ns3::CoDelQueueDisc::MaxSize", StringValue ("100p"));
 
   NS_LOG_INFO ("Install internet stack on all nodes.");
   InternetStackHelper internet;
@@ -257,8 +257,8 @@ main (int argc, char *argv[])
   uint16_t handle = tchPfifo.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
   tchPfifo.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
 
-  TrafficControlHelper tchFqCoDel;
-  tchFqCoDel.SetRootQueueDisc ("ns3::FqCoDelQueueDisc");
+  TrafficControlHelper CoDel;
+  CoDel.SetRootQueueDisc ("ns3::CoDelQueueDisc");
 
   NS_LOG_INFO ("Create channels");
   PointToPointHelper p2p;
@@ -319,11 +319,11 @@ main (int argc, char *argv[])
   tchPfifo.Install (devn6n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue (FqcodelLinkDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue (FqcodelLinkDelay));
+  p2p.SetDeviceAttribute ("DataRate", StringValue (CodelLinkDataRate));
+  p2p.SetChannelAttribute ("Delay", StringValue (CodelLinkDelay));
   devn7n8 = p2p.Install (n7n8);
-  // only backbone link has FQ-CODEL queue disc
-  queueDiscs = tchFqCoDel.Install (devn7n8); 
+  // only backbone link has CODEL queue disc
+  queueDiscs = CoDel.Install (devn7n8); 
 
   p2p.SetQueue ("ns3::DropTailQueue");
   p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
@@ -379,7 +379,7 @@ main (int argc, char *argv[])
     {
       PointToPointHelper ptp;
       std::stringstream stmp;
-      stmp << pathOut << "/fqcodel";
+      stmp << pathOut << "/codel";
       ptp.EnablePcapAll (stmp.str ().c_str ());
     }
 
@@ -392,8 +392,8 @@ main (int argc, char *argv[])
 
   if (writeForPlot)
     {
-      filePlotQueueDisc << pathOut << "/" << "fq-codel-queue-disc.plotme";
-      filePlotQueueDiscAvg << pathOut << "/" << "fq-codel-queue-disc_avg.plotme";
+      filePlotQueueDisc << pathOut << "/" << "codel-queue-disc.plotme";
+      filePlotQueueDiscAvg << pathOut << "/" << "codel-queue-disc_avg.plotme";
 
       remove (filePlotQueueDisc.str ().c_str ());
       remove (filePlotQueueDiscAvg.str ().c_str ());
@@ -406,7 +406,7 @@ main (int argc, char *argv[])
 
   QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
 
-  if (st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP) != 0)
+  if (st.GetNDroppedPackets (CoDelQueueDisc::OVERLIMIT_DROP) != 0)
     {
       std::cout << "There should be no drops due to queue full." << std::endl;
     }
@@ -414,17 +414,17 @@ main (int argc, char *argv[])
   if (flowMonitor)
     {
       std::stringstream stmp;
-      stmp << pathOut << "/fqcodel.flowmon";
+      stmp << pathOut << "/codel.flowmon";
 
       flowmon->SerializeToXmlFile (stmp.str ().c_str (), false, false);
     }
 
-  if (printFqCoDelStats)
+  if (printCoDelStats)
     {
-      std::cout << "***FQ CoDel stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::UNCLASSIFIED_DROP)
+      std::cout << "***CoDel stats from Node 2 queue ***" << std::endl;
+      std::cout << "\t " << st.GetNDroppedPackets (CoDelQueueDisc::TARGET_EXCEEDED_DROP)
                 << " drops due to prob mark" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (CoDelQueueDisc::OVERLIMIT_DROP)
                 << " drops due to queue limits" << std::endl;
     }
 
