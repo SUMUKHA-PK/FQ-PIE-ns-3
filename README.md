@@ -81,37 +81,19 @@ Here the DRR algorithm is used in order to determine which queue has to dequeue.
 ***
 
 ### Result and Analysis ([details](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Results-and-Further))
-**PIE vs FQ-PIE**
-
-1. Only when TCP packets are present in the Network :
-
-
-|       Drops       | PIE | FQ-PIE |
-|:-----------------:|:---:|:------:|
-|    Random Drops   | 204 |    0   |
-| Queue limit Drops |  0  |    0   |
-
-
-2. When both TCP and UDP packets are present in the Network:
-
-
-|       Drops       |  PIE | FQ-PIE |
-|:-----------------:|:----:|:------:|
-|    Random Drops   | 3512 |   483  |
-| Queue limit Drops |  454 |    0   |
+**FQ-PIE vs FQ-CoDel vs PIE vs CoDel**
 
 
 ***
 
 ### Conclusion
-* Fq-PIE is a drastic increment over the already existing  problem and handles the buffer bloat problem really well. 
-* As comparision of Fq-PIE with other AQMs is not done it is currently not possible to compare its performance with others. 
-* These results are only representative of how better FqPie is with respect to Pie.
+* Fq-PIE and Fq-CoDel have comparable throughputs
+* PIE and CoDel are not fair when both TCP and UDP packets are present
+* Fq-PIE is however better than Fq-CoDel in case of preventing buffer bloat as it reduces the number of drops significantly compared to Fq-CoDel.
 
 *** 
 
 ### Further
-* Comparison with FqCodel and Codel is yet to be done as a test-suite could not be prepared.
 * CAKE implementation and comparison with FqPIE
 * Only Basic FQ-PIE has been implemented. A enhanced version can be used for better results. [Enhanced PIE](https://tools.ietf.org/html/rfc8033#appendix-B)
 
