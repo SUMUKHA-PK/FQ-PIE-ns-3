@@ -86,6 +86,13 @@ Here the DRR algorithm is used in order to determine which queue has to dequeue.
 ### Result and Analysis ([details](https://github.com/SUMUKHA-PK/FQ-PIE-ns-3/wiki/Results-and-Further))
 **FQ-PIE vs FQ-CoDel vs PIE vs CoDel**
 
+| Output            | Fq-PIE | Fq-CoDel | PIE    | CoDel  |
+|-------------------|--------|----------|--------|--------|
+| Drops             | 68197  | 84424    | 82671  | 82637  |
+| TCP (Mbps)        | 4.01   | 4.36     | 0.52   | 0.48   |
+| TCP (Packets / s) | 500.35 | 543.57   | 64.87  | 60.48  |
+| UDP (Mbps)        | 5.51   | 5.34     | 4.38   | 4.42   |
+| UDP (Packets / s) | 667.88 | 648.53   | 531.73 | 536.93 |
 
 ***
 
