@@ -1,6 +1,6 @@
-# project ns (3-dev) configured on Sat Sep 29 10:59:54 2018 by
-# waf 2.0.9 (abi 20, python 2070fc1 on linux2)
-# using ./waf configure --enable-examples
+# project ns (3-dev) configured on Mon Dec 10 09:26:37 2018 by
+# waf 2.0.9 (abi 20, python 30700f0 on linux)
+# using ./waf configure doxygen
 #
 ----------------------------------------
 Setting top to
@@ -10,7 +10,7 @@ Setting out to
 /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build
 ----------------------------------------
 Checking for 'gcc' (C compiler)
-find program=['gcc', 'cc'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='CC' -> ['/usr/bin/gcc']
+find program=['gcc', 'cc'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='CC' -> ['/usr/bin/gcc']
 ['/usr/bin/gcc', '-dM', '-E', '-']
 out: #define __SSP_STRONG__ 3
 #define __DBL_MIN_EXP__ (-1021)
@@ -360,14 +360,14 @@ out: #define __SSP_STRONG__ 3
 #define __ATOMIC_ACQ_REL 4
 #define __ATOMIC_RELEASE 3
 
-find program=['ar'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='AR' -> ['/usr/bin/ar']
+find program=['ar'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='AR' -> ['/usr/bin/ar']
 /usr/bin/gcc
 ----------------------------------------
 Checking for cc version
 7.3.0
 ----------------------------------------
 Checking for 'g++' (C++ compiler)
-find program=['g++', 'c++'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='CXX' -> ['/usr/bin/g++']
+find program=['g++', 'c++'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='CXX' -> ['/usr/bin/g++']
 ['/usr/bin/g++', '-dM', '-E', '-']
 out: #define __SSP_STRONG__ 3
 #define __DBL_MIN_EXP__ (-1021)
@@ -717,109 +717,110 @@ out: #define __SSP_STRONG__ 3
 #define __ATOMIC_ACQ_REL 4
 #define __ATOMIC_RELEASE 3
 
-find program=['ar'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='AR' -> ['/usr/bin/ar']
+find program=['ar'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='AR' -> ['/usr/bin/ar']
 /usr/bin/g++
 ------------------------------------------------------
 Checking for compilation flag -Wl,--soname=foo support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_165a51ec88b996970387483fe5918dce/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wl,--soname=foo', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wl,--soname=foo', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_165a51ec88b996970387483fe5918dce/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------
 Checking for compilation flag -std=c++11 support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_165a51ec88b996970387483fe5918dce/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_165a51ec88b996970387483fe5918dce/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------
 Checking for program 'python'
-/usr/bin/python
-find program=['python'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PYTHON' -> ['/usr/bin/python']
-['/usr/bin/python', '-c', 'import imp;print(imp.get_tag())']
-err: Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-AttributeError: 'module' object has no attribute 'get_tag'
+/home/some_guyy/anaconda3/bin/python
+find program=['python'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PYTHON' -> ['/home/some_guyy/anaconda3/bin/python']
+['/home/some_guyy/anaconda3/bin/python', '-c', 'import imp;print(imp.get_tag())']
+out: cpython-37
 
-['/usr/bin/python', '-c', 'import sys\nfor x in sys.version_info: print(str(x))']
-out: 2
+err: -c:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+
+['/home/some_guyy/anaconda3/bin/python', '-c', 'import sys\nfor x in sys.version_info: print(str(x))']
+out: 3
 7
-15
-candidate
-1
+0
+final
+0
 
-['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(standard_lib=0, prefix='/usr/local') or ''))"]
-out: '/usr/local/lib/python2.7/dist-packages'
+['/home/some_guyy/anaconda3/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(standard_lib=0, prefix='/usr/local') or ''))"]
+out: '/usr/local/lib/python3.7/site-packages'
 
-'/usr/local/lib/python2.7/dist-packages'
+'/usr/local/lib/python3.7/site-packages'
 
-['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(plat_specific=1, standard_lib=0, prefix='/usr/local') or ''))"]
-out: '/usr/local/lib/python2.7/dist-packages'
+['/home/some_guyy/anaconda3/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(plat_specific=1, standard_lib=0, prefix='/usr/local') or ''))"]
+out: '/usr/local/lib/python3.7/site-packages'
 
-'/usr/local/lib/python2.7/dist-packages'
+'/usr/local/lib/python3.7/site-packages'
 
 ------------------------------------------------------
 Checking for python version >= 2.3
-2.7.15
-['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_config_var('prefix') or ''))\nprint(repr(get_config_var('SO') or ''))\nprint(repr(get_config_var('LDFLAGS') or ''))\nprint(repr(get_config_var('LIBDIR') or ''))\nprint(repr(get_config_var('LIBPL') or ''))\nprint(repr(get_config_var('INCLUDEPY') or ''))\nprint(repr(get_config_var('Py_ENABLE_SHARED') or ''))\nprint(repr(get_config_var('MACOSX_DEPLOYMENT_TARGET') or ''))\nprint(repr(get_config_var('LDSHARED') or ''))\nprint(repr(get_config_var('CFLAGS') or ''))\nprint(repr(get_config_var('LDVERSION') or ''))"]
-out: '/usr'
-'.so'
-'-Wl,-Bsymbolic-functions -Wl,-z,relro'
-'/usr/lib'
-'/usr/lib/python2.7/config-x86_64-linux-gnu'
-'/usr/include/python2.7'
-1
+3.7.0
+['/home/some_guyy/anaconda3/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_config_var('prefix') or ''))\nprint(repr(get_config_var('SO') or ''))\nprint(repr(get_config_var('LDFLAGS') or ''))\nprint(repr(get_config_var('LIBDIR') or ''))\nprint(repr(get_config_var('LIBPL') or ''))\nprint(repr(get_config_var('INCLUDEPY') or ''))\nprint(repr(get_config_var('Py_ENABLE_SHARED') or ''))\nprint(repr(get_config_var('MACOSX_DEPLOYMENT_TARGET') or ''))\nprint(repr(get_config_var('LDSHARED') or ''))\nprint(repr(get_config_var('CFLAGS') or ''))\nprint(repr(get_config_var('LDVERSION') or ''))"]
+out: '/home/some_guyy/anaconda3'
+'.cpython-37m-x86_64-linux-gnu.so'
+'-L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+'/home/some_guyy/anaconda3/lib'
+'/home/some_guyy/anaconda3/lib/python3.7/config-3.7m-x86_64-linux-gnu'
+'/home/some_guyy/anaconda3/include/python3.7m'
 ''
-'x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
-'-fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
 ''
+'gcc -pthread -shared -B /home/some_guyy/anaconda3/compiler_compat -L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+'-Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes'
+'3.7m'
 
-'/usr'
-'.so'
-'-Wl,-Bsymbolic-functions -Wl,-z,relro'
-'/usr/lib'
-'/usr/lib/python2.7/config-x86_64-linux-gnu'
-'/usr/include/python2.7'
-1
-''
-'x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
-'-fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
-''
+err: -c:4: DeprecationWarning: SO is deprecated, use EXT_SUFFIX
 
-Configuration returned from ['/usr/bin/python']:
-prefix = '/usr'
-SO = '.so'
-LDFLAGS = '-Wl,-Bsymbolic-functions -Wl,-z,relro'
-LIBDIR = '/usr/lib'
-LIBPL = '/usr/lib/python2.7/config-x86_64-linux-gnu'
-INCLUDEPY = '/usr/include/python2.7'
-Py_ENABLE_SHARED = 1
+'/home/some_guyy/anaconda3'
+'.cpython-37m-x86_64-linux-gnu.so'
+'-L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+'/home/some_guyy/anaconda3/lib'
+'/home/some_guyy/anaconda3/lib/python3.7/config-3.7m-x86_64-linux-gnu'
+'/home/some_guyy/anaconda3/include/python3.7m'
+''
+''
+'gcc -pthread -shared -B /home/some_guyy/anaconda3/compiler_compat -L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+'-Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes'
+'3.7m'
+
+Configuration returned from ['/home/some_guyy/anaconda3/bin/python']:
+prefix = '/home/some_guyy/anaconda3'
+SO = '.cpython-37m-x86_64-linux-gnu.so'
+LDFLAGS = '-L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+LIBDIR = '/home/some_guyy/anaconda3/lib'
+LIBPL = '/home/some_guyy/anaconda3/lib/python3.7/config-3.7m-x86_64-linux-gnu'
+INCLUDEPY = '/home/some_guyy/anaconda3/include/python3.7m'
+Py_ENABLE_SHARED = ''
 MACOSX_DEPLOYMENT_TARGET = ''
-LDSHARED = 'x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
-CFLAGS = '-fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  '
-LDVERSION = ''
+LDSHARED = 'gcc -pthread -shared -B /home/some_guyy/anaconda3/compiler_compat -L/home/some_guyy/anaconda3/lib -Wl,-rpath=/home/some_guyy/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/'
+CFLAGS = '-Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes'
+LDVERSION = '3.7m'
 
 ------------------------------------------------------
 python-config
-/usr/bin/python-config
-find program=['/usr/bin/python-config', 'python2.7-config', 'python-config-2.7', 'python2.7m-config'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PYTHON_CONFIG' -> ['/usr/bin/python-config']
+/home/some_guyy/anaconda3/bin/python3.7-config
+find program=['/home/some_guyy/anaconda3/bin/python-config', 'python3.7-config', 'python-config-3.7', 'python3.7m-config'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PYTHON_CONFIG' -> ['/home/some_guyy/anaconda3/bin/python3.7-config']
 ------------------------------------------------------------------
 Asking python-config for pyembed '--cflags --libs --ldflags' flags
-['/usr/bin/python-config', '--cflags', '--libs', '--ldflags']
-out: -I/usr/include/python2.7 -I/usr/include/x86_64-linux-gnu/python2.7  -fno-strict-aliasing -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes
--lpython2.7 -lpthread -ldl  -lutil -lm 
--L/usr/lib/python2.7/config-x86_64-linux-gnu -L/usr/lib -lpython2.7 -lpthread -ldl  -lutil -lm  -Xlinker -export-dynamic -Wl,-O1 -Wl,-Bsymbolic-functions
+['/home/some_guyy/anaconda3/bin/python3.7-config', '--cflags', '--libs', '--ldflags']
+out: -I/home/some_guyy/anaconda3/include/python3.7m -I/home/some_guyy/anaconda3/include/python3.7m  -Wno-unused-result -Wsign-compare -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O3 -pipe  -fdebug-prefix-map==/usr/local/src/conda/- -fdebug-prefix-map==/usr/local/src/conda-prefix -fuse-linker-plugin -ffat-lto-objects -flto-partition=none -flto -flto -fuse-linker-plugin -ffat-lto-objects -flto-partition=none -DNDEBUG -fwrapv -O3 -Wall
+-lpython3.7m -lpthread -ldl  -lutil -lrt -lm 
+-L/home/some_guyy/anaconda3/lib/python3.7/config-3.7m-x86_64-linux-gnu -L/home/some_guyy/anaconda3/lib -lpython3.7m -lpthread -ldl  -lutil -lrt -lm  -Xlinker -export-dynamic
 
-Unhandled flag '-Wdate-time'
-Unhandled flag '-Wformat'
-Unhandled flag '-Werror=format-security'
+Unhandled flag '-Wno-unused-result'
+Unhandled flag '-Wsign-compare'
+Unhandled flag '-pipe'
 Unhandled flag '-Wall'
-Unhandled flag '-Wstrict-prototypes'
 yes
 ------------------------------------------------------------------
 Testing pyembed configuration
@@ -843,85 +844,31 @@ int main(int argc, char **argv)
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_a57c82d0bb1b6ce105b1adaf17e48b8b/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_ecc01260b79eb2b4d98f3aad608dae13/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fno-strict-aliasing', '-g', '-fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=.', '-fstack-protector-strong', '-g', '-fwrapv', '-O2', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a57c82d0bb1b6ce105b1adaf17e48b8b/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_a57c82d0bb1b6ce105b1adaf17e48b8b/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-march=nocona', '-mtune=haswell', '-ftree-vectorize', '-fPIC', '-fstack-protector-strong', '-fno-plt', '-O3', '-fdebug-prefix-map==/usr/local/src/conda/-', '-fdebug-prefix-map==/usr/local/src/conda-prefix', '-fuse-linker-plugin', '-ffat-lto-objects', '-flto-partition=none', '-flto', '-flto', '-fuse-linker-plugin', '-ffat-lto-objects', '-flto-partition=none', '-fwrapv', '-O3', '-I/home/some_guyy/anaconda3/include/python3.7m', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python3.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python3.7/site-packages"', '-DNDEBUG', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_ecc01260b79eb2b4d98f3aad608dae13/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_ecc01260b79eb2b4d98f3aad608dae13/testbuild/testprog[0m
 
-['/usr/bin/g++', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a57c82d0bb1b6ce105b1adaf17e48b8b/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
-yes
-------------------------------------------------------------------
-Asking python-config for pyext '--cflags --libs --ldflags' flags
-['/usr/bin/python-config', '--cflags', '--libs', '--ldflags']
-out: -I/usr/include/python2.7 -I/usr/include/x86_64-linux-gnu/python2.7  -fno-strict-aliasing -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security  -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes
--lpython2.7 -lpthread -ldl  -lutil -lm 
--L/usr/lib/python2.7/config-x86_64-linux-gnu -L/usr/lib -lpython2.7 -lpthread -ldl  -lutil -lm  -Xlinker -export-dynamic -Wl,-O1 -Wl,-Bsymbolic-functions
+['/usr/bin/g++', '-fPIC', '-Xlinker', '-export-dynamic', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_ecc01260b79eb2b4d98f3aad608dae13/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/home/some_guyy/anaconda3/lib/python3.7/config-3.7m-x86_64-linux-gnu', '-L/home/some_guyy/anaconda3/lib', '-lpython3.7m', '-lpthread', '-ldl', '-lutil', '-lrt', '-lm', '-lpython3.7m', '-lpthread', '-ldl', '-lutil', '-lrt', '-lm']
+err: lto1: internal compiler error: in lto_tag_to_tree_code, at lto-streamer.h:1005
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-7/README.Bugs> for instructions.
+lto-wrapper: fatal error: /usr/bin/g++ returned 1 exit status
+compilation terminated.
+/usr/bin/x86_64-linux-gnu-ld: error: lto-wrapper failed
+collect2: error: ld returned 1 exit status
 
-Unhandled flag '-Wdate-time'
-Unhandled flag '-Wformat'
-Unhandled flag '-Werror=format-security'
-Unhandled flag '-Wall'
-Unhandled flag '-Wstrict-prototypes'
-yes
-------------------------------------------------------------------
-Testing pyext configuration
-==>
+from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/bindings/python: Test does not build: Traceback (most recent call last):
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
+    bld.compile()
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
+    raise Errors.BuildError(self.producer.error)
+waflib.Errors.BuildError: Build failed
+ -> task in 'testprog' failed with exit status 1 (run with -v to display more information)
 
-#include <Python.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
-	void Py_Initialize(void);
-	void Py_Finalize(void);
-#ifdef __cplusplus
-}
-#endif
-int main(int argc, char **argv)
-{
-   (void)argc; (void)argv;
-   Py_Initialize();
-   Py_Finalize();
-   return 0;
-}
-
-<==
-[1/2] Compiling [32mbuild/.conf_check_32dd877420402ebba3e21efffcab14ee/test.cpp[0m
-
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fPIC', '-fno-strict-aliasing', '-g', '-fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=.', '-fstack-protector-strong', '-g', '-fwrapv', '-O2', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_32dd877420402ebba3e21efffcab14ee/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_32dd877420402ebba3e21efffcab14ee/testbuild/testprog.so[0m
-
-['/usr/bin/g++', '-shared', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_32dd877420402ebba3e21efffcab14ee/testbuild/testprog.so', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
-yes
-------------------------------------------------------------------
-Checking for compilation flag -fvisibility=hidden support
-==>
-int main() { return 0; }
-<==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
-
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fvisibility=hidden', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
-ok
-------------------------------------------------------------------
-Checking for compilation flag -Wno-array-bounds support
-==>
-int main() { return 0; }
-<==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
-
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-array-bounds', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
-ok
-------------------------------------------------------------------
-Checking for pybindgen location
-not found
-------------------------------------------------------------------
-Checking for python module 'pybindgen'
-['/usr/bin/python', '-c', "\nimport pybindgen as current_module\nversion = getattr(current_module, '__version__', None)\nif version is not None:\n\tprint(str(version))\nelse:\n\tprint('unknown version')\n"]
-err: Traceback (most recent call last):
-  File "<string>", line 2, in <module>
-ImportError: No module named pybindgen
-
-not found
-from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/bindings/python: Could not find the python module 'pybindgen'
+Could not build a python embedded interpreter
+from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/bindings/python: The configuration failed
 ------------------------------------------------------------------
 Checking boost includes
 1_65_1
@@ -982,7 +929,7 @@ not found
 ------------------------------------------------------------------
 Checking for program 'pkg-config'
 /usr/bin/pkg-config
-find program=['pkg-config'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PKGCONFIG' -> ['/usr/bin/pkg-config']
+find program=['pkg-config'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='PKGCONFIG' -> ['/usr/bin/pkg-config']
 ------------------------------------------------------------------
 Checking for 'gtk+-3.0'
 ['/usr/bin/pkg-config', '--cflags', '--libs', 'gtk+-3.0']
@@ -1017,9 +964,9 @@ checking for uint128_t
         }
         
 <==
-[1/2] Compiling [32mbuild/.conf_check_15979b5167f65bd9c4deefc49adf5e6b/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_931177211b78de1da3fb566aa8ea8e7a/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_15979b5167f65bd9c4deefc49adf5e6b/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_931177211b78de1da3fb566aa8ea8e7a/testbuild/test.cpp.1.o']
 err: ../test.cpp: In function ‘int main(int, char**)’:
 ../test.cpp:6:7: error: ‘uint128_t’ was not declared in this scope
   if ((uint128_t *) 0) return 0;
@@ -1043,11 +990,11 @@ err: ../test.cpp: In function ‘int main(int, char**)’:
               uint32_t
 
 from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
     bld.compile()
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
     raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
+waflib.Errors.BuildError: Build failed
  -> task in 'testprog' failed with exit status 1 (run with -v to display more information)
 
 not found
@@ -1066,12 +1013,12 @@ checking for __uint128_t
         }
         
 <==
-[1/2] Compiling [32mbuild/.conf_check_ba65b410bcec2d80d444293b98c87fd2/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_7462700f4b5c27f83701c6503b837fce/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_ba65b410bcec2d80d444293b98c87fd2/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_ba65b410bcec2d80d444293b98c87fd2/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_7462700f4b5c27f83701c6503b837fce/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_7462700f4b5c27f83701c6503b837fce/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_ba65b410bcec2d80d444293b98c87fd2/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_7462700f4b5c27f83701c6503b837fce/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking high precision implementation
@@ -1087,12 +1034,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_90ace3801f57efbed1ffc4852e4ee697/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_39d115246574134842cd4942a50add5c/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39d115246574134842cd4942a50add5c/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_39d115246574134842cd4942a50add5c/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39d115246574134842cd4942a50add5c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header inttypes.h
@@ -1105,12 +1052,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_0d960a2805e2e50e6905ae7145a1f423/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -1123,20 +1070,20 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_cb8ec4dd527036035ea35926961a2fed/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_fe69187a285a7d40ed5c061c76a5cb41/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_cb8ec4dd527036035ea35926961a2fed/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_fe69187a285a7d40ed5c061c76a5cb41/testbuild/test.cpp.1.o']
 err: ../test.cpp:1:10: fatal error: sys/inttypes.h: No such file or directory
  #include <sys/inttypes.h>
           ^~~~~~~~~~~~~~~~
 compilation terminated.
 
 from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
     bld.compile()
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
     raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
+waflib.Errors.BuildError: Build failed
  -> task in 'testprog' failed with exit status 1 (run with -v to display more information)
 
 not found
@@ -1152,12 +1099,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_c1f65fb12d443e31c86a0dcec5dcd78f/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_4d0bfb14fee28ca805a2fcffb356690f/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_c1f65fb12d443e31c86a0dcec5dcd78f/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_c1f65fb12d443e31c86a0dcec5dcd78f/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_4d0bfb14fee28ca805a2fcffb356690f/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_4d0bfb14fee28ca805a2fcffb356690f/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_c1f65fb12d443e31c86a0dcec5dcd78f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_4d0bfb14fee28ca805a2fcffb356690f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/stat.h
@@ -1170,12 +1117,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_597a6c688a568f51ccba9ebd88396f83/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_e3ffb9a17f8229cea8cd1f0a0e78fdc2/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_597a6c688a568f51ccba9ebd88396f83/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_597a6c688a568f51ccba9ebd88396f83/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_e3ffb9a17f8229cea8cd1f0a0e78fdc2/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_e3ffb9a17f8229cea8cd1f0a0e78fdc2/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_597a6c688a568f51ccba9ebd88396f83/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_e3ffb9a17f8229cea8cd1f0a0e78fdc2/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header dirent.h
@@ -1188,12 +1135,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_d79b80e3ece8add11d51ba0d6707f991/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_9b880c755d943a9ffa6752972069b547/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_d79b80e3ece8add11d51ba0d6707f991/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_d79b80e3ece8add11d51ba0d6707f991/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_9b880c755d943a9ffa6752972069b547/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_9b880c755d943a9ffa6752972069b547/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_d79b80e3ece8add11d51ba0d6707f991/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_9b880c755d943a9ffa6752972069b547/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header stdlib.h
@@ -1206,12 +1153,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_39e21ec0a7b1576662ae91c938493ded/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_9e9f3820741de07ee9e1c333d3bdbdd6/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39e21ec0a7b1576662ae91c938493ded/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_39e21ec0a7b1576662ae91c938493ded/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_9e9f3820741de07ee9e1c333d3bdbdd6/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_9e9f3820741de07ee9e1c333d3bdbdd6/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39e21ec0a7b1576662ae91c938493ded/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_9e9f3820741de07ee9e1c333d3bdbdd6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header signal.h
@@ -1224,12 +1171,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_97048a74328460658179ae85c3684631/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_d1292688995446dc3b5ff43fff7d37ca/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_97048a74328460658179ae85c3684631/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_97048a74328460658179ae85c3684631/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_d1292688995446dc3b5ff43fff7d37ca/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_d1292688995446dc3b5ff43fff7d37ca/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_97048a74328460658179ae85c3684631/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_d1292688995446dc3b5ff43fff7d37ca/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header pthread.h
@@ -1244,12 +1191,12 @@ int main ()
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_6567aa9f730444e58d6da43897e812a6/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_228043edadaae77d286d0a6328005ffa/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_6567aa9f730444e58d6da43897e812a6/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_6567aa9f730444e58d6da43897e812a6/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_228043edadaae77d286d0a6328005ffa/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_228043edadaae77d286d0a6328005ffa/testbuild/testprog[0m
 
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_6567aa9f730444e58d6da43897e812a6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_228043edadaae77d286d0a6328005ffa/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header stdint.h
@@ -1262,12 +1209,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_90ace3801f57efbed1ffc4852e4ee697/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_39d115246574134842cd4942a50add5c/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39d115246574134842cd4942a50add5c/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_39d115246574134842cd4942a50add5c/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_90ace3801f57efbed1ffc4852e4ee697/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_39d115246574134842cd4942a50add5c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header inttypes.h
@@ -1280,12 +1227,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_0d960a2805e2e50e6905ae7145a1f423/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0d960a2805e2e50e6905ae7145a1f423/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b8e3228d1eabeeb20512a6f35833ebc3/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -1298,20 +1245,20 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_cb8ec4dd527036035ea35926961a2fed/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_fe69187a285a7d40ed5c061c76a5cb41/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_cb8ec4dd527036035ea35926961a2fed/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_fe69187a285a7d40ed5c061c76a5cb41/testbuild/test.cpp.1.o']
 err: ../test.cpp:1:10: fatal error: sys/inttypes.h: No such file or directory
  #include <sys/inttypes.h>
           ^~~~~~~~~~~~~~~~
 compilation terminated.
 
 from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Configure.py", line 324, in run_build
     bld.compile()
-  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
+  File "/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/.waf3-2.0.9-897e824215d3dab2b64982d8af27db90/waflib/Build.py", line 176, in compile
     raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
+waflib.Errors.BuildError: Build failed
  -> task in 'testprog' failed with exit status 1 (run with -v to display more information)
 
 not found
@@ -1326,12 +1273,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_a50b7cb963fc04f5988c6a5cf0b62d59/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_96c166632f2c8b12d0260b43f27b7f31/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a50b7cb963fc04f5988c6a5cf0b62d59/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_a50b7cb963fc04f5988c6a5cf0b62d59/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_96c166632f2c8b12d0260b43f27b7f31/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_96c166632f2c8b12d0260b43f27b7f31/testbuild/testprog[0m
 
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a50b7cb963fc04f5988c6a5cf0b62d59/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lrt']
+['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_96c166632f2c8b12d0260b43f27b7f31/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lrt']
 yes
 ------------------------------------------------------------------
 Checking for header sys/ioctl.h
@@ -1344,12 +1291,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_8552fa39dd41ded8db546f0ebb300167/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_c2693f5f9b4d5114a1e7a2ba70971eee/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_8552fa39dd41ded8db546f0ebb300167/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_8552fa39dd41ded8db546f0ebb300167/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_c2693f5f9b4d5114a1e7a2ba70971eee/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_c2693f5f9b4d5114a1e7a2ba70971eee/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_8552fa39dd41ded8db546f0ebb300167/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_c2693f5f9b4d5114a1e7a2ba70971eee/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header net/if.h
@@ -1362,12 +1309,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_8009e8b853378ca5669a368f61baa213/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_eb8dd7af5088870f99e6d018c381f3ca/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_8009e8b853378ca5669a368f61baa213/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_8009e8b853378ca5669a368f61baa213/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_eb8dd7af5088870f99e6d018c381f3ca/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_eb8dd7af5088870f99e6d018c381f3ca/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_8009e8b853378ca5669a368f61baa213/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_eb8dd7af5088870f99e6d018c381f3ca/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header net/ethernet.h
@@ -1380,12 +1327,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_12a94ca88da693c5dbcae557a271c166/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_b872d538f284eb776ded79c0eb0b6df4/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_12a94ca88da693c5dbcae557a271c166/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_12a94ca88da693c5dbcae557a271c166/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b872d538f284eb776ded79c0eb0b6df4/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_b872d538f284eb776ded79c0eb0b6df4/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_12a94ca88da693c5dbcae557a271c166/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_b872d538f284eb776ded79c0eb0b6df4/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header linux/if_tun.h
@@ -1398,12 +1345,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_68d082904eaa5957cad6c13e1b679453/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header netpacket/packet.h
@@ -1416,12 +1363,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_e826be80fc8426d537e8e44c0251bec9/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_a45030adbbc8abd832408a97aa8b6de8/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_e826be80fc8426d537e8e44c0251bec9/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_e826be80fc8426d537e8e44c0251bec9/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a45030adbbc8abd832408a97aa8b6de8/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_a45030adbbc8abd832408a97aa8b6de8/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_e826be80fc8426d537e8e44c0251bec9/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_a45030adbbc8abd832408a97aa8b6de8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for NSC location
@@ -1447,21 +1394,21 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_68d082904eaa5957cad6c13e1b679453/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_68d082904eaa5957cad6c13e1b679453/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_f2fa48198a7b7e95f49157c25fcb4467/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for program 'sudo'
 /usr/bin/sudo
-find program=['sudo'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='SUDO' -> ['/usr/bin/sudo']
+find program=['sudo'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='SUDO' -> ['/usr/bin/sudo']
 ------------------------------------------------------------------
 Checking for program 'valgrind'
 not found
-find program=['valgrind'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='VALGRIND' -> None
+find program=['valgrind'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='VALGRIND' -> None
 from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3: Could not find the program ['valgrind']
 ------------------------------------------------------------------
 Checking for 'gsl'
@@ -1476,46 +1423,45 @@ from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3: The configuration failed
 ------------------------------------------------------------------
 python-config
 not found
-find program=['libgcrypt-config'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='LIBGCRYPT_CONFIG' -> None
+find program=['libgcrypt-config'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='LIBGCRYPT_CONFIG' -> None
 from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3: Could not find the program ['libgcrypt-config']
 ------------------------------------------------------------------
 Checking for compilation flag -fstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_165a51ec88b996970387483fe5918dce/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_165a51ec88b996970387483fe5918dce/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -fstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_2eb40f7b667037e7d39156ef8fe4b8fd/test.c[0m
+[1/1] Compiling [32mbuild/.conf_check_0594268cc6748e08150254ff6732ae22/test.c[0m
 
-['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.c', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_2eb40f7b667037e7d39156ef8fe4b8fd/testbuild/test.c.1.o']
+['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.c', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0594268cc6748e08150254ff6732ae22/testbuild/test.c.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_71a6c847f39cba5d7299c229a3431ec9/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_165a51ec88b996970387483fe5918dce/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_71a6c847f39cba5d7299c229a3431ec9/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_165a51ec88b996970387483fe5918dce/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_2eb40f7b667037e7d39156ef8fe4b8fd/test.c[0m
+[1/1] Compiling [32mbuild/.conf_check_0594268cc6748e08150254ff6732ae22/test.c[0m
 
-['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.c', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_2eb40f7b667037e7d39156ef8fe4b8fd/testbuild/test.c.1.o']
+['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '../test.c', '-c', '-o/home/some_guyy/pk/git/FQ-PIE-ns-3/ns3/build/.conf_check_0594268cc6748e08150254ff6732ae22/testbuild/test.c.1.o']
 ok
 ------------------------------------------------------------------
 Checking for program 'doxygen'
-not found
-find program=['doxygen'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='DOXYGEN' -> None
-from /home/some_guyy/pk/git/FQ-PIE-ns-3/ns3: Could not find the program ['doxygen']
+/usr/bin/doxygen
+find program=['doxygen'] paths=['/home/some_guyy/anaconda3/bin', '/home/some_guyy/.cargo/bin', '/home/some_guyy/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/some_guyy/.dotnet/tools', '/usr/lib/jvm/java-8-oracle/bin', '/usr/lib/jvm/java-8-oracle/db/bin', '/usr/lib/jvm/java-8-oracle/jre/bin', '/home/some_guyy/pk/git/Quick-file-open', '/home/some_guyy/go/bin', '/home/some_guyy/pk/git/Distributed-Systems/bin'] var='DOXYGEN' -> ['/usr/bin/doxygen']

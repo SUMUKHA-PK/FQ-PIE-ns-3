@@ -156,7 +156,7 @@ BuildAppsTest ()
 
   ApplicationContainer clientAppsTCP,clientAppsUDP;
 
-  AddressValue remoteAddressTCP (InetSocketAddress (i8i9.GetAddress (1), port_tcp)); //Address to the sink
+  AddressValue remoteAddressTCP (InetSocketAddress (i8i9.GetAddress (1), port_tcp)); //Address to the tcp sink
   clientHelperTCP.SetAttribute ("Remote", remoteAddressTCP);
   //Installing TCP on nodes 0-4
   clientAppsTCP.Add (clientHelperTCP.Install (n0n7.Get (0)));
@@ -170,7 +170,7 @@ BuildAppsTest ()
 
 
 
-  AddressValue remoteAddressUDP (InetSocketAddress (i8i10.GetAddress (1), port_udp));
+  AddressValue remoteAddressUDP (InetSocketAddress (i8i10.GetAddress (1), port_udp)); // Address to the udp sink
   clientHelperUDP.SetAttribute ("Remote", remoteAddressUDP);
   //Installing UDP on nodes 5-6
   clientAppsUDP.Add (clientHelperUDP.Install (n5n7.Get (0)));
