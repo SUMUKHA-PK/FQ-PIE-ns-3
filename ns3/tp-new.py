@@ -68,7 +68,7 @@ with open(file_name[0:file_name.rindex('.')] + '.csv') as fq:
                 val = 0
                 valPacket = 0
 
-    print flowLabel + ' In Mbps: ' + str(totalval * 8.0/(1000.0 * 1000.0)/(new_time - startTime)) + ' In Packets: ' + str(totalvalPacket/(new_time - startTime))
+    print(flowLabel + ' In Mbps: ' + str(totalval * 8.0/(1000.0 * 1000.0)/(new_time - startTime)) + ' In Packets: ' + str(totalvalPacket/(new_time - startTime)))
 fBytes.close()
 fPackets.close()
 os.remove(file_name[0:file_name.rindex('.')] + '.csv')
