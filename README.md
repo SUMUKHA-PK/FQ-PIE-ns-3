@@ -30,7 +30,10 @@ This file contains all the declarations of the functions in **fq-pie-queue-disc.
 This file creates an environment where only TCP packets are in the network
 
 * **fq-pie-example-udp.cc** ([Click here](https://raw.githubusercontent.com/SUMUKHA-PK/FQ-PIE-ns-3/master/ns3/src/traffic-control/examples/fq-pie-example-udp.cc)) <br/>
-This file creates an environment where only TCP and UDP packets are in the network
+This file creates an environment where TCP and UDP packets are in the network
+
+* **fq-pie-example-udp-7-flows.cc** ([Click here](https://raw.githubusercontent.com/SUMUKHA-PK/FQ-PIE-ns-3/master/ns3/src/traffic-control/examples/fq-pie-example-udp-7-flows.cc)) <br/>
+This file creates an environment where TCP and UDP packets are in the network. There are 5 TCP flows and 2 UDP flows. This is the example used for comparision.
 
 ### Algorithm (important functions)
 
