@@ -94,14 +94,16 @@ void
 BuildAppsTest ()
 {
   // SINK is in the right side
-  uint16_t port = 50000;
-  Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
-  PacketSinkHelper sinkHelperTCP ("ns3::TcpSocketFactory", sinkLocalAddress);
+  uint16_t portTCP = 50000, portUDP = 50001;
+  Address sinkLocalAddressTCP (InetSocketAddress (Ipv4Address::GetAny (), portTCP));
+  PacketSinkHelper sinkHelperTCP ("ns3::TcpSocketFactory", sinkLocalAddressTCP);
   ApplicationContainer sinkAppTCP = sinkHelperTCP.Install (n3n4.Get (1));
   sinkAppTCP.Start (Seconds (sink_start_time));
   sinkAppTCP.Stop (Seconds (sink_stop_time));
 
-  PacketSinkHelper sinkHelperUDP ("ns3::UdpSocketFactory", sinkLocalAddress);
+
+  Address sinkLocalAddressUDP (InetSocketAddress (Ipv4Address::GetAny (), portUDP));
+  PacketSinkHelper sinkHelperUDP ("ns3::UdpSocketFactory", sinkLocalAddressUDP);
   ApplicationContainer sinkAppUDP = sinkHelperUDP.Install (n3n5.Get (1));
   sinkAppUDP.Start (Seconds (sink_start_time));
   sinkAppUDP.Stop (Seconds (sink_stop_time));
@@ -126,13 +128,13 @@ BuildAppsTest ()
   clientHelper2.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
   ApplicationContainer clientApps1;
-  AddressValue remoteAddressUDP (InetSocketAddress (i3i5.GetAddress (1), port));
+  AddressValue remoteAddressUDP (InetSocketAddress (i3i5.GetAddress (1), portUDP));
   clientHelper1.SetAttribute ("Remote", remoteAddressUDP);
   clientApps1.Add (clientHelper1.Install (n0n2.Get (0)));
   clientApps1.Start (Seconds (client_start_time));
   clientApps1.Stop (Seconds (client_stop_time));
 
-  AddressValue remoteAddressTCP (InetSocketAddress (i3i4.GetAddress (1), port));
+  AddressValue remoteAddressTCP (InetSocketAddress (i3i4.GetAddress (1), portTCP));
   ApplicationContainer clientApps2;
   clientHelper2.SetAttribute ("Remote", remoteAddressTCP);
   clientApps2.Add (clientHelper2.Install (n1n2.Get (0)));
