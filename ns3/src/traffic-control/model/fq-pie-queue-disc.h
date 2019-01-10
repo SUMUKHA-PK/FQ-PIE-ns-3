@@ -220,6 +220,8 @@ private:
    */
   void CalculatePFlow ();
 
+  Ptr<QueueDiscItem> PieDequeue(Ptr <FqPieFlow> flow);
+
 protected:
   /**
    * \brief Dispose of the object

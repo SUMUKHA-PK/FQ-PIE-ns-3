@@ -406,11 +406,6 @@ main (int argc, char *argv[])
 
   QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
 
-  if (st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP) != 0)
-    {
-      std::cout << "There should be no drops due to queue full." << std::endl;
-    }
-
   if (flowMonitor)
     {
       std::stringstream stmp;
@@ -422,10 +417,8 @@ main (int argc, char *argv[])
   if (printFqCoDelStats)
     {
       std::cout << "***FQ CoDel stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::UNCLASSIFIED_DROP)
-                << " drops due to prob mark" << std::endl;
       std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP)
-                << " drops due to queue limits" << std::endl;
+                << " drops" << std::endl;
     }
 
   Simulator::Destroy ();

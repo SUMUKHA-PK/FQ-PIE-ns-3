@@ -416,6 +416,7 @@ FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
       qDelay = Time (Seconds (0));
       missingInitFlag = true;
     }
+    
 
   flow->m_qDelay = qDelay;
 
@@ -526,6 +527,69 @@ FqPieQueueDisc::CalculatePFlow()
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 }
 
+Ptr<QueueDiscItem>
+FqPieQueueDisc::PieDequeue(Ptr <FqPieFlow> flow)
+{
+  Ptr<QueueDisc> qd = flow->GetQueueDisc();
+  if (qd->GetInternalQueue (0)->IsEmpty ())
+    {
+      NS_LOG_LOGIC ("Queue empty");
+      return 0;
+    }
+
+  Ptr<QueueDiscItem> item = qd->GetInternalQueue (0)->Dequeue ();
+  double now = Simulator::Now ().GetSeconds ();
+  uint32_t pktSize = item->GetSize ();
+
+  // if not in a measurement cycle and the queue has built up to dq_threshold,
+  // start the measurement cycle
+
+  if ( (qd->GetInternalQueue (0)->GetNBytes () >= m_dqThreshold) && (!flow->m_inMeasurement) )
+    {
+      flow->m_dqStart = now;
+      flow->m_dqCount = 0;
+      flow->m_inMeasurement = true;
+    }
+
+  if (flow->m_inMeasurement)
+    {
+      flow->m_dqCount += pktSize;
+
+      // done with a measurement cycle
+      if (flow->m_dqCount >= m_dqThreshold)
+        {
+
+          double tmp = now - flow->m_dqStart;
+
+          if (tmp > 0)
+            {
+              if (flow->m_avgDqRate == 0)
+                {
+                  flow->m_avgDqRate = flow->m_dqCount / tmp;
+                }
+              else
+                {
+                  flow->m_avgDqRate = (0.5 * flow->m_avgDqRate) + (0.5 * (flow->m_dqCount / tmp));
+                }
+            }
+
+          // restart a measurement cycle if there is enough data
+          if (GetInternalQueue (0)->GetNBytes () > m_dqThreshold)
+            {
+              flow->m_dqStart = now;
+              flow->m_dqCount = 0;
+              flow->m_inMeasurement = true;
+            }
+          else
+            {
+              flow->m_dqCount = 0;
+              flow->m_inMeasurement = false;
+            }
+        }
+    }
+
+  return item;
+}
 
 Ptr<QueueDiscItem>
 FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this makes the queue behave the following way
@@ -541,7 +605,6 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
       while (!found && !m_newFlows.empty ())
         {
           flow = m_newFlows.front ();
-
           if (flow->GetDeficit () <= 0)
             {
               flow->IncreaseDeficit (m_quantum);
@@ -579,7 +642,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
           return 0;
         }
 
-      item = flow->GetQueueDisc ()->Dequeue ();
+      item = PieDequeue(flow);
 
       if (!item)
         {
