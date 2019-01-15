@@ -413,11 +413,11 @@ main (int argc, char *argv[])
 
   QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
 
-  if (st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP) != 0)
-    {
-      std::cout << "There should be no drops due to queue full." << std::endl;
-      exit (1);
-    }
+  // if (st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP) != 0)
+  //   {
+  //     std::cout << "There should be no drops due to queue full." << std::endl;
+  //     exit (1);
+  //   }
 
   if (flowMonitor)
     {
@@ -431,9 +431,7 @@ main (int argc, char *argv[])
     {
       std::cout << "***FQ PIE stats from Node 2 queue ***" << std::endl;
       std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
-                << " drops due to prob mark" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP)
-                << " drops due to queue limits" << std::endl;
+                << " drops" << std::endl;
     }
 
   Simulator::Destroy ();
