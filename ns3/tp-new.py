@@ -10,7 +10,8 @@ parser.add_argument('outFileBytes', type=str)
 parser.add_argument('outFilePackets', type=str)
 parser.add_argument('--startTime', type=float, default=0)
 parser.add_argument('--packetSize', type=float, default=1500)
-parser.add_argument('--destPort', type=int)
+parser.add_argument('--destPortTCP', type=int)
+parser.add_argument('--destPortUDP', type=int)
 parser.add_argument('--destIpTCP', type=str)
 parser.add_argument('--destIpUDP', type=str)
 parser.add_argument('flowLabel', type=str)
@@ -24,7 +25,9 @@ packetSize = args.packetSize
 destIpTCP = args.destIpTCP
 destIpUDP = args.destIpUDP
 flowLabel = args.flowLabel
-destPort = args.destPort
+destPortTCP = args.destPortTCP
+destPortUDP = args.destPortUDP
+
 
 if not os.path.exists(os.path.dirname(outFileBytes)):
     try:
@@ -84,7 +87,7 @@ with open(file_name[0:file_name.rindex('.')] + '.csv') as fq:
             val = 0
             valPacket = 0
 
-        if (str(line.split('\t')[2]).strip() == destIpUDP) and float(line.split('\t')[0]) >= startTime and (destPort == None or line.split('\t')[3].strip () == '' or destPort == int (line.split('\t')[3].strip ())):
+        if (str(line.split('\t')[2]).strip() == destIpUDP) and float(line.split('\t')[0]) >= startTime and (destPortUDP == None or line.split('\t')[3].strip () == '' or destPortUDP == int (line.split('\t')[3].strip ())):
             valUDP += float(line.split('\t')[1])
             totalvalUDP += float(line.split('\t')[1])
             valPacketUDP += 1
@@ -98,7 +101,7 @@ with open(file_name[0:file_name.rindex('.')] + '.csv') as fq:
                 old_time = new_time
                 valUDP = 0
                 valPacketUDP = 0
-        elif (str(line.split('\t')[2]).strip() == destIpTCP) and float(line.split('\t')[0]) >= startTime and (destPort == None or line.split('\t')[3].strip () == '' or destPort == int (line.split('\t')[3].strip ())):
+        elif (str(line.split('\t')[2]).strip() == destIpTCP) and float(line.split('\t')[0]) >= startTime and (destPortUDP == None or line.split('\t')[3].strip () == '' or destPortTCP == int (line.split('\t')[3].strip ())):
             valTCP += float(line.split('\t')[1])
             totalvalTCP += float(line.split('\t')[1])
             valPacketTCP += 1
