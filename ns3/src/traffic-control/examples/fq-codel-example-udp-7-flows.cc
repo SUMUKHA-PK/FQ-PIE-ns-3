@@ -341,7 +341,7 @@ main (int argc, char *argv[])
 
   NS_LOG_INFO ("Create nodes");
   NodeContainer c;
-  c.Create (11);
+  c.Create (16);
 
   // The sources
   Names::Add ( "N0", c.Get (0));
@@ -568,19 +568,19 @@ main (int argc, char *argv[])
   ipv4.SetBase ("10.1.10.0", "255.255.255.0");
   i8i10 = ipv4.Assign (devn8n10);
 
-   ipv4.SetBase ("10.1.9.0", "255.255.255.0");
+   ipv4.SetBase ("10.1.11.0", "255.255.255.0");
   i8i20 = ipv4.Assign (devn8n20);
 
-  ipv4.SetBase ("10.1.10.0", "255.255.255.0");
+  ipv4.SetBase ("10.1.12.0", "255.255.255.0");
   i8i30 = ipv4.Assign (devn8n30);
 
-  ipv4.SetBase ("10.1.9.0", "255.255.255.0");
+  ipv4.SetBase ("10.1.13.0", "255.255.255.0");
   i8i40 = ipv4.Assign (devn8n40);
 
-  ipv4.SetBase ("10.1.10.0", "255.255.255.0");
+  ipv4.SetBase ("10.1.14.0", "255.255.255.0");
   i8i50 = ipv4.Assign (devn8n50);
 
-   ipv4.SetBase ("10.1.9.0", "255.255.255.0");
+  ipv4.SetBase ("10.1.15.0", "255.255.255.0");
   i8i60 = ipv4.Assign (devn8n60);
 
   // Set up the routing
