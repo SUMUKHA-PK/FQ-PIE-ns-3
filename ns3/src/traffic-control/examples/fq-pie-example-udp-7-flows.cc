@@ -636,7 +636,7 @@ main (int argc, char *argv[])
   if (printFqpieStats)
     {
       std::cout << "***FQ pie stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP) + st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP)
                 << " drops" << std::endl;
     }
 

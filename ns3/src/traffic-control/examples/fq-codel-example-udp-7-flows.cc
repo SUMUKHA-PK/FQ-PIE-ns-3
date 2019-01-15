@@ -630,7 +630,7 @@ main (int argc, char *argv[])
   if (printFqCoDelStats)
     {
       std::cout << "***FQ CoDel stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP)
+      std::cout << "\t " << st.GetNDroppedPackets (FqCoDelQueueDisc::OVERLIMIT_DROP) +  st.GetNDroppedPackets (FqCoDelQueueDisc::UNCLASSIFIED_DROP)
                 << " drops" << std::endl;
     }
 
