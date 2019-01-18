@@ -77,7 +77,7 @@ double sink_stop_time;
 double client_start_time;
 double client_stop_time;
 
-/ The Sources
+// The Sources
 NodeContainer n0n7;
 NodeContainer n1n7;
 NodeContainer n2n7;
