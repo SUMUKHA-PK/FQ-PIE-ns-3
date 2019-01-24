@@ -130,7 +130,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeDoubleChecker<double> ())
     .AddAttribute ("Tupdate",
                    "Time period to calculate drop probability",
-                   TimeValue (Seconds (0.03)),
+                   TimeValue (Seconds (0.016)),
                    MakeTimeAccessor (&FqPieQueueDisc::m_tUpdate),
                    MakeTimeChecker ())
     .AddAttribute ("Supdate",
@@ -146,12 +146,12 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeQueueSizeChecker ())
     .AddAttribute ("DequeueThreshold",
                    "Minimum queue size in bytes before dequeue rate is measured",
-                   UintegerValue (10000),
+                   UintegerValue (16000),
                    MakeUintegerAccessor (&FqPieQueueDisc::m_dqThreshold),
                    MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("QueueDelayReference",
                    "Desired queue delay",
-                   TimeValue (Seconds (0.02)),
+                   TimeValue (Seconds (0.015)),
                    MakeTimeAccessor (&FqPieQueueDisc::m_qDelayRef),
                    MakeTimeChecker ())
     .AddAttribute ("MaxBurstAllowance",

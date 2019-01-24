@@ -205,31 +205,31 @@ BuildAppsTest ()
   clientHelperTCP0.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperTCP0.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperTCP0.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperTCP0.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperTCP0.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
   OnOffHelper clientHelperTCP1 ("ns3::TcpSocketFactory", Address ());
   clientHelperTCP1.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperTCP1.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperTCP1.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperTCP1.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperTCP1.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
  
   OnOffHelper clientHelperTCP2 ("ns3::TcpSocketFactory", Address ());
   clientHelperTCP2.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperTCP2.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperTCP2.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperTCP2.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperTCP2.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
  
   OnOffHelper clientHelperTCP3 ("ns3::TcpSocketFactory", Address ());
   clientHelperTCP3.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperTCP3.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperTCP3.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperTCP3.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperTCP3.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
   
   OnOffHelper clientHelperTCP4 ("ns3::TcpSocketFactory", Address ());
   clientHelperTCP4.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperTCP4.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperTCP4.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperTCP4.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperTCP4.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
 
 // UDP Sinks
@@ -238,13 +238,13 @@ BuildAppsTest ()
   clientHelperUDP5.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperUDP5.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperUDP5.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperUDP5.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperUDP5.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
   OnOffHelper clientHelperUDP6 ("ns3::UdpSocketFactory", Address ());
   clientHelperUDP6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelperUDP6.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
   clientHelperUDP6.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelperUDP6.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
+  clientHelperUDP6.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
 
 
   ApplicationContainer clientAppsTCP0,clientAppsTCP1,clientAppsTCP2,clientAppsTCP3,clientAppsTCP4,clientAppsUDP5,clientAppsUDP6;
@@ -399,8 +399,8 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Set pie params in Fqpiequeuedisc");
   // Config::SetDefault ("ns3::FqpieQueueDisc::MaxSize", StringValue ("100p"));
   Config::SetDefault ("ns3::FqPieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
-  Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (10000));
-  Config::SetDefault ("ns3::FqPieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
+  Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (16000));
+  Config::SetDefault ("ns3::FqPieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.015)));
   Config::SetDefault ("ns3::FqPieQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
 
   NS_LOG_INFO ("Install internet stack on all nodes.");
@@ -443,43 +443,43 @@ main (int argc, char *argv[])
 
   // The sources
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn0n7 = p2p.Install (n0n7);
   tchPfifo.Install (devn0n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn1n7 = p2p.Install (n1n7);
   tchPfifo.Install (devn1n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn2n7 = p2p.Install (n2n7);
   tchPfifo.Install (devn2n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn3n7 = p2p.Install (n3n7);
   tchPfifo.Install (devn3n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn4n7 = p2p.Install (n4n7);
   tchPfifo.Install (devn4n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn5n7 = p2p.Install (n5n7);
   tchPfifo.Install (devn5n7);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn6n7 = p2p.Install (n6n7);
   tchPfifo.Install (devn6n7);
@@ -495,43 +495,43 @@ main (int argc, char *argv[])
 
   // The sinks
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n00 = p2p.Install (n8n00);
   tchPfifo.Install (devn8n00);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n10 = p2p.Install (n8n10);
   tchPfifo.Install (devn8n10);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n20 = p2p.Install (n8n20);
   tchPfifo.Install (devn8n20);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n30 = p2p.Install (n8n30);
   tchPfifo.Install (devn8n30);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n40 = p2p.Install (n8n40);
   tchPfifo.Install (devn8n40);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n50 = p2p.Install (n8n50);
   tchPfifo.Install (devn8n50);
 
   p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
   p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   devn8n60 = p2p.Install (n8n60);
   tchPfifo.Install (devn8n60);
