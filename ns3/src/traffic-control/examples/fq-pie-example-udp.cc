@@ -1,342 +1,303 @@
-/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Copyright (c) 2018 NITK Surathkal
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Authors:  Sumukha PK <sumukhapk46@gmail.com>
- *           Prajval M  <26prajval98@gmail.com>
- *           Ishaan R D <ishaanrd6@gmail.com>
- *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
- */
+// /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
+// /*
+//  * Copyright (c) 2018 NITK Surathkal
+//  *
+//  * This program is free software; you can redistribute it and/or modify
+//  * it under the terms of the GNU General Public License version 2 as
+//  * published by the Free Software Foundation;
+//  *
+//  * This program is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  * GNU General Public License for more details.
+//  *
+//  * You should have received a copy of the GNU General Public License
+//  * along with this program; if not, write to the Free Software
+//  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//  *
+//  * Authors:  Sumukha PK <sumukhapk46@gmail.com>
+//  *           Prajval M  <26prajval98@gmail.com>
+//  *           Ishaan R D <ishaanrd6@gmail.com>
+//  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
+//  */
 
-/** Network topology
- *
- *    10Mb/s, 2ms                            10Mb/s, 4ms
- * n0--------------|                    |---------------n4
- *                 |    1.5Mbps, 20ms   |
- *                 n2------------------n3
- *    10Mb/s, 3ms  |  QueueLimit = 100  |    10Mb/s, 5ms
- * n1--------------|                    |---------------n5
- *
- */
+// /** Network topology
+//  *
+//  * 
+//  *    100mB/s, 5ms |                    | 100mB/s, 5ms
+//  * n0--------------|TCP                 |---------------n00 TCP sink
+//  *                 |                    |
+//  *                 |                    |
+//  *    100mB/s, 5ms |                    | 100Mb/s, 5ms
+//  * n1--------------|TCP                 |---------------n10 TCP sink
+//  *                 |                    |
+//  *                 |                    |
+//  *    100Mb/s, 5ms |TCP                 | 100Mb/s, 5ms
+//  * n2--------------|                    |---------------n20 TCP sink
+//  *                 |    10Mbps, 32ms    |
+//  *                 n7------------------n8
+//  *    100Mb/s, 5ms |  QueueLimit = 100  |    
+//  *                 |                    |
+//  *                 |                    | 100Mb/s, 5ms
+//  * n3--------------|TCP                 |---------------n30 TCP sink
+//  *                 |                    |
+//  *                 |                    |
+//  *    100mB/s, 5ms |TCP                 | 100Mb/s, 5ms
+//  * n4--------------|                    |--------------- n40 TCP sink
+//  *                 |                    |
+//  *                 |                    | 
+//  *    100mB/s, 5ms |UDP                 | 100Mb/s, 5ms
+//  * n5--------------|                    |--------------- n50 UDP sink
+//  *                 |                    |
+//  *                 |                    |
+//  *    100mB/s, 5ms |UDP                 | 100Mb/s, 5ms
+//  * n6--------------|                    |--------------- n60 UDP sink
+//  */
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
-#include "ns3/internet-module.h"
 #include "ns3/flow-monitor-helper.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
+#include <fstream>
+#include "ns3/ipv6-static-routing-helper.h"
+#include "ns3/ipv6-routing-table-entry.h"
+#include "ns3/internet-module.h"
+#include "ns3/flow-monitor-module.h"
+#include "ns3/tcp-header.h"
 #include "ns3/traffic-control-module.h"
+#include  <string>
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("FqPieExample");
-
-uint32_t checkTimes;
-double avgQueueDiscSize;
-
-// The times
-double global_start_time;
-double global_stop_time;
-double sink_start_time;
-double sink_stop_time;
-double client_start_time;
-double client_stop_time;
-
-NodeContainer n0n2;
-NodeContainer n1n2;
-NodeContainer n2n3;
-NodeContainer n3n4;
-NodeContainer n3n5;
-
-Ipv4InterfaceContainer i0i2;
-Ipv4InterfaceContainer i1i2;
-Ipv4InterfaceContainer i2i3;
-Ipv4InterfaceContainer i3i4;
-Ipv4InterfaceContainer i3i5;
-
-std::stringstream filePlotQueueDisc;
-std::stringstream filePlotQueueDiscAvg;
+std::string dir = "FqPieTCP/";
 
 void
-CheckQueueDiscSize (Ptr<QueueDisc> queue)
+CheckQueueSize (Ptr<QueueDisc> queue)
 {
-  uint32_t qSize = queue->GetCurrentSize ().GetValue ();
+  double qSize = queue->GetCurrentSize ().GetValue ();
+  // check queue size every 1/100 of a second
+  Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue);
 
-  avgQueueDiscSize += qSize;
-  checkTimes++;
-
-  // check queue disc size every 1/100 of a second
-  Simulator::Schedule (Seconds (0.01), &CheckQueueDiscSize, queue);
-
-  std::ofstream fPlotQueueDisc (filePlotQueueDisc.str ().c_str (), std::ios::out | std::ios::app);
-  fPlotQueueDisc << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
-  fPlotQueueDisc.close ();
-
-  std::ofstream fPlotQueueDiscAvg (filePlotQueueDiscAvg.str ().c_str (), std::ios::out | std::ios::app);
-  fPlotQueueDiscAvg << Simulator::Now ().GetSeconds () << " " << avgQueueDiscSize / checkTimes << std::endl;
-  fPlotQueueDiscAvg.close ();
+  std::ofstream fPlotQueue (dir + "queueTraces/queue0.plotme", std::ios::out | std::ios::app);
+  fPlotQueue << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
+  fPlotQueue.close ();
 }
 
-void
-BuildAppsTest ()
+static void
+CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 {
-  // SINK is in the right side
-  uint16_t portTCP = 50000, portUDP = 50001;
-  Address sinkLocalAddressTCP (InetSocketAddress (Ipv4Address::GetAny (), portTCP));
-  PacketSinkHelper sinkHelperTCP ("ns3::TcpSocketFactory", sinkLocalAddressTCP);
-  ApplicationContainer sinkAppTCP = sinkHelperTCP.Install (n3n4.Get (1));
-  sinkAppTCP.Start (Seconds (sink_start_time));
-  sinkAppTCP.Stop (Seconds (sink_stop_time));
-
-
-  Address sinkLocalAddressUDP (InetSocketAddress (Ipv4Address::GetAny (), portUDP));
-  PacketSinkHelper sinkHelperUDP ("ns3::UdpSocketFactory", sinkLocalAddressUDP);
-  ApplicationContainer sinkAppUDP = sinkHelperUDP.Install (n3n5.Get (1));
-  sinkAppUDP.Start (Seconds (sink_start_time));
-  sinkAppUDP.Stop (Seconds (sink_stop_time));
-
-  // Connection one
-  // Clients are in left side
-  /*
-   * Create the OnOff applications to send TCP to the server
-   * onoffhelper is a client that send data to TCP destination
-  */
-  OnOffHelper clientHelper1 ("ns3::UdpSocketFactory", Address ());
-  clientHelper1.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper1.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper1.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper1.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
-
-  // Connection two
-  OnOffHelper clientHelper2 ("ns3::TcpSocketFactory", Address ());
-  clientHelper2.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper2.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper2.SetAttribute ("PacketSize", UintegerValue (1000));
-  clientHelper2.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
-
-  ApplicationContainer clientApps1;
-  AddressValue remoteAddressUDP (InetSocketAddress (i3i5.GetAddress (1), portUDP));
-  clientHelper1.SetAttribute ("Remote", remoteAddressUDP);
-  clientApps1.Add (clientHelper1.Install (n0n2.Get (0)));
-  clientApps1.Start (Seconds (client_start_time));
-  clientApps1.Stop (Seconds (client_stop_time));
-
-  AddressValue remoteAddressTCP (InetSocketAddress (i3i4.GetAddress (1), portTCP));
-  ApplicationContainer clientApps2;
-  clientHelper2.SetAttribute ("Remote", remoteAddressTCP);
-  clientApps2.Add (clientHelper2.Install (n1n2.Get (0)));
-  clientApps2.Start (Seconds (client_start_time));
-  clientApps2.Stop (Seconds (client_stop_time));
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << " " << newCwnd / 1446.0 << std::endl;
 }
 
-int
-main (int argc, char *argv[])
+static void
+cwnd ()
 {
-  LogComponentEnable ("FqPieQueueDisc", LOG_LEVEL_INFO);
+  for (int i = 0; i < 5; i++)
+    {
+      AsciiTraceHelper asciiTraceHelper;
+      Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
 
-  std::string FqpieLinkDataRate = "1.5Mbps";
-  std::string FqpieLinkDelay = "20ms";
+      Config::ConnectWithoutContext ("/NodeList/" + std::to_string (i) + "/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow", MakeBoundCallback (&CwndChange,stream));
 
-  std::string pathOut;
+    }
+}
+
+int main (int argc, char *argv[])
+{
+  int i = 0;
+  float startTime = 0.0;
+  float simDuration = 101;      // in seconds
+  std::string  pathOut = ".";
   bool writeForPlot = true;
-  bool writePcap = true;
-  bool flowMonitor = false;
+  // std::string EcnMode = "NoEcn";
+  // bool useEcn = false;
+  float stopTime = startTime + simDuration;
+  std::string queue_disc_type = "FqPieQueueDisc";
+  bool bql = true;
 
-  bool printFqPieStats = true;
-
-  global_start_time = 0.0;
-  sink_start_time = global_start_time;
-  client_start_time = global_start_time + 1.5;
-  global_stop_time = 7.0;
-  sink_stop_time = global_stop_time + 3.0;
-  client_stop_time = global_stop_time - 2.0;
-
-  // Configuration and command line parameter parsing
-  // Will only save in the directory if enable opts below
-  pathOut = "."; // Current directory
   CommandLine cmd;
-  cmd.AddValue ("pathOut", "Path to save results from --writeForPlot/--writePcap/--writeFlowMonitor", pathOut);
-  cmd.AddValue ("writeForPlot", "<0/1> to write results for plot (gnuplot)", writeForPlot);
-  cmd.AddValue ("writePcap", "<0/1> to write results in pcapfile", writePcap);
-  cmd.AddValue ("writeFlowMonitor", "<0/1> to enable Flow Monitor and write their results", flowMonitor);
+  cmd.AddValue ("queue_disc_type", "Queue disc type for gateway by defalut is FqPie (e.g. ns3::FqPieQueueDisc)", queue_disc_type);
+  cmd.Parse (argc,argv);
 
-  cmd.Parse (argc, argv);
+  queue_disc_type = std::string ("ns3::") + queue_disc_type;
 
-  NS_LOG_INFO ("Create nodes");
-  NodeContainer c;
-  c.Create (6);
-  Names::Add ( "N0", c.Get (0));
-  Names::Add ( "N1", c.Get (1));
-  Names::Add ( "N2", c.Get (2));
-  Names::Add ( "N3", c.Get (3));
-  Names::Add ( "N4", c.Get (4));
-  Names::Add ( "N5", c.Get (5));
-  n0n2 = NodeContainer (c.Get (0), c.Get (2));
-  n1n2 = NodeContainer (c.Get (1), c.Get (2));
-  n2n3 = NodeContainer (c.Get (2), c.Get (3));
-  n3n4 = NodeContainer (c.Get (3), c.Get (4));
-  n3n5 = NodeContainer (c.Get (3), c.Get (5));
+  TypeId qdTid;
+  NS_ABORT_MSG_UNLESS (TypeId::LookupByNameFailSafe (queue_disc_type, &qdTid), "TypeId " << queue_disc_type << " not found");
 
-  Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpNewReno"));
-  // 42 = headers size
-  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1000 - 42));
-  Config::SetDefault ("ns3::TcpSocket::DelAckCount", UintegerValue (1));
-  GlobalValue::Bind ("ChecksumEnabled", BooleanValue (false));
+  std::string bottleneckBandwidth = "10Mbps";
+  std::string bottleneckDelay = "50ms";
 
-  uint32_t meanPktSize = 1000;
+  std::string accessBandwidth = "10Mbps";
+  std::string accessDelay = "5ms";
 
-  // PIE params
-  NS_LOG_INFO ("Set PIE params in Fqpiequeuedisc");
-  Config::SetDefault ("ns3::FqPieQueueDisc::MaxSize", StringValue ("100p"));
-  Config::SetDefault ("ns3::FqPieQueueDisc::MeanPktSize", UintegerValue (meanPktSize));
-  Config::SetDefault ("ns3::FqPieQueueDisc::DequeueThreshold", UintegerValue (10000));
-  Config::SetDefault ("ns3::FqPieQueueDisc::QueueDelayReference", TimeValue (Seconds (0.02)));
-  Config::SetDefault ("ns3::FqPieQueueDisc::MaxBurstAllowance", TimeValue (Seconds (0.1)));
+  NodeContainer source;
+  source.Create (50);
 
-  NS_LOG_INFO ("Install internet stack on all nodes.");
+  // NodeContainer udpsource;
+  // udpsource.Create (2);
+
+  NodeContainer gateway;
+  gateway.Create (2);
+
+  NodeContainer sink;
+  sink.Create (1);
+
+  Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
+  Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
+  Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
+  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (1));
+  Config::SetDefault ("ns3::TcpSocketBase::LimitedTransmit", BooleanValue (false));
+  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1446));
+  Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
+  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
+
   InternetStackHelper internet;
-  internet.Install (c);
+  internet.InstallAll ();
 
   TrafficControlHelper tchPfifo;
   uint16_t handle = tchPfifo.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
   tchPfifo.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
 
-  TrafficControlHelper tchFqPie;
-  tchFqPie.SetRootQueueDisc ("ns3::FqPieQueueDisc");
+  TrafficControlHelper tch;
+  tch.SetRootQueueDisc (queue_disc_type);
 
-  NS_LOG_INFO ("Create channels");
-  PointToPointHelper p2p;
+  if (bql)
+     {
+       tch.SetQueueLimits ("ns3::DynamicQueueLimits");
+     }
+     Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue ("100p"));
 
-  NetDeviceContainer devn0n2;
-  NetDeviceContainer devn1n2;
-  NetDeviceContainer devn2n3;
-  NetDeviceContainer devn3n4;
-  NetDeviceContainer devn3n5;
+  // Create and configure access link and bottleneck link
+  PointToPointHelper accessLink;
+  accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
+  accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  QueueDiscContainer queueDiscs;
+  NetDeviceContainer devices[50];
+  for (i = 0; i < 50; i++)
+    {
+      devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
+      tchPfifo.Install (devices[i]);
+    }
 
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
-  devn0n2 = p2p.Install (n0n2);
-  tchPfifo.Install (devn0n2);
+  NetDeviceContainer devices_sink;
+  devices_sink = accessLink.Install (gateway.Get (1), sink.Get (0));
+  tchPfifo.Install (devices_sink);
 
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("3ms"));
-  devn1n2 = p2p.Install (n1n2);
-  tchPfifo.Install (devn1n2);
+  PointToPointHelper bottleneckLink;
+  bottleneckLink.SetDeviceAttribute ("DataRate", StringValue (bottleneckBandwidth));
+  bottleneckLink.SetChannelAttribute ("Delay", StringValue (bottleneckDelay));
 
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue (FqpieLinkDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue (FqpieLinkDelay));
-  devn2n3 = p2p.Install (n2n3);
-  // only backbone link has FQ-PIE queue disc
-  queueDiscs = tchFqPie.Install (devn2n3);  // Have to change this line.
+  NetDeviceContainer devices_gateway;
+  devices_gateway = bottleneckLink.Install (gateway.Get (0), gateway.Get (1));
+  QueueDiscContainer queueDiscs = tch.Install (devices_gateway);
 
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("4ms"));
-  devn3n4 = p2p.Install (n3n4);
-  tchPfifo.Install (devn3n4);
+  Ipv4AddressHelper address;
+  address.SetBase ("10.0.0.0", "255.255.255.0");
 
-  p2p.SetQueue ("ns3::DropTailQueue");
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
-  devn3n5 = p2p.Install (n3n5);
-  tchPfifo.Install (devn3n5);
+  // Configure the source and sink net devices
+  // and the channels between the source/sink and the gateway
+  //Ipv4InterfaceContainer sink_Interfaces;
+  Ipv4InterfaceContainer interfaces[50];
+  Ipv4InterfaceContainer interfaces_sink;
+  Ipv4InterfaceContainer interfaces_gateway;
+  // Ipv4InterfaceContainer udpinterfaces[2];
 
-  NS_LOG_INFO ("Assign IP Addresses");
-  Ipv4AddressHelper ipv4;
+  // NetDeviceContainer udpdevices[2];
 
-  ipv4.SetBase ("10.1.1.0", "255.255.255.0");
-  i0i2 = ipv4.Assign (devn0n2);
+  for (i = 0; i < 50; i++)
+    {
+      address.NewNetwork ();
+      interfaces[i] = address.Assign (devices[i]);
+    }
 
-  ipv4.SetBase ("10.1.2.0", "255.255.255.0");
-  i1i2 = ipv4.Assign (devn1n2);
+  // for (i = 0; i < 2; i++)
+  //   {
+  //     udpdevices[i] = accessLink.Install (udpsource.Get (i), gateway.Get (0));
+  //     address.NewNetwork ();
+  //     udpinterfaces[i] = address.Assign (udpdevices[i]);
+  //   }
 
-  ipv4.SetBase ("10.1.3.0", "255.255.255.0");
-  i2i3 = ipv4.Assign (devn2n3);
+  address.NewNetwork ();
+  interfaces_gateway = address.Assign (devices_gateway);
 
-  ipv4.SetBase ("10.1.4.0", "255.255.255.0");
-  i3i4 = ipv4.Assign (devn3n4);
+  address.NewNetwork ();
+  interfaces_sink = address.Assign (devices_sink);
 
-  ipv4.SetBase ("10.1.5.0", "255.255.255.0");
-  i3i5 = ipv4.Assign (devn3n5);
-
-  // Set up the routing
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
-  BuildAppsTest ();
+  uint16_t port = 50000;
+  // uint16_t port1 = 50001;
+  Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
+  // Address sinkLocalAddress1 (InetSocketAddress (Ipv4Address::GetAny (), port1));
+  PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
+  // PacketSinkHelper sinkHelper1 ("ns3::UdpSocketFactory", sinkLocalAddress1);
 
-  if (writePcap)
-    {
-      PointToPointHelper ptp;
-      std::stringstream stmp;
-      stmp << pathOut << "/fqpie";
-      ptp.EnablePcapAll (stmp.str ().c_str ());
-    }
+  // Configure application
+  AddressValue remoteAddress (InetSocketAddress (interfaces_sink.GetAddress (1), port));
+  // AddressValue remoteAddress1 (InetSocketAddress (interfaces_sink.GetAddress (1), port1));
 
-  Ptr<FlowMonitor> flowmon;
-  if (flowMonitor)
-    {
-      FlowMonitorHelper flowmonHelper;
-      flowmon = flowmonHelper.InstallAll ();
-    }
+  BulkSendHelper ftp ("ns3::TcpSocketFactory", Address ());
+  ftp.SetAttribute ("Remote", remoteAddress);
+  ftp.SetAttribute ("SendSize", UintegerValue (1000));
+
+  ApplicationContainer sourceApp = ftp.Install (source);
+  sourceApp.Start (Seconds (0));
+  sourceApp.Stop (Seconds (stopTime - 1));
+
+  sinkHelper.SetAttribute ("Protocol", TypeIdValue (TcpSocketFactory::GetTypeId ()));
+  ApplicationContainer sinkApp = sinkHelper.Install (sink);
+  sinkApp.Start (Seconds (0));
+  sinkApp.Stop (Seconds (stopTime));
+
+  // OnOffHelper clientHelper6 ("ns3::UdpSocketFactory", Address ());
+  // clientHelper6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  // clientHelper6.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  // clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper6.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  // ApplicationContainer clientApps6;
+
+  // clientHelper6.SetAttribute ("Remote", remoteAddress1);
+  // clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
+  // clientApps6.Start (Seconds (0));
+  // clientApps6.Stop (Seconds (stopTime - 1));
+
+  // OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
+  // clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  // clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  // clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  // ApplicationContainer clientApps7;
+  // clientHelper7.SetAttribute ("Remote", remoteAddress1);
+  // clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
+  // clientApps7.Start (Seconds (0));
+  // clientApps7.Stop (Seconds (stopTime - 1));
+
+  // sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
+  // ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
+  // sinkApp1.Start (Seconds (0));
+  // sinkApp1.Stop (Seconds (stopTime));
 
   if (writeForPlot)
     {
-      filePlotQueueDisc << pathOut << "/" << "fq-pie-queue-disc.plotme";
-      filePlotQueueDiscAvg << pathOut << "/" << "fq-pie-queue-disc_avg.plotme";
-
-      remove (filePlotQueueDisc.str ().c_str ());
-      remove (filePlotQueueDiscAvg.str ().c_str ());
       Ptr<QueueDisc> queue = queueDiscs.Get (0);
-      Simulator::ScheduleNow (&CheckQueueDiscSize, queue);
+      Simulator::ScheduleNow (&CheckQueueSize, queue);
     }
 
-  Simulator::Stop (Seconds (sink_stop_time));
+  std::string dirToSave = "mkdir -p " + dir;
+  system (dirToSave.c_str ());
+  system ((dirToSave + "/pcap/").c_str ());
+  system ((dirToSave + "/cwndTraces/").c_str ());
+  system ((dirToSave + "/queueTraces/").c_str ());
+  bottleneckLink.EnablePcapAll (dir + "pcap/N", true);
+
+  Simulator::Schedule (Seconds (0.1), &cwnd);
+
+  Simulator::Stop (Seconds (stopTime));
   Simulator::Run ();
 
-  QueueDisc::Stats st = queueDiscs.Get (0)->GetStats ();
-
-  if (st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP) != 0)
-    {
-      std::cout << "There should be no drops due to queue full." << std::endl;
-      exit (1);
-    }
-
-  if (flowMonitor)
-    {
-      std::stringstream stmp;
-      stmp << pathOut << "/fqpie.flowmon";
-
-      flowmon->SerializeToXmlFile (stmp.str ().c_str (), false, false);
-    }
-
-  if (printFqPieStats)
-    {
-      std::cout << "***FQ PIE stats from Node 2 queue ***" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::UNFORCED_DROP)
-                << " drops due to prob mark" << std::endl;
-      std::cout << "\t " << st.GetNDroppedPackets (FqPieQueueDisc::FORCED_DROP)
-                << " drops due to queue limits" << std::endl;
-    }
-
   Simulator::Destroy ();
-
   return 0;
 }

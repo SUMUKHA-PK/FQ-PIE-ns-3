@@ -7,4 +7,3 @@ set xrange [0:50]
 set key outside;
 set key right top;
 plot "queue0.plotme" title "S1-0" with lines lw 1.5
-
