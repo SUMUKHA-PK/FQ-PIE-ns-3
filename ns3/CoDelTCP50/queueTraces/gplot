@@ -1,5 +1,5 @@
 set terminal postscript eps color font 20
-set output "Codel Mix traffic.eps"
+set output "Codel TCP 50.eps"
 set autoscale
 set xrange [0:100]
 set yrange [0:250]
@@ -11,4 +11,4 @@ set xtics 10
 set ytics 20
 
 
-plot "queue0.plotme" using 1:2 title "CoDel Mix traffic" with line lw 5 
+plot "queue0.plotme" using 1:2 title "CoDel TCP 50" with line lw 5 

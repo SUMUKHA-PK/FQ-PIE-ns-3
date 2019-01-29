@@ -1,9 +1,14 @@
-set terminal pngcairo enhanced color lw 2 size 800,600 font 'Arial-Bold'
-set output "TP-Flow.png"
-set xlabel "Time (sec)"
-set ylabel "Throughput (Mbps)"
-set xrange [2:50]
-set xrange [0:50]
-set key outside;
-set key right top;
-plot "queue0.plotme" title "S1-0" with lines lw 1.5
+set terminal postscript eps color font 20
+set output "FQ CoDel Mix traffic.eps"
+set autoscale
+set xrange [0:100]
+set yrange [0:220]
+
+set ylabel "Queuing Delay (in ms)"
+set xlabel "Time (in seconds)"
+
+set xtics 10
+set ytics 10
+
+
+plot "queue0.plotme" using 1:2 title "FQ CoDel Mix traffic" with line lw 5 

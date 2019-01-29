@@ -34,8 +34,9 @@ if not os.path.exists(os.path.dirname(outFilePackets)):
     try:
         os.makedirs(os.path.dirname(outFilePackets))
     except OSError as exc: # Guard against race condition
-        if exc.errno != errno.EEXIST:
-            raise
+        # if exc.errno != errno.EEXIST:
+        #     raise
+        print("!")
 
 os.system ("tshark -r " + file_name +" -T fields -e frame.time_relative -e frame.len -e ip.dst -e tcp.dstport > " + file_name[0:file_name.rindex('.')] + ".csv")
 fBytes         = open (outFileBytes, 'w')

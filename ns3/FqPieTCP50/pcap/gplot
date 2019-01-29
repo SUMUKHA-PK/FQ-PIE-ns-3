@@ -1,0 +1,14 @@
+set terminal postscript eps color font 20
+set output "FQ PIE Throughput TCP 50.eps"
+set autoscale
+set xrange [0:100]
+set yrange [0:1000]
+
+set ylabel "Throughput (in packets/s)"
+set xlabel "Time (in seconds)"
+
+set xtics 10
+set ytics 50
+
+
+plot "TCP.plotme" using 1:2 title "FQ PIE Throughput TCP 50" with line lw 5 

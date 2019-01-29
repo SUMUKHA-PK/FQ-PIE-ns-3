@@ -1,14 +1,14 @@
 set terminal postscript eps color font 20
-set output "Codel Mix traffic.eps"
+set output "PIE TCP 5.eps"
 set autoscale
 set xrange [0:100]
-set yrange [0:250]
+set yrange [0:200]
 
 set ylabel "Queuing Delay (in ms)"
 set xlabel "Time (in seconds)"
 
 set xtics 10
-set ytics 20
+set ytics 10
 
 
-plot "queue0.plotme" using 1:2 title "CoDel Mix traffic" with line lw 5 
+plot "queue0.plotme" using 1:2 title "PIE TCP 5" with line lw 5 
