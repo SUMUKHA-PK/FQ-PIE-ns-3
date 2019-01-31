@@ -40,7 +40,7 @@ NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
-//All flow functions are implemented here
+
 TypeId FqPieFlow::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::FqPieFlow")
@@ -49,61 +49,6 @@ TypeId FqPieFlow::GetTypeId (void)
     .AddConstructor<FqPieFlow> ()
   ;
   return tid;
-}
-
-FqPieFlow::FqPieFlow ()
-  : m_deficit (0),
-    m_status (INACTIVE)
-{
-  NS_LOG_FUNCTION (this);
-}
-
-FqPieFlow::~FqPieFlow ()
-{
-  NS_LOG_FUNCTION (this);
-}
-
-void
-FqPieFlow::SetDeficit (uint32_t deficit)
-{
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit = deficit;
-}
-
-int32_t
-FqPieFlow::GetDeficit (void) const
-{
-  NS_LOG_FUNCTION (this);
-  return m_deficit;
-}
-
-void
-FqPieFlow::IncreaseDeficit (int32_t deficit)
-{
-  NS_LOG_FUNCTION (this << deficit);
-  m_deficit += deficit;
-}
-
-void
-FqPieFlow::SetStatus (FlowStatus status)
-{
-  NS_LOG_FUNCTION (this);
-  m_status = status;
-}
-
-FqPieFlow::FlowStatus
-FqPieFlow::GetStatus (void) const
-{
-  NS_LOG_FUNCTION (this);
-  return m_status;
-}
-
-
-Time
-FqPieFlow::GetQueueDelay (void)
-{
-  NS_LOG_FUNCTION (this);
-  return m_qDelay;
 }
 
 //All functions related to Queuedisc are implemented here
@@ -161,13 +106,64 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeTimeChecker ())
     .AddAttribute ("Flows",
                    "The number of queues into which the incoming packets are classified",
-                   UintegerValue (1024),
+                   UintegerValue (50),
                    MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
+                   MakeUintegerChecker<uint32_t> ())
+    .AddAttribute ("Perturbation",
+                   "The salt used as an additional input to the hash function used to classify packets",
+                   UintegerValue (0),
+                   MakeUintegerAccessor (&FqPieQueueDisc::m_perturbation),
                    MakeUintegerChecker<uint32_t> ())
   ;
   return tid;
 }
 
+FqPieFlow::FqPieFlow ()
+  : m_deficit (0),
+    m_status (INACTIVE)
+{
+  NS_LOG_FUNCTION (this);
+}
+
+FqPieFlow::~FqPieFlow ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+void
+FqPieFlow::SetDeficit (uint32_t deficit)
+{
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit = deficit;
+}
+
+int32_t
+FqPieFlow::GetDeficit (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_deficit;
+}
+
+void
+FqPieFlow::IncreaseDeficit (int32_t deficit)
+{
+  NS_LOG_FUNCTION (this << deficit);
+  m_deficit += deficit;
+}
+
+void
+FqPieFlow::SetStatus (FlowStatus status)
+{
+  NS_LOG_FUNCTION (this);
+  m_status = status;
+}
+
+FqPieFlow::FlowStatus
+FqPieFlow::GetStatus (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_status;
+}
 
 FqPieQueueDisc::FqPieQueueDisc ()
   : QueueDisc (QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS),
@@ -181,6 +177,13 @@ FqPieQueueDisc::FqPieQueueDisc ()
 FqPieQueueDisc::~FqPieQueueDisc ()
 {
   NS_LOG_FUNCTION (this);
+}
+
+Time
+FqPieFlow::GetQueueDelay (void)
+{
+  NS_LOG_FUNCTION (this);
+  return m_qDelay;
 }
 
 int64_t
@@ -212,51 +215,6 @@ FqPieQueueDisc::InitializeParams (void)
   m_queueDiscFactory.Set ("MaxSize", QueueSizeValue (GetMaxSize ()));
 }
 
-
-bool
-FqPieQueueDisc::CheckConfig (void)
-{
-  NS_LOG_FUNCTION (this);
-  if (GetNQueueDiscClasses () > 0)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
-      return false;
-    }
-
-  if (GetNInternalQueues () == 0)
-    {
-      // add  a DropTail queue
-      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
-                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
-    }
-
-  if (GetNInternalQueues () != 1)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
-      return false;
-    }
-  if (!m_quantum)
-      {
-        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
-        Ptr<NetDevice> dev;
-        // if the NetDeviceQueueInterface object is aggregated to a
-        // NetDevice, get the MTU of such NetDevice
-        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
-          {
-            m_quantum = dev->GetMtu ();
-            NS_LOG_LOGIC ("Setting the quantum to the MTU of the device: " << m_quantum);
-          }
-
-        if (!m_quantum)
-          {
-            NS_LOG_ERROR ("The quantum parameter cannot be null");
-            return false;
-         }
-      }
-  return true;
-}
-
-//changes needed/
 bool
 FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
@@ -516,15 +474,20 @@ FqPieQueueDisc::CalculatePFlow()
 {
   std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
   std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
+  int x = 0;
   for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ptrFlow++){
+    x++;
     Ptr<FqPieFlow> flow = (*ptrFlow);
     CalculateP(flow);
   }
   for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ptrFlow++){
+    x++;
     Ptr<FqPieFlow> flow = (*ptrFlow);
     CalculateP(flow);
   }
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
+
+  std::cout<<x<<std::endl;
 }
 
 Ptr<QueueDiscItem>
@@ -574,7 +537,7 @@ FqPieQueueDisc::PieDequeue(Ptr <FqPieFlow> flow)
             }
 
           // restart a measurement cycle if there is enough data
-          if (GetInternalQueue (0)->GetNBytes () > m_dqThreshold)
+          if (qd->GetInternalQueue (0)->GetNBytes () > m_dqThreshold)
             {
               flow->m_dqStart = now;
               flow->m_dqCount = 0;
@@ -668,6 +631,49 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
   flow->IncreaseDeficit (item->GetSize () * -1);
 
   return item;
+}
+
+bool
+FqPieQueueDisc::CheckConfig (void)
+{
+  NS_LOG_FUNCTION (this);
+  if (GetNQueueDiscClasses () > 0)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
+      return false;
+    }
+
+  if (GetNInternalQueues () == 0)
+    {
+      // add  a DropTail queue
+      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
+                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
+    }
+
+  if (GetNInternalQueues () != 1)
+    {
+      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
+      return false;
+    }
+  if (!m_quantum)
+      {
+        Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
+        Ptr<NetDevice> dev;
+        // if the NetDeviceQueueInterface object is aggregated to a
+        // NetDevice, get the MTU of such NetDevice
+        if (ndqi && (dev = ndqi->GetObject<NetDevice> ()))
+          {
+            m_quantum = dev->GetMtu ();
+            NS_LOG_LOGIC ("Setting the quantum to the MTU of the device: " << m_quantum);
+          }
+
+        if (!m_quantum)
+          {
+            NS_LOG_ERROR ("The quantum parameter cannot be null");
+            return false;
+         }
+      }
+  return true;
 }
 
 void

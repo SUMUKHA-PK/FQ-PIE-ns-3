@@ -1,8 +1,8 @@
 set terminal postscript eps color font 20
-set output "FQ CoDel TCP 50.eps"
+set output "FQ PIE TCP 5.eps"
 set autoscale
 set xrange [0:100]
-set yrange [0:220]
+set yrange [0:250]
 
 set ylabel "Queuing Delay (in ms)"
 set xlabel "Time (in seconds)"
@@ -11,4 +11,4 @@ set xtics 10
 set ytics 10
 
 
-plot "queue0.plotme" using 1:2 title "FQ CoDel TCP 50" with line lw 5 
+plot "queue0.plotme" using 1:2 title "FQ PIE TCP 5" with line lw 5 

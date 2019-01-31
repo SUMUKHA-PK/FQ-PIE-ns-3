@@ -70,7 +70,7 @@
 
 using namespace ns3;
 
-std::string dir = "FqPieTCP5/";
+std::string dir = "FqPieTCP50/";
 
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
@@ -93,7 +93,7 @@ CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 static void
 cwnd ()
 {
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 50; i++)
     {
       AsciiTraceHelper asciiTraceHelper;
       Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
@@ -132,7 +132,7 @@ int main (int argc, char *argv[])
   std::string accessDelay = "5ms";
 
   NodeContainer source;
-  source.Create (5);
+  source.Create (50);
 
   // NodeContainer udpsource;
   // udpsource.Create (2);
@@ -173,8 +173,8 @@ int main (int argc, char *argv[])
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
   accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  NetDeviceContainer devices[5];
-  for (i = 0; i < 5; i++)
+  NetDeviceContainer devices[50];
+  for (i = 0; i < 50; i++)
     {
       devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
       tchPfifo.Install (devices[i]);
@@ -205,7 +205,7 @@ int main (int argc, char *argv[])
 
   // NetDeviceContainer udpdevices[2];
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < 50; i++)
     {
       address.NewNetwork ();
       interfaces[i] = address.Assign (devices[i]);
