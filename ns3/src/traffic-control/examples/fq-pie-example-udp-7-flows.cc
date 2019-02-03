@@ -132,10 +132,10 @@ int main (int argc, char *argv[])
   std::string accessDelay = "5ms";
 
   NodeContainer source;
-  source.Create (5);
+  source.Create (1);
 
   NodeContainer udpsource;
-  udpsource.Create (2);
+  udpsource.Create (1);
 
   NodeContainer gateway;
   gateway.Create (2);
@@ -177,8 +177,8 @@ FlowMonitorHelper flowmon;
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
   accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  NetDeviceContainer devices[5];
-  for (i = 0; i < 5; i++)
+  NetDeviceContainer devices[1];
+  for (i = 0; i < 1; i++)
     {
       devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
       tchPfifo.Install (devices[i]);
@@ -209,13 +209,13 @@ FlowMonitorHelper flowmon;
 
   NetDeviceContainer udpdevices[2];
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < 1; i++)
     {
       address.NewNetwork ();
       interfaces[i] = address.Assign (devices[i]);
     }
 
-  for (i = 0; i < 2; i++)
+  for (i = 0; i < 1; i++)
     {
       udpdevices[i] = accessLink.Install (udpsource.Get (i), gateway.Get (0));
       address.NewNetwork ();
@@ -267,17 +267,17 @@ FlowMonitorHelper flowmon;
   clientApps6.Start (Seconds (0));
   clientApps6.Stop (Seconds (stopTime - 1));
 
-  OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
-  clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
-  clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
+  // OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
+  // clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  // clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  // clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
 
-  ApplicationContainer clientApps7;
-  clientHelper7.SetAttribute ("Remote", remoteAddress1);
-  clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
-  clientApps7.Start (Seconds (0));
-  clientApps7.Stop (Seconds (stopTime - 1));
+  // ApplicationContainer clientApps7;
+  // clientHelper7.SetAttribute ("Remote", remoteAddress1);
+  // clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
+  // clientApps7.Start (Seconds (0));
+  // clientApps7.Stop (Seconds (stopTime - 1));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
