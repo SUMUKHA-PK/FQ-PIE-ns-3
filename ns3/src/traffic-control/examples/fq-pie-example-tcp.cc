@@ -70,18 +70,19 @@
 
 using namespace ns3;
 
-std::string dir = "FqPieTCP30/";
+std::string dir = "FqPieTCP5/";
 
 void
-CheckQueueSize (Ptr<QueueDisc> queue)
+CheckQueueSize (Ptr<QueueDisc> queue,Ptr<FlowMonitor> monitor )
 {
   double qSize = queue->GetCurrentSize ().GetValue ();
   // check queue size every 1/100 of a second
-  Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue);
+  Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue,monitor);
 
   std::ofstream fPlotQueue (dir + "queueTraces/queue0.plotme", std::ios::out | std::ios::app);
   fPlotQueue << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
   fPlotQueue.close ();
+
 }
 
 static void
@@ -93,7 +94,7 @@ CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 static void
 cwnd ()
 {
-  for (int i = 0; i < 30; i++)
+  for (int i = 0; i < 5; i++)
     {
       AsciiTraceHelper asciiTraceHelper;
       Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
@@ -132,10 +133,7 @@ int main (int argc, char *argv[])
   std::string accessDelay = "5ms";
 
   NodeContainer source;
-  source.Create (30);
-
-  // NodeContainer udpsource;
-  // udpsource.Create (2);
+  source.Create (5);
 
   NodeContainer gateway;
   gateway.Create (2);
@@ -146,11 +144,11 @@ int main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
-  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (1));
+  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (10));
   Config::SetDefault ("ns3::TcpSocketBase::LimitedTransmit", BooleanValue (false));
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1446));
   Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
-  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
+  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("1000p")));
 
   InternetStackHelper internet;
   internet.InstallAll ();
@@ -168,13 +166,17 @@ int main (int argc, char *argv[])
      }
      Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue ("100p"));
 
+
+  FlowMonitorHelper flowmon;
+  Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+
   // Create and configure access link and bottleneck link
   PointToPointHelper accessLink;
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
   accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  NetDeviceContainer devices[30];
-  for (i = 0; i < 30; i++)
+  NetDeviceContainer devices[5];
+  for (i = 0; i < 5; i++)
     {
       devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
       tchPfifo.Install (devices[i]);
@@ -198,25 +200,15 @@ int main (int argc, char *argv[])
   // Configure the source and sink net devices
   // and the channels between the source/sink and the gateway
   //Ipv4InterfaceContainer sink_Interfaces;
-  Ipv4InterfaceContainer interfaces[50];
+  Ipv4InterfaceContainer interfaces[5];
   Ipv4InterfaceContainer interfaces_sink;
   Ipv4InterfaceContainer interfaces_gateway;
-  // Ipv4InterfaceContainer udpinterfaces[2];
 
-  // NetDeviceContainer udpdevices[2];
-
-  for (i = 0; i < 30; i++)
+  for (i = 0; i < 5; i++)
     {
       address.NewNetwork ();
       interfaces[i] = address.Assign (devices[i]);
     }
-
-  // for (i = 0; i < 2; i++)
-  //   {
-  //     udpdevices[i] = accessLink.Install (udpsource.Get (i), gateway.Get (0));
-  //     address.NewNetwork ();
-  //     udpinterfaces[i] = address.Assign (udpdevices[i]);
-  //   }
 
   address.NewNetwork ();
   interfaces_gateway = address.Assign (devices_gateway);
@@ -227,7 +219,6 @@ int main (int argc, char *argv[])
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
   uint16_t port = 50000;
-  // uint16_t port1 = 50001;
   Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
   // Address sinkLocalAddress1 (InetSocketAddress (Ipv4Address::GetAny (), port1));
   PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
@@ -283,7 +274,7 @@ int main (int argc, char *argv[])
   if (writeForPlot)
     {
       Ptr<QueueDisc> queue = queueDiscs.Get (0);
-      Simulator::ScheduleNow (&CheckQueueSize, queue);
+      Simulator::ScheduleNow (&CheckQueueSize, queue,monitor);
     }
 
   std::string dirToSave = "mkdir -p " + dir;

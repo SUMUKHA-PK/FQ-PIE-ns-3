@@ -185,7 +185,7 @@ FqCoDelQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
         }
     }
 
-  std::cout<<"HASH : "<<h<<std::endl;
+  // std::cout<<"HASH : "<<h<<std::endl;
   Ptr<FqCoDelFlow> flow;
   if (m_flowsIndices.find (h) == m_flowsIndices.end ())
     {

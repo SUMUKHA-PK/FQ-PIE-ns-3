@@ -70,7 +70,7 @@
 
 using namespace ns3;
 
-std::string dir = "FqPie/";
+std::string dir = "FqPieMix/";
 
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
@@ -93,7 +93,7 @@ CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 static void
 cwnd ()
 {
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 1; i++)
     {
       AsciiTraceHelper asciiTraceHelper;
       Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
@@ -146,11 +146,11 @@ int main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
-  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (1));
+  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (10));
   Config::SetDefault ("ns3::TcpSocketBase::LimitedTransmit", BooleanValue (false));
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1446));
   Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
-  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
+  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("1000p")));
 
   InternetStackHelper internet;
   internet.InstallAll ();
@@ -168,6 +168,10 @@ int main (int argc, char *argv[])
      }
      Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue ("100p"));
 
+
+FlowMonitorHelper flowmon;
+  Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+ 
   // Create and configure access link and bottleneck link
   PointToPointHelper accessLink;
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));

@@ -100,8 +100,6 @@ public:
     IN_BURST_PROTECTING,
   };
 
-Time GetQueueDelay (void);
-
   bool m_inMeasurement;                         //!< Indicates whether we are in a measurement cycle
   double m_avgDqRate;                           //!< Time averaged dequeue rate
   double m_dqStart;                             //!< Start timestamp of current measurement cycle
@@ -153,7 +151,6 @@ public:
     IN_BURST,
     IN_BURST_PROTECTING,
   };
-
   /**
    * \brief Get queue delay.
    *

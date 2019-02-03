@@ -31,6 +31,19 @@
 #include "fq-pie-queue-disc.h"
 #include "ns3/drop-tail-queue.h"
 #include "ns3/net-device-queue-interface.h"
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/flow-monitor-helper.h"
+#include "ns3/point-to-point-module.h"
+#include "ns3/applications-module.h"
+#include <fstream>
+#include "ns3/ipv6-static-routing-helper.h"
+#include "ns3/ipv6-routing-table-entry.h"
+#include "ns3/internet-module.h"
+#include "ns3/flow-monitor-module.h"
+#include "ns3/tcp-header.h"
+#include "ns3/traffic-control-module.h"
+#include  <string>
 
 namespace ns3 {
 
@@ -40,6 +53,7 @@ NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
+std::string dir ="FqPieTCP5/";
 
 TypeId FqPieFlow::GetTypeId (void)
 {
@@ -106,7 +120,7 @@ TypeId FqPieQueueDisc::GetTypeId (void)
                    MakeTimeChecker ())
     .AddAttribute ("Flows",
                    "The number of queues into which the incoming packets are classified",
-                   UintegerValue (50),
+                   UintegerValue (1024),
                    MakeUintegerAccessor (&FqPieQueueDisc::m_flows),
                    MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("Perturbation",
@@ -179,11 +193,43 @@ FqPieQueueDisc::~FqPieQueueDisc ()
   NS_LOG_FUNCTION (this);
 }
 
-Time
-FqPieFlow::GetQueueDelay (void)
-{
-  NS_LOG_FUNCTION (this);
-  return m_qDelay;
+Time FqPieQueueDisc::GetQueueDelay(void) {
+
+  std::list<Ptr<FqPieFlow>> newFlows = this->m_newFlows;
+  std::list<Ptr<FqPieFlow>> oldFlows = this->m_oldFlows;
+  Time delay ;
+  int f=0;
+  float x=0;
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = newFlows.begin(); ptrFlow != newFlows.end(); ptrFlow++){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    if(f==0){
+      delay=flow->m_qDelay;
+      f=1;
+    }
+    else{
+      delay+=flow->m_qDelay;
+    }
+    x++;
+  }
+  for(std::list<Ptr<FqPieFlow>>::iterator ptrFlow = oldFlows.begin(); ptrFlow != oldFlows.end(); ptrFlow++){
+    Ptr<FqPieFlow> flow = (*ptrFlow);
+    if(f==0){
+      delay=flow->m_qDelay;
+      f=1;
+    }
+    else{
+      delay+=flow->m_qDelay;
+    }
+    x++;
+  }
+  // std::cout<<"Qdelay : "<<delay<<std::endl;
+  std::cout<<"Qdelay avg : "<<(delay.GetSeconds())/x<<std::endl;
+
+  std::ofstream fPlotQueue (dir + "queueTraces/queue1.plotme", std::ios::out | std::ios::app);
+  fPlotQueue << Simulator::Now ().GetSeconds () << " " << 1000* (delay.GetSeconds())/x << std::endl;
+  fPlotQueue.close ();
+
+  return delay;
 }
 
 int64_t
@@ -261,6 +307,7 @@ FqPieQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       flow->m_dqStart = 0;
       flow->m_burstState = FqPieFlow::NO_BURST;
       flow->m_qDelayOld = Time (Seconds (0));
+      flow->m_qDelay = Time (Seconds (0));
       m_flowsIndices[h] = GetNQueueDiscClasses () - 1; 
     }
   else
@@ -467,6 +514,8 @@ FqPieQueueDisc::CalculateP (Ptr<FqPieFlow> flow)
     }
 
   flow->m_qDelayOld = qDelay;
+
+  // std::cout<<"QDELAY: "<< qDelay<<std::endl;
 }
 
 void
@@ -487,7 +536,8 @@ FqPieQueueDisc::CalculatePFlow()
   }
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 
-  std::cout<<x<<std::endl;
+
+  std::cout<<"QUEUEDELAY: "<<FqPieQueueDisc::GetQueueDelay().GetSeconds()<<std::endl;
 }
 
 Ptr<QueueDiscItem>
@@ -637,24 +687,24 @@ bool
 FqPieQueueDisc::CheckConfig (void)
 {
   NS_LOG_FUNCTION (this);
-  if (GetNQueueDiscClasses () > 0)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
-      return false;
-    }
+  // if (GetNQueueDiscClasses () > 0)
+  //   {
+  //     NS_LOG_ERROR ("FqPieQueueDisc cannot have classes");
+  //     return false;
+  //   }
 
-  if (GetNInternalQueues () == 0)
-    {
-      // add  a DropTail queue
-      AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
-                          ("MaxSize", QueueSizeValue (GetMaxSize ())));
-    }
+  // if (GetNInternalQueues () == 0)
+  //   {
+  //     // add  a DropTail queue
+  //     AddInternalQueue (CreateObjectWithAttributes<DropTailQueue<QueueDiscItem> >
+  //                         ("MaxSize", QueueSizeValue (GetMaxSize ())));
+  //   }
 
-  if (GetNInternalQueues () != 1)
-    {
-      NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
-      return false;
-    }
+  // if (GetNInternalQueues () != 1)
+  //   {
+  //     NS_LOG_ERROR ("FqPieQueueDisc needs 1 internal queue");
+  //     return false;
+  //   }
   if (!m_quantum)
       {
         Ptr<NetDeviceQueueInterface> ndqi = GetNetDeviceQueueInterface ();
