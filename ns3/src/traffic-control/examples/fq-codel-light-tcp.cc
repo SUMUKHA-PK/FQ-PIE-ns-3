@@ -70,19 +70,18 @@
 
 using namespace ns3;
 
-std::string dir ="FqPieTCP50/";
+std::string dir = "Evaluation/FqCoDelTCP5/";
 
 void
-CheckQueueSize (Ptr<QueueDisc> queue,Ptr<FlowMonitor> monitor )
+CheckQueueSize (Ptr<QueueDisc> queue)
 {
   double qSize = queue->GetCurrentSize ().GetValue ();
   // check queue size every 1/100 of a second
-  Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue,monitor);
+  Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue);
 
   std::ofstream fPlotQueue (dir + "queueTraces/queue0.plotme", std::ios::out | std::ios::app);
   fPlotQueue << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
   fPlotQueue.close ();
-  
 }
 
 static void
@@ -94,14 +93,14 @@ CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 static void
 cwnd ()
 {
-  for(int i=0;i<50;i++)
-  {
-    AsciiTraceHelper asciiTraceHelper;
-    Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
-    
-    Config::ConnectWithoutContext ("/NodeList/" + std::to_string (i) + "/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow", MakeBoundCallback (&CwndChange,stream));
-  
-  }
+  for (int i = 0; i < 5; i++)
+    {
+      AsciiTraceHelper asciiTraceHelper;
+      Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
+
+      Config::ConnectWithoutContext ("/NodeList/" + std::to_string (i) + "/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow", MakeBoundCallback (&CwndChange,stream));
+
+    }
 }
 
 int main (int argc, char *argv[])
@@ -113,12 +112,12 @@ int main (int argc, char *argv[])
   bool writeForPlot = true;
   // std::string EcnMode = "NoEcn";
   // bool useEcn = false;
-  std::string queue_disc_type = "FqPieQueueDisc";
   float stopTime = startTime + simDuration;
+  std::string queue_disc_type = "FqCoDelQueueDisc";
   bool bql = true;
 
   CommandLine cmd;
-  cmd.AddValue ("queue_disc_type", "Queue disc type for gateway (e.g. ns3::FqPieQueueDisc)", queue_disc_type);
+  cmd.AddValue ("queue_disc_type", "Queue disc type for gateway by defalut is FqCoDel (e.g. ns3::FqCoDelQueueDisc)", queue_disc_type);
   cmd.Parse (argc,argv);
 
   queue_disc_type = std::string ("ns3::") + queue_disc_type;
@@ -133,7 +132,10 @@ int main (int argc, char *argv[])
   std::string accessDelay = "5ms";
 
   NodeContainer source;
-  source.Create (50);
+  source.Create (5);
+
+  // NodeContainer udpsource;
+  // udpsource.Create (2);
 
   NodeContainer gateway;
   gateway.Create (2);
@@ -144,11 +146,11 @@ int main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
-  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (10));
+  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (1));
   Config::SetDefault ("ns3::TcpSocketBase::LimitedTransmit", BooleanValue (false));
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1446));
   Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
-  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("1000p")));
+  Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
 
   InternetStackHelper internet;
   internet.InstallAll ();
@@ -166,17 +168,13 @@ int main (int argc, char *argv[])
      }
      Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue ("100p"));
 
-
-  FlowMonitorHelper flowmon;
-  Ptr<FlowMonitor> monitor = flowmon.InstallAll();
- 
-// Create and configure access link and bottleneck link
+  // Create and configure access link and bottleneck link
   PointToPointHelper accessLink;
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
   accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  NetDeviceContainer devices[50];
-  for (i = 0; i < 50; i++)
+  NetDeviceContainer devices[5];
+  for (i = 0; i < 5; i++)
     {
       devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
       tchPfifo.Install (devices[i]);
@@ -203,12 +201,22 @@ int main (int argc, char *argv[])
   Ipv4InterfaceContainer interfaces[50];
   Ipv4InterfaceContainer interfaces_sink;
   Ipv4InterfaceContainer interfaces_gateway;
+  // Ipv4InterfaceContainer udpinterfaces[2];
 
-  for (i = 0; i < 50; i++)
+  // NetDeviceContainer udpdevices[2];
+
+  for (i = 0; i < 5; i++)
     {
       address.NewNetwork ();
       interfaces[i] = address.Assign (devices[i]);
     }
+
+  // for (i = 0; i < 2; i++)
+  //   {
+  //     udpdevices[i] = accessLink.Install (udpsource.Get (i), gateway.Get (0));
+  //     address.NewNetwork ();
+  //     udpinterfaces[i] = address.Assign (udpdevices[i]);
+  //   }
 
   address.NewNetwork ();
   interfaces_gateway = address.Assign (devices_gateway);
@@ -219,11 +227,16 @@ int main (int argc, char *argv[])
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
   uint16_t port = 50000;
+  // uint16_t port1 = 50001;
   Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
+  // Address sinkLocalAddress1 (InetSocketAddress (Ipv4Address::GetAny (), port1));
   PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
+  // PacketSinkHelper sinkHelper1 ("ns3::UdpSocketFactory", sinkLocalAddress1);
 
   // Configure application
   AddressValue remoteAddress (InetSocketAddress (interfaces_sink.GetAddress (1), port));
+  // AddressValue remoteAddress1 (InetSocketAddress (interfaces_sink.GetAddress (1), port1));
+
   BulkSendHelper ftp ("ns3::TcpSocketFactory", Address ());
   ftp.SetAttribute ("Remote", remoteAddress);
   ftp.SetAttribute ("SendSize", UintegerValue (1000));
@@ -237,10 +250,40 @@ int main (int argc, char *argv[])
   sinkApp.Start (Seconds (0));
   sinkApp.Stop (Seconds (stopTime));
 
+  // OnOffHelper clientHelper6 ("ns3::UdpSocketFactory", Address ());
+  // clientHelper6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  // clientHelper6.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  // clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper6.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  // ApplicationContainer clientApps6;
+
+  // clientHelper6.SetAttribute ("Remote", remoteAddress1);
+  // clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
+  // clientApps6.Start (Seconds (0));
+  // clientApps6.Stop (Seconds (stopTime - 1));
+
+  // OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
+  // clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+  // clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+  // clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  // ApplicationContainer clientApps7;
+  // clientHelper7.SetAttribute ("Remote", remoteAddress1);
+  // clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
+  // clientApps7.Start (Seconds (0));
+  // clientApps7.Stop (Seconds (stopTime - 1));
+
+  // sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
+  // ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
+  // sinkApp1.Start (Seconds (0));
+  // sinkApp1.Stop (Seconds (stopTime));
+
   if (writeForPlot)
     {
       Ptr<QueueDisc> queue = queueDiscs.Get (0);
-      Simulator::ScheduleNow (&CheckQueueSize, queue,monitor);
+      Simulator::ScheduleNow (&CheckQueueSize, queue);
     }
 
   std::string dirToSave = "mkdir -p " + dir;
@@ -249,6 +292,7 @@ int main (int argc, char *argv[])
   system ((dirToSave + "/cwndTraces/").c_str ());
   system ((dirToSave + "/queueTraces/").c_str ());
   bottleneckLink.EnablePcapAll (dir + "pcap/N", true);
+
   Simulator::Schedule (Seconds (0.1), &cwnd);
 
   Simulator::Stop (Seconds (stopTime));

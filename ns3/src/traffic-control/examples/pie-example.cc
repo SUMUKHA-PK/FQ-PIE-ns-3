@@ -144,7 +144,7 @@ main (int argc, char *argv[])
 
   std::string pathOut;
   bool writeForPlot = false;
-  bool writePcap = true;
+  bool writePcap = false;
   bool flowMonitor = false;
 
   bool printPieStats = true;
