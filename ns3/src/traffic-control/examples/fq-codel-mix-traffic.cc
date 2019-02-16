@@ -92,10 +92,10 @@ int main (int argc, char *argv[])
   TypeId qdTid;
   NS_ABORT_MSG_UNLESS (TypeId::LookupByNameFailSafe (queue_disc_type, &qdTid), "TypeId " << queue_disc_type << " not found");
 
-  std::string bottleneckBandwidth = "10Mbps";
+  std::string bottleneckBandwidth = "100Mbps";
   std::string bottleneckDelay = "50ms";
 
-  std::string accessBandwidth = "10Mbps";
+  std::string accessBandwidth = "100Mbps";
   std::string accessDelay = "5ms";
 
   NodeContainer source;
@@ -222,7 +222,7 @@ int main (int argc, char *argv[])
   OnOffHelper clientHelper6 ("ns3::UdpSocketFactory", Address ());
   clientHelper6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelper6.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
   clientHelper6.SetAttribute ("PacketSize", UintegerValue (1000));
 
   ApplicationContainer clientApps6;
@@ -235,7 +235,7 @@ int main (int argc, char *argv[])
   OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
   clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
   clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
 
   ApplicationContainer clientApps7;

@@ -93,10 +93,10 @@ int main (int argc, char *argv[])
   TypeId qdTid;
   NS_ABORT_MSG_UNLESS (TypeId::LookupByNameFailSafe (queue_disc_type, &qdTid), "TypeId " << queue_disc_type << " not found");
 
-  std::string bottleneckBandwidth = "10Mbps";
+  std::string bottleneckBandwidth = "100Mbps";
   std::string bottleneckDelay = "50ms";
 
-  std::string accessBandwidth = "10Mbps";
+  std::string accessBandwidth = "100Mbps";
   std::string accessDelay = "5ms";
 
   NodeContainer source;

@@ -21,39 +21,6 @@
 //  *           Mohit P. Tahiliani <tahiliani@nitk.edu.in>
 //  */
 
-// /** Network topology
-//  *
-//  * 
-//  *    100mB/s, 5ms |                    | 100mB/s, 5ms
-//  * n0--------------|TCP                 |---------------n00 TCP sink
-//  *                 |                    |
-//  *                 |                    |
-//  *    100mB/s, 5ms |                    | 100Mb/s, 5ms
-//  * n1--------------|TCP                 |---------------n10 TCP sink
-//  *                 |                    |
-//  *                 |                    |
-//  *    100Mb/s, 5ms |TCP                 | 100Mb/s, 5ms
-//  * n2--------------|                    |---------------n20 TCP sink
-//  *                 |    10Mbps, 32ms    |
-//  *                 n7------------------n8
-//  *    100Mb/s, 5ms |  QueueLimit = 100  |    
-//  *                 |                    |
-//  *                 |                    | 100Mb/s, 5ms
-//  * n3--------------|TCP                 |---------------n30 TCP sink
-//  *                 |                    |
-//  *                 |                    |
-//  *    100mB/s, 5ms |TCP                 | 100Mb/s, 5ms
-//  * n4--------------|                    |--------------- n40 TCP sink
-//  *                 |                    |
-//  *                 |                    | 
-//  *    100mB/s, 5ms |UDP                 | 100Mb/s, 5ms
-//  * n5--------------|                    |--------------- n50 UDP sink
-//  *                 |                    |
-//  *                 |                    |
-//  *    100mB/s, 5ms |UDP                 | 100Mb/s, 5ms
-//  * n6--------------|                    |--------------- n60 UDP sink
-//  */
-
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
 #include "ns3/flow-monitor-helper.h"
@@ -125,10 +92,10 @@ int main (int argc, char *argv[])
   TypeId qdTid;
   NS_ABORT_MSG_UNLESS (TypeId::LookupByNameFailSafe (queue_disc_type, &qdTid), "TypeId " << queue_disc_type << " not found");
 
-  std::string bottleneckBandwidth = "10Mbps";
+  std::string bottleneckBandwidth = "100Mbps";
   std::string bottleneckDelay = "50ms";
 
-  std::string accessBandwidth = "10Mbps";
+  std::string accessBandwidth = "100Mbps";
   std::string accessDelay = "5ms";
 
   NodeContainer source;
@@ -253,7 +220,7 @@ int main (int argc, char *argv[])
   // OnOffHelper clientHelper6 ("ns3::UdpSocketFactory", Address ());
   // clientHelper6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   // clientHelper6.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  // clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper6.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
   // clientHelper6.SetAttribute ("PacketSize", UintegerValue (1000));
 
   // ApplicationContainer clientApps6;
@@ -266,7 +233,7 @@ int main (int argc, char *argv[])
   // OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
   // clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
   // clientHelper7.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  // clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("10Mb/s")));
+  // clientHelper7.SetAttribute ("DataRate", DataRateValue (DataRate ("100Mb/s")));
   // clientHelper7.SetAttribute ("PacketSize", UintegerValue (1000));
 
   // ApplicationContainer clientApps7;
