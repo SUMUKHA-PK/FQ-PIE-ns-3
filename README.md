@@ -31,21 +31,21 @@ This file contains all the declarations of the functions in **fq-pie-queue-disc.
 ### Steps to reproduce the results :
 
 * For validation of fq-pie, it is compared to pie :
-        * fq-pie-validation and pie-validation are compared
+	* fq-pie-validation and pie-validation are compared
 * For evaluation of fq-pie, it is compared with fq-codel :
-        * fq-pie-light-tcp and fq-codel-light-tcp
-        * fq-pie-mix-traffic and fq-codel-mix-traffic
-        * fq-pie-heavy-tcp and fq-codel-heavy-tcp
+	* fq-pie-light-tcp and fq-codel-light-tcp
+	* fq-pie-mix-traffic and fq-codel-mix-traffic
+	* fq-pie-heavy-tcp and fq-codel-heavy-tcp
 
 * List of example-files :
-        * fq-pie-light-tcp 
-        * fq-codel-light-tcp
-        * fq-pie-mix-traffic 
-        * fq-codel-mix-traffic
-        * fq-pie-heavy-tcp 
-        * fq-codel-heavy-tcp
-        * fq-pie-validation 
-        * pie-validation
+	* fq-pie-light-tcp 
+	* fq-codel-light-tcp
+	* fq-pie-mix-traffic 
+	* fq-codel-mix-traffic
+	* fq-pie-heavy-tcp 
+	* fq-codel-heavy-tcp
+	* fq-pie-validation 
+	* pie-validation
 
 #### Steps to run :
 * Clone the repository
@@ -57,7 +57,7 @@ This file contains all the declarations of the functions in **fq-pie-queue-disc.
 
 * To run an simulation for `example-file` (Check the list of example files above) :<br/>
         
-        ./waf --run example-file
+	./waf --run example-file
 
 * If a validation script is run you have a Validation folder in your ns3 which has your example-file's sub folder conatining simulation documents (cwnd traces, pcap files and queue traces) which can be analysed
 
