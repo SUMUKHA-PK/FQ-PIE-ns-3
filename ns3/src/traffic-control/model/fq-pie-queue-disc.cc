@@ -53,7 +53,7 @@ NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
-std::string dir ="FqPieTCP5/";
+std::string dir1 ="FqPieTCP5/";
 
 TypeId FqPieFlow::GetTypeId (void)
 {
@@ -65,6 +65,8 @@ TypeId FqPieFlow::GetTypeId (void)
   return tid;
 }
 
+double val;
+int g=0;
 //All functions related to Queuedisc are implemented here
 TypeId FqPieQueueDisc::GetTypeId (void)
 {
@@ -225,9 +227,22 @@ Time FqPieQueueDisc::GetQueueDelay(void) {
   // std::cout<<"Qdelay : "<<delay<<std::endl;
   std::cout<<"Qdelay avg : "<<(delay.GetSeconds())/x<<std::endl;
 
-  std::ofstream fPlotQueue (dir + "queueTraces/queue1.plotme", std::ios::out | std::ios::app);
-  fPlotQueue << Simulator::Now ().GetSeconds () << " " << 1000* (delay.GetSeconds())/x << std::endl;
-  fPlotQueue.close ();
+  double c = (delay.GetSeconds())/x;
+  if(g==0){
+    std::ofstream fPlotQueue (dir1 + "queueTraces/queue1.plotme", std::ios::out | std::ios::app);
+    fPlotQueue << Simulator::Now ().GetSeconds () << " " << 1000* c<< std::endl;
+    val = c;
+    fPlotQueue.close ();
+  }
+  else{
+    if(c!=val&&c!=0){
+      std::ofstream fPlotQueue (dir1 + "queueTraces/queue1.plotme", std::ios::out | std::ios::app);
+      fPlotQueue << Simulator::Now ().GetSeconds () << " " << 1000* c << std::endl;
+      fPlotQueue.close ();
+      val = c;
+    }
+  }
+  
 
   return delay;
 }
