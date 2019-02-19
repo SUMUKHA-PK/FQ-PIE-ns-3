@@ -39,6 +39,9 @@ def build(bld):
     obj = bld.create_ns3_program('fq-pie-heavy-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-pie-heavy-tcp.cc'  
 
+    obj = bld.create_ns3_program('fq-codel-validation', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-codel-validation.cc'
+
     obj = bld.create_ns3_program('fq-codel-mix-traffic', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-codel-mix-traffic.cc'
 

@@ -37,7 +37,7 @@
 
 using namespace ns3;
 
-std::string dir = "Validation/Pie/";
+std::string dir = "Validation/FqCoDel/";
 
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
@@ -78,11 +78,11 @@ int main (int argc, char *argv[])
   std::string  pathOut = ".";
   bool writeForPlot = true;
   float stopTime = startTime + simDuration;
-  std::string queue_disc_type = "PieQueueDisc";
+  std::string queue_disc_type = "FqCoDelQueueDisc";
   bool bql = true;
 
   CommandLine cmd;
-  cmd.AddValue ("queue_disc_type", "Queue disc type for gateway by default is Pie (e.g. ns3::PieQueueDisc)", queue_disc_type);
+  cmd.AddValue ("queue_disc_type", "Queue disc type for gateway by defalut is FqCoDel (e.g. ns3::FqCoDelQueueDisc)", queue_disc_type);
   cmd.Parse (argc,argv);
 
   queue_disc_type = std::string ("ns3::") + queue_disc_type;
