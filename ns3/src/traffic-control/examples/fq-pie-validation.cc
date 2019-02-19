@@ -230,10 +230,10 @@ FlowMonitorHelper flowmon;
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (10));
-  clientApps6.Stop (Seconds (30));
-  clientApps6.Start (Seconds (50));
-  clientApps6.Stop (Seconds (70));
+  clientApps6.Start (Seconds (30));
+  clientApps6.Stop (Seconds (50));
+  // clientApps6.Start (Seconds (50));
+  // clientApps6.Stop (Seconds (70));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);

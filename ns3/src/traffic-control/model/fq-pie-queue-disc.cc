@@ -53,7 +53,7 @@ NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
-std::string dir1 ="FqPieTCP5/";
+std::string dir1 ="Validation/FqPie/";
 
 TypeId FqPieFlow::GetTypeId (void)
 {
@@ -232,6 +232,7 @@ Time FqPieQueueDisc::GetQueueDelay(void) {
     std::ofstream fPlotQueue (dir1 + "queueTraces/queue1.plotme", std::ios::out | std::ios::app);
     fPlotQueue << Simulator::Now ().GetSeconds () << " " << 1000* c<< std::endl;
     val = c;
+    g=1;
     fPlotQueue.close ();
   }
   else{
