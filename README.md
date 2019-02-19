@@ -59,7 +59,9 @@ This file contains all the declarations of the functions in **fq-pie-queue-disc.
         
 	./waf --run example-file
 
-* If a validation script is run you have a Validation folder in your ns3 which has your example-file's sub folder conatining simulation documents (cwnd traces, pcap files and queue traces) which can be analysed
+* If a validation script is run you have a Validation folder in your ns3 which has your example-file's sub folder containing simulation documents (cwnd traces, pcap files and queue traces) which can be analysed
 
 
-* If a evaluation script is run you have a Evaluation folder in your ns3 which has your example-file's sub folder conatining simulation documents (cwnd traces, pcap files and queue traces) which can be analysed
+* If a evaluation script is run you have a Evaluation folder in your ns3 which has your example-file's sub folder containing simulation documents (cwnd traces, pcap files and queue traces) which can be analysed
+
+(PS: For getting results in FQPIE, one must change the directory to desired examples directory in ```fq-pie-queuedisc.cc``` )
