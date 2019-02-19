@@ -108,6 +108,7 @@ int main (int argc, char *argv[])
   NodeContainer sink;
   sink.Create (1);
 
+  Config::SetDefault ("ns3::TcpSocket::SndBufSize", StringValue ("ns3::TcpHighSpeed"));
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
@@ -229,8 +230,10 @@ FlowMonitorHelper flowmon;
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (0));
-  clientApps6.Stop (Seconds (stopTime - 1));
+  clientApps6.Start (Seconds (10));
+  clientApps6.Stop (Seconds (30));
+  clientApps6.Start (Seconds (50));
+  clientApps6.Stop (Seconds (70));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
