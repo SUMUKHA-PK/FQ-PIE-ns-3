@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
 {
   int i = 0;
   float startTime = 0.0;
-  float simDuration = 101;      // in seconds
+  float simDuration = 501;      // in seconds
   std::string  pathOut = ".";
   bool writeForPlot = true;
   float stopTime = startTime + simDuration;

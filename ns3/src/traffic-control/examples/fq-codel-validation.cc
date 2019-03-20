@@ -39,16 +39,37 @@ using namespace ns3;
 
 std::string dir = "Validation/FqCoDel/";
 
+static void
+SojournChange (Ptr<OutputStreamWrapper> stream, ns3::Time newCwnd)
+{
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << " " << newCwnd.GetSeconds ()<< std::endl;
+}
+
+static void
+Sojourn ()
+{
+AsciiTraceHelper asciiTraceHelper;
+Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir +"S1.plotme");
+
+Config::ConnectWithoutContext ("$ns3::NodeListPriv/NodeList0/$ns3::TrafficControlLayer/RootQueueDiscList/0/$ns3::QueueDisc/SojournTime", MakeBoundCallback (&SojournChange,stream));
+}
+// give node id as I have given 5 and interface id in my case it was 6 according to topology you are using
+
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
 {
   double qSize = queue->GetCurrentSize ().GetValue ();
+  // Time qdel = queue->m_ojourn;
   // check queue size every 1/100 of a second
   Simulator::Schedule (Seconds (0.1), &CheckQueueSize, queue);
 
   std::ofstream fPlotQueue (dir + "queueTraces/queue0.plotme", std::ios::out | std::ios::app);
   fPlotQueue << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
   fPlotQueue.close ();
+
+  std::ofstream fPlotQueue1 (dir + "queueTraces/queue0.plotme", std::ios::out | std::ios::app);
+  fPlotQueue1 << Simulator::Now ().GetSeconds () << " " << qSize << std::endl;
+  fPlotQueue1.close ();
 }
 
 static void
@@ -254,7 +275,8 @@ FlowMonitorHelper flowmon;
   bottleneckLink.EnablePcapAll (dir + "pcap/N", true);
 
   Simulator::Schedule (Seconds (0.1), &cwnd);
-
+  Simulator::Schedule (Seconds (0.1), &Sojourn);
+  
   Simulator::Stop (Seconds (stopTime));
   Simulator::Run ();
 
