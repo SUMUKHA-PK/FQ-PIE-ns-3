@@ -53,7 +53,8 @@ NS_OBJECT_ENSURE_REGISTERED (FqPieFlow);
 
 NS_OBJECT_ENSURE_REGISTERED (FqPieQueueDisc);
 
-std::string dir1 ="Validation/FqPie/";
+std::string dir1 = "Validation/FqPie/";
+
 
 TypeId FqPieFlow::GetTypeId (void)
 {
@@ -225,7 +226,7 @@ Time FqPieQueueDisc::GetQueueDelay(void) {
     x++;
   }
   // std::cout<<"Qdelay : "<<delay<<std::endl;
-  std::cout<<"Qdelay avg : "<<(delay.GetSeconds())/x<<std::endl;
+  // std::cout<<"Qdelay avg : "<<(delay.GetSeconds())/x<<std::endl;  
 
   double c = (delay.GetSeconds())/x;
   if(g==0){
@@ -553,7 +554,7 @@ FqPieQueueDisc::CalculatePFlow()
   m_rtrsEvent = Simulator::Schedule (m_tUpdate, &FqPieQueueDisc::CalculatePFlow, this);
 
 
-  std::cout<<"QUEUEDELAY: "<<FqPieQueueDisc::GetQueueDelay().GetSeconds()<<std::endl;
+  // std::cout<<"QUEUEDELAY: "<<FqPieQueueDisc::GetQueueDelay().GetSeconds()<<std::endl;
 }
 
 Ptr<QueueDiscItem>
@@ -690,6 +691,7 @@ FqPieQueueDisc::DoDequeue ()  //this is an internal function of queue disc, this
         }
       else
         {
+          std::cout<<Simulator::Now().GetSeconds()<<" "<<Simulator::Now ().GetSeconds() - item->GetTimeStamp ().GetSeconds()<<std::endl;
           NS_LOG_LOGIC ("Dequeued packet " << item->GetPacket ());
         }
     } while (item == 0);

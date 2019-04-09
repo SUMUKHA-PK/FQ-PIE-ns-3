@@ -332,10 +332,12 @@ public:
    */
   QueueSize GetCurrentSize (void);
 
+  Time GetPacketSojournTime (void) const;
   /**
    * \brief Retrieve all the collected statistics.
    * \return the collected statistics.
    */
+
   const Stats& GetStats (void);
 
   /**

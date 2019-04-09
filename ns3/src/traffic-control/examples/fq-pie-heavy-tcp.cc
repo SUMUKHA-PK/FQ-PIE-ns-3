@@ -39,6 +39,21 @@ using namespace ns3;
 
 std::string dir ="Evaluation/FqPieTCP50/";
 
+static void
+SojournChange (Ptr<OutputStreamWrapper> stream, ns3::Time newCwnd)
+{
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << " " << newCwnd.GetMilliSeconds()<< std::endl;
+}
+
+static void
+Sojourn ()
+{
+AsciiTraceHelper asciiTraceHelper;
+Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir +"S1.plotme");
+
+Config::ConnectWithoutContext ("$ns3::NodeListPriv/NodeList/50/$ns3::TrafficControlLayer/RootQueueDiscList/50/$ns3::QueueDisc/SojournTime", MakeBoundCallback (&SojournChange,stream));
+}
+
 void
 CheckQueueSize (Ptr<QueueDisc> queue,Ptr<FlowMonitor> monitor )
 {
@@ -75,7 +90,7 @@ int main (int argc, char *argv[])
 {
   int i = 0;
   float startTime = 0.0;
-  float simDuration = 101;      // in seconds
+  float simDuration = 301;      // in seconds
   std::string  pathOut = ".";
   bool writeForPlot = true;
   // std::string EcnMode = "NoEcn";
@@ -218,6 +233,7 @@ int main (int argc, char *argv[])
   bottleneckLink.EnablePcapAll (dir + "pcap/N", true);
   Simulator::Schedule (Seconds (0.1), &cwnd);
 
+  Simulator::Schedule (Seconds (0.1), &Sojourn);
   Simulator::Stop (Seconds (stopTime));
   Simulator::Run ();
 

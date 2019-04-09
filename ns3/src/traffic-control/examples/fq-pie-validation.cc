@@ -74,7 +74,7 @@ int main (int argc, char *argv[])
 {
   int i = 0;
   float startTime = 0.0;
-  float simDuration = 101;      // in seconds
+  float simDuration = 301;      // in seconds
   std::string  pathOut = ".";
   bool writeForPlot = true;
   float stopTime = startTime + simDuration;
@@ -218,7 +218,6 @@ FlowMonitorHelper flowmon;
   sinkHelper.SetAttribute ("Protocol", TypeIdValue (TcpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp = sinkHelper.Install (sink);
   sinkApp.Start (Seconds (0));
-  sinkApp.Stop (Seconds (stopTime));
 
   OnOffHelper clientHelper6 ("ns3::UdpSocketFactory", Address ());
   clientHelper6.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
@@ -230,10 +229,14 @@ FlowMonitorHelper flowmon;
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (30));
-  clientApps6.Stop (Seconds (50));
-  // clientApps6.Start (Seconds (50));
-  // clientApps6.Stop (Seconds (70));
+  clientApps6.Start (Seconds (25));
+  clientApps6.Stop (Seconds (75));
+  
+  clientApps6.Start (Seconds (125));
+  clientApps6.Stop (Seconds (175));
+
+  clientApps6.Start (Seconds (225));
+  clientApps6.Stop (Seconds (275));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);

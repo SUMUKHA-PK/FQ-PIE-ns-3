@@ -325,6 +325,7 @@ TypeId QueueDisc::GetTypeId (void)
 QueueDisc::QueueDisc (QueueDiscSizePolicy policy)
   :  m_nPackets (0),
      m_nBytes (0),
+    //  m_sojourn (0),
      m_maxSize (QueueSize ("1p")),         // to avoid that setting the mode at construction time is ignored
      m_running (false),
      m_peeked (false),
@@ -712,7 +713,6 @@ QueueDisc::PacketDequeued (Ptr<const QueueDiscItem> item)
       m_nBytes -= item->GetSize ();
       m_stats.nTotalDequeuedPackets++;
       m_stats.nTotalDequeuedBytes += item->GetSize ();
-
       m_sojourn (Simulator::Now () - item->GetTimeStamp ());
 
       NS_LOG_LOGIC ("m_traceDequeue (p)");

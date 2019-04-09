@@ -30,11 +30,11 @@ def build(bld):
     obj = bld.create_ns3_program('fq-pie-validation', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-pie-validation.cc'
 
-    obj = bld.create_ns3_program('fq-pie-mix-traffic', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
-    obj.source = 'fq-pie-mix-traffic.cc'
+    obj = bld.create_ns3_program('fq-pie-5-up', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-pie-5-up.cc'
 
-    obj = bld.create_ns3_program('fq-pie-light-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
-    obj.source = 'fq-pie-light-tcp.cc'
+    obj = bld.create_ns3_program('fq-pie-10-up', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-pie-10-up.cc'
 
     obj = bld.create_ns3_program('fq-pie-heavy-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-pie-heavy-tcp.cc'  
@@ -42,11 +42,11 @@ def build(bld):
     obj = bld.create_ns3_program('fq-codel-validation', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-codel-validation.cc'
 
-    obj = bld.create_ns3_program('fq-codel-mix-traffic', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
-    obj.source = 'fq-codel-mix-traffic.cc'
+    obj = bld.create_ns3_program('fq-codel-5-up', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-codel-5-up.cc'
 
-    obj = bld.create_ns3_program('fq-codel-light-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
-    obj.source = 'fq-codel-light-tcp.cc'
+    obj = bld.create_ns3_program('fq-codel-10-up', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
+    obj.source = 'fq-codel-10-up.cc'
 
     obj = bld.create_ns3_program('fq-codel-heavy-tcp', ['point-to-point', 'internet', 'applications', 'flow-monitor', 'traffic-control'])
     obj.source = 'fq-codel-heavy-tcp.cc'    

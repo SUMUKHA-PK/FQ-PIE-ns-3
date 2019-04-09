@@ -37,7 +37,7 @@
 
 using namespace ns3;
 
-std::string dir = "Evaluation/FqCoDelMix/";
+std::string dir = "Evaluation/FqCoDelTCP10/";
 
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
@@ -60,7 +60,7 @@ CwndChange (Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 static void
 cwnd ()
 {
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 10; i++)
     {
       AsciiTraceHelper asciiTraceHelper;
       Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir + "cwndTraces/S1-" + std::to_string (i + 1) + ".plotme");
@@ -99,7 +99,7 @@ int main (int argc, char *argv[])
   std::string accessDelay = "5ms";
 
   NodeContainer source;
-  source.Create (5);
+  source.Create (10);
 
   NodeContainer udpsource;
   udpsource.Create (2);
@@ -117,8 +117,6 @@ int main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocketBase::LimitedTransmit", BooleanValue (false));
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1446));
   Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
-  // Config::SetDefault ("ns3::FqCoDelQueueDisc::UseEcn", BooleanValue (useEcn));
-  // Config::SetDefault ("ns3::TcpSocketBase::EcnMode", StringValue (EcnMode));
   Config::SetDefault (queue_disc_type + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
 
   InternetStackHelper internet;
@@ -142,8 +140,8 @@ int main (int argc, char *argv[])
   accessLink.SetDeviceAttribute ("DataRate", StringValue (accessBandwidth));
   accessLink.SetChannelAttribute ("Delay", StringValue (accessDelay));
 
-  NetDeviceContainer devices[5];
-  for (i = 0; i < 5; i++)
+  NetDeviceContainer devices[10];
+  for (i = 0; i < 10; i++)
     {
       devices[i] = accessLink.Install (source.Get (i), gateway.Get (0));
       tchPfifo.Install (devices[i]);
@@ -167,14 +165,14 @@ int main (int argc, char *argv[])
   // Configure the source and sink net devices
   // and the channels between the source/sink and the gateway
   //Ipv4InterfaceContainer sink_Interfaces;
-  Ipv4InterfaceContainer interfaces[5];
+  Ipv4InterfaceContainer interfaces[10];
   Ipv4InterfaceContainer interfaces_sink;
   Ipv4InterfaceContainer interfaces_gateway;
   Ipv4InterfaceContainer udpinterfaces[2];
 
   NetDeviceContainer udpdevices[2];
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < 10; i++)
     {
       address.NewNetwork ();
       interfaces[i] = address.Assign (devices[i]);
@@ -229,8 +227,14 @@ int main (int argc, char *argv[])
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (0));
-  clientApps6.Stop (Seconds (stopTime - 1));
+  clientApps6.Start (Seconds (25));
+  clientApps6.Stop (Seconds (75));
+  
+  clientApps6.Start (Seconds (125));
+  clientApps6.Stop (Seconds (175));
+
+  clientApps6.Start (Seconds (225));
+  clientApps6.Stop (Seconds (275));
 
   OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
   clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
@@ -241,8 +245,14 @@ int main (int argc, char *argv[])
   ApplicationContainer clientApps7;
   clientHelper7.SetAttribute ("Remote", remoteAddress1);
   clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
-  clientApps7.Start (Seconds (0));
-  clientApps7.Stop (Seconds (stopTime - 1));
+  clientApps7.Start (Seconds (25));
+  clientApps7.Stop (Seconds (75));
+  
+  clientApps7.Start (Seconds (125));
+  clientApps7.Stop (Seconds (175));
+
+  clientApps7.Start (Seconds (225));
+  clientApps7.Stop (Seconds (275));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);

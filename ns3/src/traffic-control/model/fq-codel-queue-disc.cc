@@ -294,7 +294,7 @@ FqCoDelQueueDisc::DoDequeue (void)
         }
       else
         {
-          // NS_LOG_DEBUG ("Dequeued packet " << item->GetPacket ());
+          std::cout<<Simulator::Now().GetSeconds()<<" "<<Simulator::Now ().GetSeconds() - item->GetTimeStamp ().GetSeconds()<<std::endl;
         }
     } while (item == 0);
 

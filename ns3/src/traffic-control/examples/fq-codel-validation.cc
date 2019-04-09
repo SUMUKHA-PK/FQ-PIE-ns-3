@@ -51,9 +51,8 @@ Sojourn ()
 AsciiTraceHelper asciiTraceHelper;
 Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (dir +"S1.plotme");
 
-Config::ConnectWithoutContext ("$ns3::NodeListPriv/NodeList0/$ns3::TrafficControlLayer/RootQueueDiscList/0/$ns3::QueueDisc/SojournTime", MakeBoundCallback (&SojournChange,stream));
+Config::ConnectWithoutContext ("$ns3::NodeListPriv/NodeList/2/$ns3::TrafficControlLayer/RootQueueDiscList/1/$ns3::QueueDisc/SojournTime", MakeBoundCallback (&SojournChange,stream));
 }
-// give node id as I have given 5 and interface id in my case it was 6 according to topology you are using
 
 void
 CheckQueueSize (Ptr<QueueDisc> queue)
@@ -95,7 +94,7 @@ int main (int argc, char *argv[])
 {
   int i = 0;
   float startTime = 0.0;
-  float simDuration = 101;      // in seconds
+  float simDuration = 301;      // in seconds
   std::string  pathOut = ".";
   bool writeForPlot = true;
   float stopTime = startTime + simDuration;
@@ -251,10 +250,14 @@ FlowMonitorHelper flowmon;
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (10));
-  clientApps6.Stop (Seconds (30));
-  clientApps6.Start (Seconds (50));
-  clientApps6.Stop (Seconds (70));
+  clientApps6.Start (Seconds (25));
+  clientApps6.Stop (Seconds (75));
+  
+  clientApps6.Start (Seconds (125));
+  clientApps6.Stop (Seconds (175));
+
+  clientApps6.Start (Seconds (225));
+  clientApps6.Stop (Seconds (275));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
@@ -276,7 +279,7 @@ FlowMonitorHelper flowmon;
 
   Simulator::Schedule (Seconds (0.1), &cwnd);
   Simulator::Schedule (Seconds (0.1), &Sojourn);
-  
+
   Simulator::Stop (Seconds (stopTime));
   Simulator::Run ();
 
