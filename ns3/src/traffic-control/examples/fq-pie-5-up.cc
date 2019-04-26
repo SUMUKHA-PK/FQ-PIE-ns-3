@@ -108,7 +108,8 @@ int main (int argc, char *argv[])
 
   NodeContainer sink;
   sink.Create (1);
-
+  
+  Config::SetDefault ("ns3::TcpL4Protocol::SocketType",StringValue("ns3::TcpHighSpeed"));
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
@@ -230,14 +231,8 @@ FlowMonitorHelper flowmon;
 
   clientHelper6.SetAttribute ("Remote", remoteAddress1);
   clientApps6.Add (clientHelper6.Install (udpsource.Get (0)));
-  clientApps6.Start (Seconds (25));
-  clientApps6.Stop (Seconds (75));
-  
-  clientApps6.Start (Seconds (125));
-  clientApps6.Stop (Seconds (175));
-
-  clientApps6.Start (Seconds (225));
-  clientApps6.Stop (Seconds (275));
+  clientApps6.Start (Seconds (75));
+  clientApps6.Stop (Seconds (225));
 
   OnOffHelper clientHelper7 ("ns3::UdpSocketFactory", Address ());
   clientHelper7.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
@@ -248,14 +243,8 @@ FlowMonitorHelper flowmon;
   ApplicationContainer clientApps7;
   clientHelper7.SetAttribute ("Remote", remoteAddress1);
   clientApps7.Add (clientHelper7.Install (udpsource.Get (1)));
-  clientApps7.Start (Seconds (25));
-  clientApps7.Stop (Seconds (75));
-  
   clientApps7.Start (Seconds (125));
   clientApps7.Stop (Seconds (175));
-
-  clientApps7.Start (Seconds (225));
-  clientApps7.Stop (Seconds (275));
 
   sinkHelper1.SetAttribute ("Protocol", TypeIdValue (UdpSocketFactory::GetTypeId ()));
   ApplicationContainer sinkApp1 = sinkHelper1.Install (sink);
