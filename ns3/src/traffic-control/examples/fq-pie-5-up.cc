@@ -109,7 +109,7 @@ int main (int argc, char *argv[])
   NodeContainer sink;
   sink.Create (1);
   
-  Config::SetDefault ("ns3:TcpL4Protocol::SocketType",StringValue("ns3::TcpHighSpeed"));
+  Config::SetDefault ("ns3::TcpL4Protocol::SocketType",StringValue("ns3::TcpHighSpeed"));
   Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1 << 20));
   Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue (Seconds (0)));
