@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 
 mkdir ~/FqPieTCP5
 counter=0
@@ -12,7 +12,6 @@ for var in 1 3 5 7 10 12 15 18 21 28 35 43 50 70 120 200 800 1200 3000 5000 7000
     mv ~/FQPIE/FQ-PIE-ns-3/ns3/Evaluation/FqPieTCP5/pcap ~/FqPieTCP5/$counter
     mv ~/FQPIE/FQ-PIE-ns-3/ns3/Evaluation/FqPieTCP5/q.plotme ~/FqPieTCP5/$counter
 done
-
 
 # counter=0
 # for var in 1 3
